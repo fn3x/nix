@@ -89,6 +89,7 @@
     userEmail = "fn3x@yandex.com";
     extraConfig = {
       init.defaultBranch = "main";
+      push.autoSetupRemote = true;
     };
   };
 
