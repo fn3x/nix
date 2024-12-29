@@ -1,9 +1,9 @@
-{ inputs, config, pkgs, ... }:
+{ inputs, config, pkgs, lib, ... }:
 
 {
   home.username = "fn3x";
   home.homeDirectory = "/home/fn3x";
-  
+
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
   # introduces backwards incompatible changes.
@@ -26,7 +26,6 @@
     mattermost-desktop
     fd
     ripgrep
-    tree-sitter
     tmux
     vlc
     btop
@@ -35,9 +34,7 @@
     lazygit
   ];
 
-  home.file = {
-    ".local/share/fonts".source = ../../fonts;
-  };
+  home.file = { ".local/share/fonts".source = ../../fonts; };
 
   fonts.fontconfig.enable = true;
 
@@ -55,7 +52,9 @@
   };
 
   home.shellAliases = {
-    nix-up = "nh os switch ~/nixos/";
+    nix-s = "nh os switch ~/nixos/";
+    nix-t = "nh os test ~/nixos/";
+    nix-c = "nh clean all";
   };
 
   home.sessionPath = [
@@ -95,9 +94,7 @@
 
   programs.lazygit = {
     enable = true;
-    settings = {
-      floating_window_scaling_factor = 0.9;
-    };
+    settings = { floating_window_scaling_factor = 0.9; };
   };
 
   programs.tmux = {
@@ -141,7 +138,7 @@
       ## set keys for visual mode (v) and yank/copy (y)
       bind-key -Tcopy-mode-vi 'v' send -X begin-selection
       bind-key -Tcopy-mode-vi 'y' send -X copy-pipe-and-cancel 'xclip -in -selection clipboard'
-      
+
       set -g history-limit 10000
 
       bind j select-window -t 1
@@ -200,10 +197,8 @@
     enable = true;
     enableZshIntegration = true;
   };
-  
-  programs.zsh = {
-    enable = true;
-  };
+
+  programs.zsh = { enable = true; };
 
   programs.oh-my-posh = {
     enable = true;
@@ -211,7 +206,7 @@
     useTheme = "robbyrussell";
   };
 
-  nix.settings.trusted-users = ["fn3x"];
+  nix.settings.trusted-users = [ "fn3x" ];
 
   programs.nh = {
     enable = true;
@@ -240,7 +235,8 @@
       breakindent = true;
       updatetime = 100;
 
-      guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50,i:blinkwait500-blinkoff400-blinkon500-Cursor/lCursor";
+      guicursor =
+        "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50,i:blinkwait500-blinkoff400-blinkon500-Cursor/lCursor";
       termguicolors = true;
       mouse = "";
       undofile = true;
@@ -367,7 +363,7 @@
       {
         mode = "x";
         key = "<leader>p";
-        action = "\"_dP";
+        action = ''"_dP'';
         options = {
           noremap = true;
           silent = true;
@@ -377,7 +373,7 @@
       {
         mode = "n";
         key = "<leader>d";
-        action = "\"_d";
+        action = ''"_d'';
         options = {
           noremap = true;
           silent = true;
@@ -387,7 +383,7 @@
       {
         mode = "n";
         key = "<leader>D";
-        action = "\"_D";
+        action = ''"_D'';
         options = {
           noremap = true;
           silent = true;
@@ -397,7 +393,7 @@
       {
         mode = "n";
         key = "<leader>c";
-        action = "\"_c";
+        action = ''"_c'';
         options = {
           noremap = true;
           silent = true;
@@ -407,7 +403,7 @@
       {
         mode = "n";
         key = "<leader>C";
-        action = "\"_C";
+        action = ''"_C'';
         options = {
           noremap = true;
           silent = true;
@@ -428,7 +424,7 @@
       {
         mode = "n";
         key = "<leader>n";
-        action.__raw = ''function() Snacks.notifier.show_history() end'';
+        action.__raw = "function() Snacks.notifier.show_history() end";
         options = {
           noremap = true;
           silent = true;
@@ -438,7 +434,7 @@
       {
         mode = "n";
         key = "<leader>gb";
-        action.__raw = ''function() Snacks.git.blame_line() end'';
+        action.__raw = "function() Snacks.git.blame_line() end";
         options = {
           noremap = true;
           silent = true;
@@ -448,7 +444,7 @@
       {
         mode = "n";
         key = "<leader>gf";
-        action.__raw = ''function() Snacks.lazygit.log_file() end'';
+        action.__raw = "function() Snacks.lazygit.log_file() end";
         options = {
           noremap = true;
           silent = true;
@@ -458,7 +454,7 @@
       {
         mode = "n";
         key = "<leader>gg";
-        action.__raw = ''function() Snacks.lazygit() end'';
+        action.__raw = "function() Snacks.lazygit() end";
         options = {
           noremap = true;
           silent = true;
@@ -468,7 +464,7 @@
       {
         mode = "n";
         key = "<leader>gl";
-        action.__raw = ''function() Snacks.lazygit.log() end'';
+        action.__raw = "function() Snacks.lazygit.log() end";
         options = {
           noremap = true;
           silent = true;
@@ -478,7 +474,7 @@
       {
         mode = "n";
         key = "<leader>un";
-        action.__raw = ''function() Snacks.notifier.hide() end'';
+        action.__raw = "function() Snacks.notifier.hide() end";
         options = {
           noremap = true;
           silent = true;
@@ -487,22 +483,17 @@
       }
     ];
 
-    autoGroups = {
-      HighlightYank = {
-        clear = true;
-      };
-    };
+    autoGroups = { HighlightYank = { clear = true; }; };
 
-    autoCmd = [
-      {
-        event = "TextYankPost";
-        group = "HighlightYank";
-        pattern = "*";
-        callback = {
-          __raw = "function()vim.highlight.on_yank({higroup = \"IncSearch\",timeout = 40,}) end";
-        };
-      }
-    ];
+    autoCmd = [{
+      event = "TextYankPost";
+      group = "HighlightYank";
+      pattern = "*";
+      callback = {
+        __raw = ''
+          function()vim.highlight.on_yank({higroup = "IncSearch",timeout = 40,}) end'';
+      };
+    }];
 
     plugins = {
       oil = {
@@ -515,55 +506,37 @@
             bufhidden = "hide";
             buflisted = false;
           };
-          view_options = {
-            show_hidden = true;
-          };
+          view_options = { show_hidden = true; };
         };
       };
       lualine = {
         enable = true;
         autoLoad = true;
-        settings = {
-          extensions = [
-            "fzf"
-          ];
-        };
+        settings = { extensions = [ "fzf" ]; };
       };
       web-devicons = {
         enable = true;
-        settings = {
-          lazyLoad = true;
-        };
+        settings = { lazyLoad = true; };
       };
       undotree = {
         enable = true;
-        settings = {
-          lazyLoad = true;
-        };
+        settings = { lazyLoad = true; };
       };
       sandwich = {
         enable = true;
-        settings = {
-          lazyLoad = true;
-        };
+        settings = { lazyLoad = true; };
       };
       dressing = {
         enable = true;
-        settings = {
-          lazyLoad = true;
-        };
+        settings = { lazyLoad = true; };
       };
       comment = {
         enable = true;
-        settings = {
-          lazyLoad = true;
-        };
+        settings = { lazyLoad = true; };
       };
       refactoring = {
         enable = true;
-        settings = {
-          lazyLoad = false;
-        };
+        settings = { lazyLoad = false; };
       };
       snacks = {
         enable = true;
@@ -577,100 +550,85 @@
             enabled = true;
             timeout = 2000;
           };
-          quickfile = {
-            enabled = true;
-          };
-          styles = {
-            notification = {
-              wo = {
-                wrap = true;
-              };
-            };
-          };
+          quickfile = { enabled = true; };
+          styles = { notification = { wo = { wrap = true; }; }; };
         };
-        luaConfig.pre = ''vim.api.nvim_create_autocmd("User", {
-      pattern = "VeryLazy",
-      callback = function()
-        -- Setup some globals for debugging (lazy-loaded)
-        _G.dd = function(...)
-          Snacks.debug.inspect(...);
-        end
-        _G.bt = function()
-          Snacks.debug.backtrace();
-        end
-        vim.print = _G.dd -- Override print to use snacks for `:=` command
+        luaConfig.pre = ''
+          vim.api.nvim_create_autocmd("User", {
+                pattern = "VeryLazy",
+                callback = function()
+                  -- Setup some globals for debugging (lazy-loaded)
+                  _G.dd = function(...)
+                    Snacks.debug.inspect(...);
+                  end
+                  _G.bt = function()
+                    Snacks.debug.backtrace();
+                  end
+                  vim.print = _G.dd -- Override print to use snacks for `:=` command
 
-        -- Create some toggle mappings
-        Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw");
-        Snacks.toggle.diagnostics():map("<leader>ud");
-      end,
-    });
+                  -- Create some toggle mappings
+                  Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw");
+                  Snacks.toggle.diagnostics():map("<leader>ud");
+                end,
+              });
 
-    local progress = vim.defaulttable();
-    vim.api.nvim_create_autocmd("LspProgress", {
-      callback = function(ev)
-        local client = vim.lsp.get_client_by_id(ev.data.client_id);
-        local value = ev.data.params
-            .value --[[@as {percentage?: number, title?: string, message?: string, kind: "begin" | "report" | "end"}]]
-        if not client or type(value) ~= "table" then
-          return
-        end
-        local p = progress[client.id];
+              local progress = vim.defaulttable();
+              vim.api.nvim_create_autocmd("LspProgress", {
+                callback = function(ev)
+                  local client = vim.lsp.get_client_by_id(ev.data.client_id);
+                  local value = ev.data.params
+                      .value --[[@as {percentage?: number, title?: string, message?: string, kind: "begin" | "report" | "end"}]]
+                  if not client or type(value) ~= "table" then
+                    return
+                  end
+                  local p = progress[client.id];
 
-        for i = 1, #p + 1 do
-          if i == #p + 1 or p[i].token == ev.data.params.token then
-            p[i] = {
-              token = ev.data.params.token,
-              msg = ("[%3d%%] %s%s"):format(
-                value.kind == "end" and 100 or value.percentage or 100,
-                value.title or "",
-                value.message and (" **%s**"):format(value.message) or ""
-              ),
-              done = value.kind == "end",
-            };
-            break
-          end
-        end
+                  for i = 1, #p + 1 do
+                    if i == #p + 1 or p[i].token == ev.data.params.token then
+                      p[i] = {
+                        token = ev.data.params.token,
+                        msg = ("[%3d%%] %s%s"):format(
+                          value.kind == "end" and 100 or value.percentage or 100,
+                          value.title or "",
+                          value.message and (" **%s**"):format(value.message) or ""
+                        ),
+                        done = value.kind == "end",
+                      };
+                      break
+                    end
+                  end
 
-        progress[client.id] = vim.tbl_filter(function(v)
-          return table.insert(msg, v.msg) or not v.done
-        end, p);
+                  progress[client.id] = vim.tbl_filter(function(v)
+                    return table.insert(msg, v.msg) or not v.done
+                  end, p);
 
-        local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" };
-        vim.notify(table.concat(msg, "\n"), "info", {
-          id = "lsp_progress",
-          title = client.name,
-          opts = function(notif)
-            notif.icon = #progress[client.id] == 0 and " "
-                or spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
-          end,
-        });
-      end,
-    })'';
+                  local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" };
+                  vim.notify(table.concat(msg, "\n"), "info", {
+                    id = "lsp_progress",
+                    title = client.name,
+                    opts = function(notif)
+                      notif.icon = #progress[client.id] == 0 and " "
+                          or spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
+                    end,
+                  });
+                end,
+              })'';
       };
 
       treesitter = {
         enable = true;
         settings = {
-          ensure_installed = [
-            "javascript"
-            "typescript"
-            "lua"
-            "go"
-            "zig"
-            "html"
-          ];
+          ensure_installed =
+            [ "javascript" "typescript" "lua" "go" "zig" "html" ];
           auto_install = true;
           sync_install = false;
           highlight = {
             additional_vim_regex_highlighting = false;
             custom_captures = { };
-            disable = [
-            ];
+            disable = [ ];
             enable = true;
           };
-          ignore_install = [
-          ];
+          ignore_install = [ ];
           incremental_selection = {
             enable = true;
             keymaps = {
@@ -680,20 +638,14 @@
               scope_incremental = "grc";
             };
           };
-          indent = {
-            enable = true;
-          };
+          indent = { enable = true; };
           parser_install_dir = {
             __raw = "vim.fs.joinpath(vim.fn.stdpath('data'), 'treesitter')";
           };
         };
       };
 
-      treesitter-context = {
-        settings = {
-          enable = true;
-        };
-      };
+      treesitter-context = { settings = { enable = true; }; };
 
       treesitter-textobjects = {
         enable = true;
@@ -751,14 +703,8 @@
 
       telescope = {
         enable = true;
-        settings = {
-          defaults = {
-            layout_strategy = "horizontal";
-          };
-        };
-        extensions = {
-          fzf-native.enable = true;
-        };
+        settings = { defaults = { layout_strategy = "horizontal"; }; };
+        extensions = { fzf-native.enable = true; };
         keymaps = {
           "<leader>fb" = {
             action = "buffers";
@@ -815,82 +761,109 @@
         enable = true;
         settings = {
           on_attach = ''
-        function(bufnr)
-        local gs = package.loaded.gitsigns
+              function(bufnr)
+              local gs = package.loaded.gitsigns
 
-        local function map(mode, l, r, opts)
-          opts = opts or {}
-          opts.buffer = bufnr
-          vim.keymap.set(mode, l, r, opts)
-        end
+              local function map(mode, l, r, opts)
+                opts = opts or {}
+                opts.buffer = bufnr
+                vim.keymap.set(mode, l, r, opts)
+              end
 
-        -- Navigation
-        map("n", "]c", function()
-          if vim.wo.diff then
-            return "]c"
-          end
-          vim.schedule(function()
-            gs.next_hunk()
-          end)
-          return "<Ignore>"
-        end, { expr = true })
+              -- Navigation
+              map("n", "]c", function()
+                if vim.wo.diff then
+                  return "]c"
+                end
+                vim.schedule(function()
+                  gs.next_hunk()
+                end)
+                return "<Ignore>"
+              end, { expr = true })
 
-        map("n", "[c", function()
-          if vim.wo.diff then
-            return "[c"
-          end
-          vim.schedule(function()
-            gs.prev_hunk()
-          end)
-          return "<Ignore>"
-        end, { expr = true })
+              map("n", "[c", function()
+                if vim.wo.diff then
+                  return "[c"
+                end
+                vim.schedule(function()
+                  gs.prev_hunk()
+                end)
+                return "<Ignore>"
+              end, { expr = true })
 
-        -- Actions
-        map("n", "<leader>hs", gs.stage_hunk)
-        map("n", "<leader>hr", gs.reset_hunk)
-        map("v", "<leader>hs", function()
-          gs.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
-        end)
-        map("v", "<leader>hr", function()
-          gs.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
-        end)
-        map("n", "<leader>hS", gs.stage_buffer)
-        map("n", "<leader>hu", gs.undo_stage_hunk)
-        map("n", "<leader>hR", gs.reset_buffer)
-        map("n", "<leader>hp", gs.preview_hunk)
-        map("n", "<leader>hb", function()
-          gs.blame_line({ full = true })
-        end)
-        map("n", "<leader>tb", gs.toggle_current_line_blame)
-        map("n", "<leader>hd", gs.diffthis)
-        map("n", "<leader>hD", function()
-          gs.diffthis("~")
-        end)
-        map("n", "<leader>td", gs.toggle_deleted)
+              -- Actions
+              map("n", "<leader>hs", gs.stage_hunk)
+              map("n", "<leader>hr", gs.reset_hunk)
+              map("v", "<leader>hs", function()
+                gs.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
+              end)
+              map("v", "<leader>hr", function()
+                gs.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
+              end)
+              map("n", "<leader>hS", gs.stage_buffer)
+              map("n", "<leader>hu", gs.undo_stage_hunk)
+              map("n", "<leader>hR", gs.reset_buffer)
+              map("n", "<leader>hp", gs.preview_hunk)
+              map("n", "<leader>hb", function()
+                gs.blame_line({ full = true })
+              end)
+              map("n", "<leader>tb", gs.toggle_current_line_blame)
+              map("n", "<leader>hd", gs.diffthis)
+              map("n", "<leader>hD", function()
+                gs.diffthis("~")
+              end)
+              map("n", "<leader>td", gs.toggle_deleted)
 
-        -- Text object
-        map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>")
-      end
+              -- Text object
+              map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>")
+            end
           '';
+        };
+      };
+      conform-nvim = {
+        enable = true;
+        settings = {
+          notify_on_error = true;
+          default_format_opts = {
+            lsp_format = "fallback";
+            timeout_ms = 500;
+          };
+          formatters_by_ft = {
+            lua = [ "stylua" ];
+            go = [ "gofumpt" ];
+            sql = [ "sql-formatter" ];
+            javascript = [ "prettierd" "prettier" ];
+            html = [ "prettierd" "prettier" ];
+            typescript = [ "prettierd" "prettier" ];
+            nix = [ "nixfmt" ];
+          };
+          formatters = {
+            stylua = { command = lib.getExe pkgs.stylua; };
+            prettierd = { command = lib.getExe pkgs.prettierd; };
+            prettier = {
+              command = lib.getExe pkgs.nodePackages_latest.prettier;
+            };
+            gofumpt = { command = lib.getExe pkgs.gofumpt; };
+            nixfmt = { command = lib.getExe pkgs.nixfmt; };
+          };
         };
       };
     };
 
-    extraPlugins = [
-      pkgs.vimPlugins.gruvbox-material-nvim
-    ];
-    extraConfigLua = ''require("gruvbox-material").setup();
-      vim.g.gruvbox_material_background = "medium";
-      vim.g.gruvbox_material_better_performance = 1;
-      vim.g.gruvbox_material_enable_bold = 0;
-      vim.g.gruvbox_material_menu_selection_background = "aqua";
-      vim.g.gruvbox_material_visual = "blue background";
-      vim.g.gruvbox_material_foreground = "material";
-      vim.g.gruvbox_material_float_style = "bright";
-      vim.g.gruvbox_material_diagnostic_virtual_text = "colored";
-      vim.cmd.colorscheme("gruvbox-material");
-      vim.api.nvim_set_hl(0, "LineNrAbove", { fg = "#b8fcec", bold = false });
-      vim.api.nvim_set_hl(0, "LineNr", { fg = "white", bold = true });
-      vim.api.nvim_set_hl(0, "LineNrBelow", { fg = "#fcd6a9", bold = false });'';
+    extraPlugins = [ pkgs.vimPlugins.gruvbox-material-nvim ];
+    extraConfigLua = ''
+      require("gruvbox-material").setup();
+            vim.g.gruvbox_material_background = "medium";
+            vim.g.gruvbox_material_better_performance = 1;
+            vim.g.gruvbox_material_enable_bold = 0;
+            vim.g.gruvbox_material_menu_selection_background = "aqua";
+            vim.g.gruvbox_material_visual = "blue background";
+            vim.g.gruvbox_material_foreground = "material";
+            vim.g.gruvbox_material_float_style = "bright";
+            vim.g.gruvbox_material_diagnostic_virtual_text = "colored";
+            vim.cmd.colorscheme("gruvbox-material");
+            vim.api.nvim_set_hl(0, "LineNrAbove", { fg = "#b8fcec", bold = false });
+            vim.api.nvim_set_hl(0, "LineNr", { fg = "white", bold = true });
+            vim.api.nvim_set_hl(0, "LineNrBelow", { fg = "#fcd6a9", bold = false });'';
   };
 }
