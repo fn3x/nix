@@ -95,6 +95,9 @@
 
   programs.lazygit = {
     enable = true;
+    settings = {
+      floating_window_scaling_factor = 0.9;
+    };
   };
 
   programs.tmux = {
@@ -273,8 +276,8 @@
         key = "<leader>u";
         action = "<cmd>UndotreeToggle<CR>";
         options = {
-	  noremap = true;
-	  silent = true;
+          noremap = true;
+          silent = true;
           desc = "Open parent directory";
         };
       }
@@ -284,8 +287,8 @@
         key = "<leader>fp";
         action = "<cmd>Oil<CR>";
         options = {
-	  noremap = true;
-	  silent = true;
+          noremap = true;
+          silent = true;
           desc = "Open parent directory";
         };
       }
@@ -294,8 +297,8 @@
         key = "<Esc>";
         action = "<cmd>nohlsearch<CR>";
         options = {
-	  noremap = true;
-	  silent = true;
+          noremap = true;
+          silent = true;
           desc = "Remove highlights of the last search";
         };
       }
@@ -304,8 +307,8 @@
         key = "K";
         action = ":m '<-2<CR>gv=gv";
         options = {
-	  noremap = true;
-	  silent = true;
+          noremap = true;
+          silent = true;
           desc = "Move line up by 1 line and format it";
         };
       }
@@ -314,8 +317,8 @@
         key = "J";
         action = ":m '>+1<CR>gv=gv";
         options = {
-	  noremap = true;
-	  silent = true;
+          noremap = true;
+          silent = true;
           desc = "Move line down by 1 line and format it";
         };
       }
@@ -326,8 +329,8 @@
         key = "<C-d>";
         action = "<C-d>zz";
         options = {
-	  noremap = true;
-	  silent = true;
+          noremap = true;
+          silent = true;
           desc = "Scroll down and center";
         };
       }
@@ -336,8 +339,8 @@
         key = "<C-u>";
         action = "<C-u>zz";
         options = {
-	  noremap = true;
-	  silent = true;
+          noremap = true;
+          silent = true;
           desc = "Scroll up and center";
         };
       }
@@ -346,8 +349,8 @@
         key = "n";
         action = "nzzzv";
         options = {
-	  noremap = true;
-	  silent = true;
+          noremap = true;
+          silent = true;
           desc = "Next occurence and center";
         };
       }
@@ -356,8 +359,8 @@
         key = "N";
         action = "Nzzzv";
         options = {
-	  noremap = true;
-	  silent = true;
+          noremap = true;
+          silent = true;
           desc = "Previous occurence and center";
         };
       }
@@ -366,8 +369,8 @@
         key = "<leader>p";
         action = "\"_dP";
         options = {
-	  noremap = true;
-	  silent = true;
+          noremap = true;
+          silent = true;
           desc = "Replace without yanking";
         };
       }
@@ -376,8 +379,8 @@
         key = "<leader>d";
         action = "\"_d";
         options = {
-	  noremap = true;
-	  silent = true;
+          noremap = true;
+          silent = true;
           desc = "Delete without yanking";
         };
       }
@@ -386,8 +389,8 @@
         key = "<leader>D";
         action = "\"_D";
         options = {
-	  noremap = true;
-	  silent = true;
+          noremap = true;
+          silent = true;
           desc = "Delete until EOL without yanking";
         };
       }
@@ -396,8 +399,8 @@
         key = "<leader>c";
         action = "\"_c";
         options = {
-	  noremap = true;
-	  silent = true;
+          noremap = true;
+          silent = true;
           desc = "Change without yanking";
         };
       }
@@ -406,8 +409,8 @@
         key = "<leader>C";
         action = "\"_C";
         options = {
-	  noremap = true;
-	  silent = true;
+          noremap = true;
+          silent = true;
           desc = "Change until EOL without yanking";
         };
       }
@@ -416,9 +419,70 @@
         key = "<leader><leader>";
         action = "<cmd>:w<CR>";
         options = {
-	  noremap = true;
-	  silent = true;
+          noremap = true;
+          silent = true;
           desc = "Save current buffer";
+        };
+      }
+      # Snacks keymaps
+      {
+        mode = "n";
+        key = "<leader>n";
+        action.__raw = ''function() Snacks.notifier.show_history() end'';
+        options = {
+          noremap = true;
+          silent = true;
+          desc = "Notification History";
+        };
+      }
+      {
+        mode = "n";
+        key = "<leader>gb";
+        action.__raw = ''function() Snacks.git.blame_line() end'';
+        options = {
+          noremap = true;
+          silent = true;
+          desc = "Git Blame Line";
+        };
+      }
+      {
+        mode = "n";
+        key = "<leader>gf";
+        action.__raw = ''function() Snacks.lazygit.log_file() end'';
+        options = {
+          noremap = true;
+          silent = true;
+          desc = "Lazygit Current File History";
+        };
+      }
+      {
+        mode = "n";
+        key = "<leader>gg";
+        action.__raw = ''function() Snacks.lazygit() end'';
+        options = {
+          noremap = true;
+          silent = true;
+          desc = "Lazygit";
+        };
+      }
+      {
+        mode = "n";
+        key = "<leader>gl";
+        action.__raw = ''function() Snacks.lazygit.log() end'';
+        options = {
+          noremap = true;
+          silent = true;
+          desc = "Lazygit Log (cwd)";
+        };
+      }
+      {
+        mode = "n";
+        key = "<leader>un";
+        action.__raw = ''function() Snacks.notifier.hide() end'';
+        options = {
+          noremap = true;
+          silent = true;
+          desc = "Dismiss All Notifications";
         };
       }
     ];
@@ -433,97 +497,97 @@
       {
         event = "TextYankPost";
         group = "HighlightYank";
-	pattern = "*";
-	callback = {
-	  __raw = "function()vim.highlight.on_yank({higroup = \"IncSearch\",timeout = 40,}) end";
-	};
+        pattern = "*";
+        callback = {
+          __raw = "function()vim.highlight.on_yank({higroup = \"IncSearch\",timeout = 40,}) end";
+        };
       }
     ];
 
     plugins = {
       oil = {
         enable = true;
-	settings = {
-	  default_file_explorer = true;
-	  delete_to_trash = true;
-	  skip_confirm_for_simple_edits = true;
-	  buf_options = {
-	    bufhidden = "hide";
-	    buflisted = false;
-	  };
-	  view_options = {
-	    show_hidden = true;
-	  };
-	};
+        settings = {
+          default_file_explorer = true;
+          delete_to_trash = true;
+          skip_confirm_for_simple_edits = true;
+          buf_options = {
+            bufhidden = "hide";
+            buflisted = false;
+          };
+          view_options = {
+            show_hidden = true;
+          };
+        };
       };
       lualine = {
         enable = true;
-	autoLoad = true;
-	settings = {
-	  extensions = [
-	    "fzf"
-	  ];
-	};
+        autoLoad = true;
+        settings = {
+          extensions = [
+            "fzf"
+          ];
+        };
       };
       web-devicons = {
         enable = true;
-	settings = {
-	  lazyLoad = true;
-	};
+        settings = {
+          lazyLoad = true;
+        };
       };
       undotree = {
         enable = true;
-	settings = {
-	  lazyLoad = true;
-	};
+        settings = {
+          lazyLoad = true;
+        };
       };
       sandwich = {
         enable = true;
-	settings = {
-	  lazyLoad = true;
-	};
+        settings = {
+          lazyLoad = true;
+        };
       };
       dressing = {
         enable = true;
-	settings = {
-	  lazyLoad = true;
-	};
+        settings = {
+          lazyLoad = true;
+        };
       };
       comment = {
         enable = true;
-	settings = {
-	  lazyLoad = true;
-	};
+        settings = {
+          lazyLoad = true;
+        };
       };
       refactoring = {
         enable = true;
-	settings = {
-	  lazyLoad = false;
-	};
+        settings = {
+          lazyLoad = false;
+        };
       };
       snacks = {
         enable = true;
-	settings = {
-	  bigfile = {
-	    enabled = true;
-	    size = 1.5 * 1024 * 1024;
-	    notify = true;
-	  };
-	  notifier = {
-	    enabled = true;
-	    timeout = 2000;
-	  };
-	  quickfile = {
-	    enabled = true;
-	  };
-	  styles = {
-	    notification = {
-	      wo = {
-	        wrap = true;
-	      };
-	    };
-	  };
-	};
+        settings = {
+          bigfile = {
+            enabled = true;
+            size = 1.5 * 1024 * 1024;
+            notify = true;
+          };
+          notifier = {
+            enabled = true;
+            timeout = 2000;
+          };
+          quickfile = {
+            enabled = true;
+          };
+          styles = {
+            notification = {
+              wo = {
+                wrap = true;
+              };
+            };
+          };
+        };
         luaConfig.pre = ''vim.api.nvim_create_autocmd("User", {
       pattern = "VeryLazy",
       callback = function()
@@ -583,6 +647,232 @@
         });
       end,
     })'';
+      };
+
+      treesitter = {
+        enable = true;
+        settings = {
+          ensure_installed = [
+            "javascript"
+            "typescript"
+            "lua"
+            "go"
+            "zig"
+            "html"
+          ];
+          auto_install = true;
+          sync_install = false;
+          highlight = {
+            additional_vim_regex_highlighting = false;
+            custom_captures = { };
+            disable = [
+            ];
+            enable = true;
+          };
+          ignore_install = [
+          ];
+          incremental_selection = {
+            enable = true;
+            keymaps = {
+              init_selection = false;
+              node_decremental = "grm";
+              node_incremental = "grn";
+              scope_incremental = "grc";
+            };
+          };
+          indent = {
+            enable = true;
+          };
+          parser_install_dir = {
+            __raw = "vim.fs.joinpath(vim.fn.stdpath('data'), 'treesitter')";
+          };
+        };
+      };
+
+      treesitter-context = {
+        settings = {
+          enable = true;
+        };
+      };
+
+      treesitter-textobjects = {
+        enable = true;
+        move = {
+          enable = true;
+          setJumps = true;
+          gotoNextStart = {
+            "]m" = "@function.outer";
+            "gj" = "@function.outer";
+            "]]" = "@class.outer";
+            "]b" = "@block.outer";
+            "]a" = "@parameter.inner";
+          };
+          gotoNextEnd = {
+            "]M" = "@function.outer";
+            "gJ" = "@function.outer";
+            "][" = "@class.outer";
+            "]B" = "@block.outer";
+            "]A" = "@parameter.inner";
+          };
+          gotoPreviousStart = {
+            "[m" = "@function.outer";
+            "gk" = "@function.outer";
+            "[[" = "@class.outer";
+            "[b" = "@block.outer";
+            "[a" = "@parameter.inner";
+          };
+          gotoPreviousEnd = {
+            "[M" = "@function.outer";
+            "gK" = "@function.outer";
+            "[]" = "@class.outer";
+            "[B" = "@block.outer";
+            "[A" = "@parameter.inner";
+          };
+        };
+        select = {
+          enable = true;
+          lookahead = true;
+          keymaps = {
+            "af" = "@function.outer";
+            "if" = "@function.inner";
+            "ac" = "@class.outer";
+            "ic" = "@class.inner";
+            "ab" = "@block.outer";
+            "ib" = "@block.inner";
+            "al" = "@loop.outer";
+            "il" = "@loop.inner";
+            "a/" = "@comment.outer";
+            "i/" = "@comment.outer";
+            "aa" = "@parameter.outer";
+            "ia" = "@parameter.inner";
+          };
+        };
+      };
+
+      telescope = {
+        enable = true;
+        settings = {
+          defaults = {
+            layout_strategy = "horizontal";
+          };
+        };
+        extensions = {
+          fzf-native.enable = true;
+        };
+        keymaps = {
+          "<leader>fb" = {
+            action = "buffers";
+            mode = "n";
+            options = {
+              noremap = true;
+              silent = true;
+            };
+          };
+          "<leader>ps" = {
+            action = "live_grep";
+            mode = "n";
+            options = {
+              noremap = true;
+              silent = true;
+            };
+          };
+          "<leader>fz" = {
+            action = "find_files";
+            mode = "n";
+            options = {
+              noremap = true;
+              silent = true;
+            };
+          };
+          "<C-s>" = {
+            action = "grep_string";
+            mode = "n";
+            options = {
+              noremap = true;
+              silent = true;
+            };
+          };
+          "<leader>fd" = {
+            action = "diagnostics";
+            mode = "n";
+            options = {
+              noremap = true;
+              silent = true;
+            };
+          };
+          "<leader>;" = {
+            action = "resume";
+            mode = "n";
+            options = {
+              noremap = true;
+              silent = true;
+            };
+          };
+        };
+      };
+
+      gitsigns = {
+        enable = true;
+        settings = {
+          on_attach = ''
+        function(bufnr)
+        local gs = package.loaded.gitsigns
+
+        local function map(mode, l, r, opts)
+          opts = opts or {}
+          opts.buffer = bufnr
+          vim.keymap.set(mode, l, r, opts)
+        end
+
+        -- Navigation
+        map("n", "]c", function()
+          if vim.wo.diff then
+            return "]c"
+          end
+          vim.schedule(function()
+            gs.next_hunk()
+          end)
+          return "<Ignore>"
+        end, { expr = true })
+
+        map("n", "[c", function()
+          if vim.wo.diff then
+            return "[c"
+          end
+          vim.schedule(function()
+            gs.prev_hunk()
+          end)
+          return "<Ignore>"
+        end, { expr = true })
+
+        -- Actions
+        map("n", "<leader>hs", gs.stage_hunk)
+        map("n", "<leader>hr", gs.reset_hunk)
+        map("v", "<leader>hs", function()
+          gs.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
+        end)
+        map("v", "<leader>hr", function()
+          gs.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
+        end)
+        map("n", "<leader>hS", gs.stage_buffer)
+        map("n", "<leader>hu", gs.undo_stage_hunk)
+        map("n", "<leader>hR", gs.reset_buffer)
+        map("n", "<leader>hp", gs.preview_hunk)
+        map("n", "<leader>hb", function()
+          gs.blame_line({ full = true })
+        end)
+        map("n", "<leader>tb", gs.toggle_current_line_blame)
+        map("n", "<leader>hd", gs.diffthis)
+        map("n", "<leader>hD", function()
+          gs.diffthis("~")
+        end)
+        map("n", "<leader>td", gs.toggle_deleted)
+
+        -- Text object
+        map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>")
+      end
+          '';
+        };
       };
     };
 
