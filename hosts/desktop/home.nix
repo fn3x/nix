@@ -187,24 +187,6 @@
       # See https://wiki.hyprland.org/Configuring/Monitors/
       monitor = DP-1, 2560x1440@170.00Hz, 0x0, 1
 
-      #################
-      ### AUTOSTART ###
-      #################
-
-      exec-once = dconf write /org/gnome/desktop/interface/gtk-theme "'Adwaita'"
-      exec-once = dconf write /org/gnome/desktop/interface/icon-theme "'Flat-Remix-Red-Dark'"
-      exec-once = dconf write /org/gnome/desktop/interface/document-font-name "'Noto Sans Medium 11'"
-      exec-once = dconf write /org/gnome/desktop/interface/font-name "'Noto Sans Medium 11'"
-      exec-once = dconf write /org/gnome/desktop/interface/monospace-font-name "'Noto Sans Mono Medium 11'"
-      exec-once = swww init
-      exec-once = waybar
-      exec-once = dunst
-      exec-once = [workspace 1 silent] $terminal
-      exec-once = [workspace 2 silent] firefox
-      exec-once = [workspace 3 silent] telegram-desktop
-      exec-once = [workspace 4 silent] mattermost-desktop
-      exec-once = [workspace 5 silent] spotify
-
       #############################
       ### ENVIRONMENT VARIABLES ###
       #############################
@@ -224,6 +206,28 @@
       env = XDG_SESSION_TYPE,wayland
       env = XDG_SESSION_DESKTOP,Hyprland
       env = GTK_THEME,Arc-Dark
+
+      #################
+      ### AUTOSTART ###
+      #################
+
+      # from hyprland wiki - should speed up launches of apps
+      exec-once=dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+      exec-once=systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+
+      exec-once = dconf write /org/gnome/desktop/interface/gtk-theme "'Adwaita'"
+      exec-once = dconf write /org/gnome/desktop/interface/icon-theme "'Flat-Remix-Red-Dark'"
+      exec-once = dconf write /org/gnome/desktop/interface/document-font-name "'Noto Sans Medium 11'"
+      exec-once = dconf write /org/gnome/desktop/interface/font-name "'Noto Sans Medium 11'"
+      exec-once = dconf write /org/gnome/desktop/interface/monospace-font-name "'Noto Sans Mono Medium 11'"
+      exec-once = swww init
+      exec-once = waybar
+      exec-once = dunst
+      exec-once = [workspace 1 silent] $terminal
+      exec-once = [workspace 2 silent] firefox
+      exec-once = [workspace 3 silent] telegram-desktop
+      exec-once = [workspace 4 silent] mattermost-desktop
+      exec-once = [workspace 5 silent] spotify
 
       #####################
       ### LOOK AND FEEL ###
@@ -358,12 +362,6 @@
 
       # Fix some dragging issues with XWayland
       windowrulev2 = nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned:0
-
-      workspace = 1,name:terminal,decorate:false,on-created-empty:$terminal
-      workspace = 2,name:browser,decorate:false,on-created-empty:firefox
-      workspace = 3,name:telegram,decorate:false,on-created-empty:telegram-desktop
-      workspace = 4,name:mattermost,decorate:false,on-created-empty:mattermost-desktop
-      workspace = 5,name:music,decorate:false,on-created-empty:spotify
 
       # windowrulev2 = tile,maximize,workspace 1,class:com.mitchellh.ghostty,initialClass:(- com.mitchellh.ghostty)
       # windowrulev2 = tile,maximize,workspace 2,class:firefox,initialClass:(- firefox)
@@ -783,6 +781,66 @@
           desc = "Dismiss All Notifications";
         };
       }
+      {
+        mode = "n";
+        key = "<leader>a";
+        action.__raw = "function() require('harpoon'):list():add() end";
+        options = {
+          noremap = true;
+          silent = true;
+          desc = "Add file to harpoon list";
+        };
+      }
+      {
+        mode = "n";
+        key = "<C-e>";
+        action.__raw = "function() local harpoon = require('harpoon'); harpoon.ui:toggle_quick_menu(harpoon:list()) end";
+        options = {
+          noremap = true;
+          silent = true;
+          desc = "Toggle quick menu";
+        };
+      }
+      {
+        mode = "n";
+        key = "<C-j>";
+        action.__raw = "function() local harpoon = require('harpoon'); harpoon:list():select(1) end";
+        options = {
+          noremap = true;
+          silent = true;
+          desc = "Select first item from the list";
+        };
+      }
+      {
+        mode = "n";
+        key = "<C-k>";
+        action.__raw = "function() local harpoon = require('harpoon'); harpoon:list():select(2) end";
+        options = {
+          noremap = true;
+          silent = true;
+          desc = "Select second item from the list";
+        };
+      }
+      {
+        mode = "n";
+        key = "<C-l>";
+        action.__raw = "function() local harpoon = require('harpoon'); harpoon:list():select(3) end";
+        options = {
+          noremap = true;
+          silent = true;
+          desc = "Select third item from the list";
+        };
+      }
+      {
+        mode = "n";
+        key = "<C-;>";
+        action.__raw = "function() local harpoon = require('harpoon'); harpoon:list():select(4) end";
+        options = {
+          noremap = true;
+          silent = true;
+          desc = "Select fourth item from the list";
+        };
+      }
     ];
 
     autoGroups = {
@@ -803,6 +861,26 @@
     ];
 
     plugins = {
+      harpoon = {
+        enable = true;
+        package = pkgs.vimPlugins.harpoon2;
+        saveOnToggle = true;
+        # These keymaps are for harpoon1, not harpoon2
+        # Keymaps for harpoon2 are in nixvim.keymaps
+        #
+        # keymaps = {
+        #   addFile = "<leader>a";
+        #   toggleQuickMenu = "<C-e>";
+        #   navFile = {
+        #     "1" = "<C-j>";
+        #     "2" = "<C-k>";
+        #     "3" = "<C-l>";
+        #     "4" = "<C-;>";
+        #   };
+        #   navNext = "<C-S-n>";
+        #   navPrev = "<C-S-p>";
+        # };
+      };
       oil = {
         enable = true;
         settings = {
