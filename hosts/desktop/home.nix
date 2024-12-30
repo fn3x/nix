@@ -1,6 +1,16 @@
-{ inputs, config, pkgs, lib, ... }:
+{
+  inputs,
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
+  programs.home-manager = {
+    enable = true;
+  };
+
   home.username = "fn3x";
   home.homeDirectory = "/home/fn3x";
 
@@ -24,6 +34,7 @@
     telegram-desktop
     vesktop
     mattermost-desktop
+    spotify
     fd
     ripgrep
     tmux
@@ -34,7 +45,9 @@
     lazygit
   ];
 
-  home.file = { ".local/share/fonts".source = ../../fonts; };
+  home.file = {
+    ".local/share/fonts".source = ../../fonts;
+  };
 
   fonts.fontconfig.enable = true;
 
@@ -80,7 +93,263 @@
     NVM_DIR = "~/.nvm";
   };
 
-  programs.home-manager.enable = true;
+  programs.kitty.enable = true; # required for the default Hyprland config
+
+  wayland.windowManager.hyprland = {
+    enable = true;
+    settings = {
+      "$mod" = "ALT";
+      bindl = [
+        ", XF86AudioNext, exec, playerctl next"
+        ", XF86AudioPause, exec, playerctl play-pause"
+        ", XF86AudioPlay, exec, playerctl play-pause"
+        ", XF86AudioPrev, exec, playerctl previous"
+      ];
+      bindel = [
+        ",XF86AudioRaiseVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"
+        ",XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
+        ",XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+        ",XF86AudioMicMute, exec, wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
+        ",XF86MonBrightnessUp, exec, brightnessctl s 10%+"
+        ",XF86MonBrightnessDown, exec, brightnessctl s 10%-"
+      ];
+      bindm = [
+        "$mod, mouse:272, movewindow"
+        "$mod, mouse:273, resizewindow"
+      ];
+      bind =
+        [
+          "$mod, h, movefocus, l"
+          "$mod, l, movefocus, r"
+          "$mod, k, movefocus, u"
+          "$mod, j, movefocus, d"
+          "$mod, T, exec, $terminal"
+          "$mod SHIFT, Q, killactive"
+          "$mod, M, exit"
+          "$mod, E, exec, $fileManager"
+          "$mod, V, togglefloating"
+          "$mod, P, pseudo, # dwindle"
+          "$mod, J, togglesplit, # dwindle"
+          "$mod, SPACE, exec, rofi -show drun -show-icons"
+        ]
+        ++ (
+          # workspaces
+          # binds $mod + [shift +] {1..9} to [move to] workspace {1..9}
+          builtins.concatLists (
+            builtins.genList (
+              i:
+              let
+                ws = i + 1;
+              in
+              [
+                "$mod, code:1${toString i}, workspace, ${toString ws}"
+                "$mod SHIFT, code:1${toString i}, movetoworkspace, ${toString ws}"
+              ]
+            ) 9
+          )
+        );
+    };
+    extraConfig = ''
+      ################
+      ### MONITORS ###
+      ################
+
+      # See https://wiki.hyprland.org/Configuring/Monitors/
+      monitor = DP-1, 2560x1440@170.00Hz, 0x0, 1
+
+      ###################
+      ### MY PROGRAMS ###
+      ###################
+
+      # Set programs that you use
+      $terminal = ghostty
+      $fileManager = dolphin
+
+      #################
+      ### AUTOSTART ###
+      #################
+
+      exec-once = dconf write /org/gnome/desktop/interface/gtk-theme "'Adwaita'"
+      exec-once = dconf write /org/gnome/desktop/interface/icon-theme "'Flat-Remix-Red-Dark'"
+      exec-once = dconf write /org/gnome/desktop/interface/document-font-name "'Noto Sans Medium 11'"
+      exec-once = dconf write /org/gnome/desktop/interface/font-name "'Noto Sans Medium 11'"
+      exec-once = dconf write /org/gnome/desktop/interface/monospace-font-name "'Noto Sans Mono Medium 11'"
+      exec-once = swww init
+      exec-once = waybar
+      exec-once = dunst
+      exec-once = [workspace 1 silent] $terminal
+      exec-once = [workspace 2 silent] firefox
+      exec-once = [workspace 3 silent] telegram-desktop
+      exec-once = [workspace 4 silent] mattermost-desktop
+      exec-once = [workspace 5 silent] spotify
+
+      #############################
+      ### ENVIRONMENT VARIABLES ###
+      #############################
+
+      # See https://wiki.hyprland.org/Configuring/Environment-variables/
+
+      env = XCURSOR_SIZE,24
+      env = HYPRCURSOR_SIZE,24
+      env = GBM_BACKEND,nvidia-drm
+      env = LIBVA_DRIVER_NAME,nvidia
+      env = __GLX_VENDOR_LIBRARY_NAME,nvidia
+      env = GDK_BACKEND,wayland,x11,*
+      env = QT_QPA_PLATFORM,wayland;xcb
+      env = SDL_VIDEODRIVER,wayland
+      env = CLUTTER_BACKEND,wayland
+      env = XDG_CURRENT_DESKTOP,Hyprland
+      env = XDG_SESSION_TYPE,wayland
+      env = XDG_SESSION_DESKTOP,Hyprland
+      env = GTK_THEME,Arc-Dark
+
+      #####################
+      ### LOOK AND FEEL ###
+      #####################
+
+      # https://wiki.hyprland.org/Configuring/Variables/#general
+
+      general {
+          gaps_in = 10
+          gaps_out = 0
+
+          border_size = 0
+
+          # https://wiki.hyprland.org/Configuring/Variables/#variable-types for info about colors
+          col.active_border = rgba(33ccffee) rgba(00ff99ee) 45deg
+          col.inactive_border = rgba(595959aa)
+
+          # Set to true enable resizing windows by clicking and dragging on borders and gaps
+          resize_on_border = false
+
+          # Please see https://wiki.hyprland.org/Configuring/Tearing/ before you turn this on
+          allow_tearing = false
+
+          layout = dwindle
+      }
+
+      # https://wiki.hyprland.org/Configuring/Variables/#decoration
+      decoration {
+          rounding = 10
+
+          # Change transparency of focused and unfocused windows
+          active_opacity = 1.0
+          inactive_opacity = 1.0
+
+          shadow {
+              enabled = true
+              range = 4
+              render_power = 3
+              color = rgba(1a1a1aee)
+          }
+
+          # https://wiki.hyprland.org/Configuring/Variables/#blur
+          blur {
+              enabled = true
+              size = 3
+              passes = 1
+
+              vibrancy = 0.1696
+          }
+      }
+
+      # https://wiki.hyprland.org/Configuring/Variables/#animations
+      animations {
+          enabled = yes, please :)
+
+          # Default animations, see https://wiki.hyprland.org/Configuring/Animations/ for more
+
+          bezier = easeOutQuint,0.23,1,0.32,1
+          bezier = easeInOutCubic,0.65,0.05,0.36,1
+          bezier = linear,0,0,1,1
+          bezier = almostLinear,0.5,0.5,0.75,1.0
+          bezier = quick,0.15,0,0.1,1
+
+          animation = global, 1, 10, default
+          animation = border, 1, 2.5, easeOutQuint
+          animation = windows, 1, 2.5, easeOutQuint
+          animation = windowsIn, 1, 2.0, easeOutQuint, popin 87%
+          animation = windowsOut, 1, 1.25, linear, popin 87%
+          animation = fadeIn, 1, 1.5, almostLinear
+          animation = fadeOut, 1, 1.2, almostLinear
+          animation = fade, 1, 2.0, quick
+          animation = layers, 1, 2.0, easeOutQuint
+          animation = layersIn, 1, 2.0, easeOutQuint, fade
+          animation = layersOut, 1, 1.25, linear, fade
+          animation = fadeLayersIn, 1, 1.4, almostLinear
+          animation = fadeLayersOut, 1, 1.2, almostLinear
+          animation = workspaces, 1, 1.5, almostLinear, fade
+          animation = workspacesIn, 1, 1.1, almostLinear, fade
+          animation = workspacesOut, 1, 1.5, almostLinear, fade
+      }
+
+      # See https://wiki.hyprland.org/Configuring/Dwindle-Layout/ for more
+      dwindle {
+          pseudotile = true # Master switch for pseudotiling. Enabling is bound to mainMod + P in the keybinds section below
+          preserve_split = true # You probably want this
+      }
+
+      # https://wiki.hyprland.org/Configuring/Variables/#misc
+      misc {
+          force_default_wallpaper = 1
+          disable_hyprland_logo = true
+      }
+
+      #############
+      ### INPUT ###
+      #############
+
+      # https://wiki.hyprland.org/Configuring/Variables/#input
+      input {
+          kb_layout = us,ru
+          kb_variant =
+          kb_model = kinesis
+          kb_options = grp:win_space_toggle
+          kb_rules =
+
+          follow_mouse = 1
+
+          sensitivity = 0 # -1.0 - 1.0, 0 means no modification.
+      }
+
+      # https://wiki.hyprland.org/Configuring/Variables/#gestures
+      gestures {
+          workspace_swipe = false
+      }
+
+      # Example per-device config
+      # See https://wiki.hyprland.org/Configuring/Keywords/#per-device-input-configs for more
+      device {
+          name = epic-mouse-v1
+          sensitivity = -0.5
+      }
+
+      ##############################
+      ### WINDOWS AND WORKSPACES ###
+      ##############################
+
+      # See https://wiki.hyprland.org/Configuring/Window-Rules/ for more
+      # See https://wiki.hyprland.org/Configuring/Workspace-Rules/ for workspace rules
+
+      # Ignore maximize requests from apps. You'll probably like this.
+      windowrulev2 = suppressevent maximize, class:.*
+
+      # Fix some dragging issues with XWayland
+      windowrulev2 = nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned:0
+
+      workspace = 1,name:terminal,decorate:false,on-created-empty:ghostty
+      workspace = 2,name:browser,decorate:false,on-created-empty:firefox
+      workspace = 3,name:telegram,decorate:false,on-created-empty:telegram-desktop
+      workspace = 4,name:mattermost,decorate:false,on-created-empty:mattermost-desktop
+      workspace = 5,name:music,decorate:false,on-created-empty:spotify
+
+      windowrulev2 = tile,maximize,workspace 1,class:com.mitchellh.ghostty,initialClass:(- com.mitchellh.ghostty)
+      windowrulev2 = tile,maximize,workspace 2,class:firefox,initialClass:(- firefox)
+      windowrulev2 = tile,maximize,workspace 3,class:org.telegram.desktop,initialClass:(- org.telegram.desktop)
+      windowrulev2 = tile,maximize,workspace 4,class:Mattermost,initialClass:(- Mattermost)
+      windowrulev2 = tile,maximize,workspace 5,class:spotify,initialClass:(- spotify)
+    '';
+  };
 
   programs.git = {
     enable = true;
@@ -94,7 +363,9 @@
 
   programs.lazygit = {
     enable = true;
-    settings = { floating_window_scaling_factor = 0.9; };
+    settings = {
+      floating_window_scaling_factor = 0.9;
+    };
   };
 
   programs.tmux = {
@@ -198,7 +469,9 @@
     enableZshIntegration = true;
   };
 
-  programs.zsh = { enable = true; };
+  programs.zsh = {
+    enable = true;
+  };
 
   programs.oh-my-posh = {
     enable = true;
@@ -235,8 +508,7 @@
       breakindent = true;
       updatetime = 100;
 
-      guicursor =
-        "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50,i:blinkwait500-blinkoff400-blinkon500-Cursor/lCursor";
+      guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50,i:blinkwait500-blinkoff400-blinkon500-Cursor/lCursor";
       termguicolors = true;
       mouse = "";
       undofile = true;
@@ -483,17 +755,22 @@
       }
     ];
 
-    autoGroups = { HighlightYank = { clear = true; }; };
-
-    autoCmd = [{
-      event = "TextYankPost";
-      group = "HighlightYank";
-      pattern = "*";
-      callback = {
-        __raw = ''
-          function()vim.highlight.on_yank({higroup = "IncSearch",timeout = 40,}) end'';
+    autoGroups = {
+      HighlightYank = {
+        clear = true;
       };
-    }];
+    };
+
+    autoCmd = [
+      {
+        event = "TextYankPost";
+        group = "HighlightYank";
+        pattern = "*";
+        callback = {
+          __raw = ''function()vim.highlight.on_yank({higroup = "IncSearch",timeout = 40,}) end'';
+        };
+      }
+    ];
 
     plugins = {
       oil = {
@@ -506,38 +783,62 @@
             bufhidden = "hide";
             buflisted = false;
           };
-          view_options = { show_hidden = true; };
+          view_options = {
+            show_hidden = true;
+          };
         };
       };
+
       lualine = {
         enable = true;
         autoLoad = true;
-        settings = { extensions = [ "fzf" ]; };
+        settings = {
+          extensions = [ "fzf" ];
+        };
       };
+
       web-devicons = {
         enable = true;
-        settings = { lazyLoad = true; };
+        settings = {
+          lazyLoad = true;
+        };
       };
+
       undotree = {
         enable = true;
-        settings = { lazyLoad = true; };
+        settings = {
+          lazyLoad = true;
+        };
       };
+
       sandwich = {
         enable = true;
-        settings = { lazyLoad = true; };
+        settings = {
+          lazyLoad = true;
+        };
       };
+
       dressing = {
         enable = true;
-        settings = { lazyLoad = true; };
+        settings = {
+          lazyLoad = true;
+        };
       };
+
       comment = {
         enable = true;
-        settings = { lazyLoad = true; };
+        settings = {
+          lazyLoad = true;
+        };
       };
+
       refactoring = {
         enable = true;
-        settings = { lazyLoad = false; };
+        settings = {
+          lazyLoad = false;
+        };
       };
+
       snacks = {
         enable = true;
         settings = {
@@ -550,8 +851,16 @@
             enabled = true;
             timeout = 2000;
           };
-          quickfile = { enabled = true; };
-          styles = { notification = { wo = { wrap = true; }; }; };
+          quickfile = {
+            enabled = true;
+          };
+          styles = {
+            notification = {
+              wo = {
+                wrap = true;
+              };
+            };
+          };
         };
         luaConfig.pre = ''
           vim.api.nvim_create_autocmd("User", {
@@ -618,8 +927,14 @@
       treesitter = {
         enable = true;
         settings = {
-          ensure_installed =
-            [ "javascript" "typescript" "lua" "go" "zig" "html" ];
+          ensure_installed = [
+            "javascript"
+            "typescript"
+            "lua"
+            "go"
+            "zig"
+            "html"
+          ];
           auto_install = true;
           sync_install = false;
           highlight = {
@@ -638,14 +953,20 @@
               scope_incremental = "grc";
             };
           };
-          indent = { enable = true; };
+          indent = {
+            enable = true;
+          };
           parser_install_dir = {
             __raw = "vim.fs.joinpath(vim.fn.stdpath('data'), 'treesitter')";
           };
         };
       };
 
-      treesitter-context = { settings = { enable = true; }; };
+      treesitter-context = {
+        settings = {
+          enable = true;
+        };
+      };
 
       treesitter-textobjects = {
         enable = true;
@@ -703,8 +1024,14 @@
 
       telescope = {
         enable = true;
-        settings = { defaults = { layout_strategy = "horizontal"; }; };
-        extensions = { fzf-native.enable = true; };
+        settings = {
+          defaults = {
+            layout_strategy = "horizontal";
+          };
+        };
+        extensions = {
+          fzf-native.enable = true;
+        };
         keymaps = {
           "<leader>fb" = {
             action = "buffers";
@@ -820,6 +1147,7 @@
           '';
         };
       };
+
       conform-nvim = {
         enable = true;
         settings = {
@@ -832,38 +1160,65 @@
             lua = [ "stylua" ];
             go = [ "gofumpt" ];
             sql = [ "sql-formatter" ];
-            javascript = [ "prettierd" "prettier" ];
-            html = [ "prettierd" "prettier" ];
-            typescript = [ "prettierd" "prettier" ];
-            nix = [ "nixfmt" ];
+            javascript = [
+              "prettierd"
+              "prettier"
+            ];
+            html = [
+              "prettierd"
+              "prettier"
+            ];
+            typescript = [
+              "prettierd"
+              "prettier"
+            ];
+            nix = [ "nixfmt-rfc-style" ];
           };
           formatters = {
-            stylua = { command = lib.getExe pkgs.stylua; };
-            prettierd = { command = lib.getExe pkgs.prettierd; };
+            stylua = {
+              command = lib.getExe pkgs.stylua;
+            };
+            prettierd = {
+              command = lib.getExe pkgs.prettierd;
+            };
             prettier = {
               command = lib.getExe pkgs.nodePackages_latest.prettier;
             };
-            gofumpt = { command = lib.getExe pkgs.gofumpt; };
-            nixfmt = { command = lib.getExe pkgs.nixfmt; };
+            gofumpt = {
+              command = lib.getExe pkgs.gofumpt;
+            };
+            nixfmt-rfc-style = {
+              command = lib.getExe pkgs.nixfmt-rfc-style;
+            };
           };
         };
+      };
+
+      luasnip = {
+        enable = true;
+        fromVscode = [
+          {
+            lazyLoad = true;
+            paths = "${pkgs.vimPlugins.friendly-snippets}";
+          }
+        ];
       };
     };
 
     extraPlugins = [ pkgs.vimPlugins.gruvbox-material-nvim ];
     extraConfigLua = ''
       require("gruvbox-material").setup();
-            vim.g.gruvbox_material_background = "medium";
-            vim.g.gruvbox_material_better_performance = 1;
-            vim.g.gruvbox_material_enable_bold = 0;
-            vim.g.gruvbox_material_menu_selection_background = "aqua";
-            vim.g.gruvbox_material_visual = "blue background";
-            vim.g.gruvbox_material_foreground = "material";
-            vim.g.gruvbox_material_float_style = "bright";
-            vim.g.gruvbox_material_diagnostic_virtual_text = "colored";
-            vim.cmd.colorscheme("gruvbox-material");
-            vim.api.nvim_set_hl(0, "LineNrAbove", { fg = "#b8fcec", bold = false });
-            vim.api.nvim_set_hl(0, "LineNr", { fg = "white", bold = true });
-            vim.api.nvim_set_hl(0, "LineNrBelow", { fg = "#fcd6a9", bold = false });'';
+      vim.g.gruvbox_material_background = "medium";
+      vim.g.gruvbox_material_better_performance = 1;
+      vim.g.gruvbox_material_enable_bold = 0;
+      vim.g.gruvbox_material_menu_selection_background = "aqua";
+      vim.g.gruvbox_material_visual = "blue background";
+      vim.g.gruvbox_material_foreground = "material";
+      vim.g.gruvbox_material_float_style = "bright";
+      vim.g.gruvbox_material_diagnostic_virtual_text = "colored";
+      vim.cmd.colorscheme("gruvbox-material");
+      vim.api.nvim_set_hl(0, "LineNrAbove", { fg = "#b8fcec", bold = false });
+      vim.api.nvim_set_hl(0, "LineNr", { fg = "white", bold = true });
+      vim.api.nvim_set_hl(0, "LineNrBelow", { fg = "#fcd6a9", bold = false });'';
   };
 }
