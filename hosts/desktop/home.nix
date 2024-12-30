@@ -47,9 +47,35 @@
 
   home.file = {
     ".local/share/fonts".source = ../../fonts;
+    ".config/ghostty/config" = {
+      text = ''
+        font-family="BerkeleyMono Nerd Font Mono"
+        font-size=20
+        theme="rose-pine"
+        cursor-style=block
+        cursor-style-blink=true
+        background-blur-radius=20
+        background-opacity=0.95
+        title=""
+        window-save-state=always
+        window-decoration=false
+        shell-integration=zsh
+        shell-integration-features=sudo,no-cursor
+        auto-update=check
+      '';
+      executable = false;
+    };
   };
 
   fonts.fontconfig.enable = true;
+
+  services.flameshot = {
+    enable = true;
+    settings.General = {
+      showStartupLaunchMessage = false;
+      saveLastRegion = true;
+    };
+  };
 
   programs.btop = {
     enable = true;
@@ -99,6 +125,9 @@
     enable = true;
     settings = {
       "$mod" = "ALT";
+      "$terminal" = "ghostty";
+      "$fileManager" = "dolphin";
+      "$menu" = "rofi -show drun -show-icons";
       bindl = [
         ", XF86AudioNext, exec, playerctl next"
         ", XF86AudioPause, exec, playerctl play-pause"
@@ -130,7 +159,8 @@
           "$mod, V, togglefloating"
           "$mod, P, pseudo, # dwindle"
           "$mod, J, togglesplit, # dwindle"
-          "$mod, SPACE, exec, rofi -show drun -show-icons"
+          "$mod, SPACE, exec, $menu"
+          "$mod SHIFT, S, exec, XDG_CURRENT_DESKTOP=sway flameshot gui"
         ]
         ++ (
           # workspaces
@@ -156,14 +186,6 @@
 
       # See https://wiki.hyprland.org/Configuring/Monitors/
       monitor = DP-1, 2560x1440@170.00Hz, 0x0, 1
-
-      ###################
-      ### MY PROGRAMS ###
-      ###################
-
-      # Set programs that you use
-      $terminal = ghostty
-      $fileManager = dolphin
 
       #################
       ### AUTOSTART ###
@@ -211,16 +233,16 @@
 
       general {
           gaps_in = 10
-          gaps_out = 0
+          gaps_out = 5
 
-          border_size = 0
+          border_size = 1
 
           # https://wiki.hyprland.org/Configuring/Variables/#variable-types for info about colors
           col.active_border = rgba(33ccffee) rgba(00ff99ee) 45deg
           col.inactive_border = rgba(595959aa)
 
           # Set to true enable resizing windows by clicking and dragging on borders and gaps
-          resize_on_border = false
+          resize_on_border = true
 
           # Please see https://wiki.hyprland.org/Configuring/Tearing/ before you turn this on
           allow_tearing = false
@@ -332,22 +354,30 @@
       # See https://wiki.hyprland.org/Configuring/Workspace-Rules/ for workspace rules
 
       # Ignore maximize requests from apps. You'll probably like this.
-      windowrulev2 = suppressevent maximize, class:.*
+      windowrulev2 = suppressevent maximize decorate:0, class:.*
 
       # Fix some dragging issues with XWayland
       windowrulev2 = nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned:0
 
-      workspace = 1,name:terminal,decorate:false,on-created-empty:ghostty
+      workspace = 1,name:terminal,decorate:false,on-created-empty:$terminal
       workspace = 2,name:browser,decorate:false,on-created-empty:firefox
       workspace = 3,name:telegram,decorate:false,on-created-empty:telegram-desktop
       workspace = 4,name:mattermost,decorate:false,on-created-empty:mattermost-desktop
       workspace = 5,name:music,decorate:false,on-created-empty:spotify
 
-      windowrulev2 = tile,maximize,workspace 1,class:com.mitchellh.ghostty,initialClass:(- com.mitchellh.ghostty)
-      windowrulev2 = tile,maximize,workspace 2,class:firefox,initialClass:(- firefox)
-      windowrulev2 = tile,maximize,workspace 3,class:org.telegram.desktop,initialClass:(- org.telegram.desktop)
-      windowrulev2 = tile,maximize,workspace 4,class:Mattermost,initialClass:(- Mattermost)
-      windowrulev2 = tile,maximize,workspace 5,class:spotify,initialClass:(- spotify)
+      # windowrulev2 = tile,maximize,workspace 1,class:com.mitchellh.ghostty,initialClass:(- com.mitchellh.ghostty)
+      # windowrulev2 = tile,maximize,workspace 2,class:firefox,initialClass:(- firefox)
+      # windowrulev2 = tile,maximize,workspace 3,class:org.telegram.desktop,initialClass:(- org.telegram.desktop)
+      # windowrulev2 = tile,maximize,workspace 4,class:Mattermost,initialClass:(- Mattermost)
+      # windowrulev2 = tile,maximize,workspace 5,class:spotify,initialClass:(- spotify)
+
+      # Fixes for flameshot on wayland
+      windowrulev2 = float, class:^(flameshot)$
+      windowrulev2 = move 0 0, class:^(flameshot)$
+      windowrulev2 = pin, class:^(flameshot)$
+      # set this to your leftmost monitor id, otherwise you have to move your cursor to the leftmost monitor
+      # before executing flameshot
+      windowrulev2 = monitor 1, class:^(flameshot)$
     '';
   };
 

@@ -8,7 +8,9 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    ghostty = { url = "github:ghostty-org/ghostty"; };
+    ghostty = {
+      url = "github:ghostty-org/ghostty";
+    };
     nixvim = {
       url = "github:nix-community/nixvim";
       # If using a stable channel you can use `url = "github:nix-community/nixvim/nixos-<version>"`
@@ -18,10 +20,20 @@
     hyprland-qtutils.url = "github:hyprwm/hyprland-qtutils";
   };
 
-  outputs = { self, nixpkgs, home-manager, hyprland-qtutils, ghostty, nixvim
-    , ... }@inputs:
-    let inherit (self) outputs;
-    in {
+  outputs =
+    {
+      self,
+      nixpkgs,
+      home-manager,
+      hyprland-qtutils,
+      ghostty,
+      nixvim,
+      ...
+    }@inputs:
+    let
+      inherit (self) outputs;
+    in
+    {
       nixosConfigurations = {
         desktop = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
@@ -42,8 +54,7 @@
 
       homeConfigurations = {
         "fn3x@desktop" = home-manager.lib.homeManagerConfiguration {
-          pkgs =
-            nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
+          pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
           extraSpecialArgs = { inherit inputs outputs; };
           modules = [ ./hosts/desktop/home.nix ];
         };
