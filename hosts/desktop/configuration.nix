@@ -154,6 +154,20 @@
     NIXOS_OZONE_WL = "1";
   };
 
+  environment.pathsToLink = [ "/share/zsh" ];
+  environment.persistence = {
+    "/persist" = {
+      directories = [
+        "/etc/nixos"
+        "/etc/NetworkManager/system-connections"
+        "/var/lib/systemd"
+        "/var/lib/nixos"
+        "/var/log"
+        "/srv"
+      ];
+    };
+  };
+
   xdg.portal.enable = true;
   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 

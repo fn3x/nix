@@ -19,6 +19,11 @@
 
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     hyprland-qtutils.url = "github:hyprwm/hyprland-qtutils";
+    firefox-addons = {
+      url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    impermanence.url = "github:nix-community/impermanence";
   };
 
   outputs =
@@ -27,6 +32,7 @@
       nixpkgs,
       home-manager,
       nixvim,
+      impermanence,
       ...
     }@inputs:
     let
@@ -38,6 +44,7 @@
           specialArgs = { inherit inputs outputs; };
           modules = [
             ./hosts/desktop/configuration.nix
+            impermanence.nixosModules.impermanence
             home-manager.nixosModules.home-manager
             {
               home-manager.extraSpecialArgs = { inherit inputs outputs; };

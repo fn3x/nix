@@ -6,6 +6,29 @@
   ...
 }:
 
+let
+  inherit (lib) concatStringsSep escapeShellArg mapAttrsToList;
+  env = {
+    MOZ_WEBRENDER = 1;
+    # For a better scrolling implementation and touch support.
+    # Be sure to also disable "Use smooth scrolling" in about:preferences
+    MOZ_USE_XINPUT2 = 1;
+    # Required for hardware video decoding.
+    # See https://github.com/elFarto/nvidia-vaapi-driver?tab=readme-ov-file#firefox
+    MOZ_DISABLE_RDD_SANDBOX = 1;
+    LIBVA_DRIVER_NAME = "nvidia";
+    NVD_BACKEND = "direct";
+  };
+  envStr = concatStringsSep " " (mapAttrsToList (n: v: "${n}=${escapeShellArg v}") env);
+
+  betterfox = pkgs.fetchFromGitHub {
+    owner = "yokoffing";
+    repo = "Betterfox";
+    rev = "116.1";
+    hash = "sha256-Ai8Szbrk/4FhGhS4r5gA2DqjALFRfQKo2a/TwWCIA6g=";
+  };
+in
+
 {
   programs.home-manager = {
     enable = true;
@@ -74,6 +97,440 @@
     settings.General = {
       showStartupLaunchMessage = false;
       saveLastRegion = true;
+    };
+  };
+
+  programs.firefox = {
+    enable = true;
+    package = pkgs.firefox.overrideAttrs (old: {
+      buildCommand =
+        old.buildCommand
+        + ''
+          substituteInPlace $out/bin/firefox \
+            --replace "exec -a" ${escapeShellArg envStr}" exec -a"
+        '';
+    });
+
+    profiles.default = {
+      id = 0;
+      isDefault = true;
+
+      # Hide tab bar because we have tree style tabs
+      userChrome = ''
+        #TabsToolbar {
+          visibility: collapse !important;
+        }
+
+        #titlebar-buttonbox {
+          height: 32px !important;
+        }
+      '';
+
+      extraConfig = builtins.concatStringsSep "\n" [
+        (builtins.readFile "${betterfox}/Securefox.js")
+        (builtins.readFile "${betterfox}/Fastfox.js")
+        (builtins.readFile "${betterfox}/Peskyfox.js")
+        (builtins.readFile "${betterfox}/Smoothfox.js")
+      ];
+
+      settings = {
+        "ui.key.menuAccessKeyFocuses" = false;
+        # General
+        "intl.accept_languages" = "en-US,en";
+        "browser.startup.page" = 3; # Resume previous session on startup
+        "browser.aboutConfig.showWarning" = false; # I sometimes know what I'm doing
+        "browser.ctrlTab.sortByRecentlyUsed" = false; # (default) Who wants that?
+        "browser.download.useDownloadDir" = false; # Ask where to save stuff
+        "browser.translations.neverTranslateLanguages" = "ru"; # No need :)
+        "privacy.clearOnShutdown.history" = false; # We want to save history on exit
+        # Hi-DPI
+        "layout.css.devPixelsPerPx" = "1.25";
+        # Allow executing JS in the dev console
+        "devtools.chrome.enabled" = true;
+        # Disable browser crash reporting
+        "browser.tabs.crashReporting.sendReport" = false;
+        # Allow userCrome.css
+        "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+        # Why the fuck can my search window make bell sounds
+        "accessibility.typeaheadfind.enablesound" = false;
+        # Why the fuck can my search window make bell sounds
+        "general.autoScroll" = true;
+
+        # Hardware acceleration
+        # See https://github.com/elFarto/nvidia-vaapi-driver?tab=readme-ov-file#firefox
+        "gfx.webrender.all" = true;
+        "media.ffmpeg.vaapi.enabled" = true;
+        "media.rdd-ffmpeg.enabled" = true;
+        "widget.dmabuf.force-enabled" = true;
+        "media.av1.enabled" = false; # XXX: change once I've upgraded my GPU
+        # XXX: what is this?
+        "media.ffvpx.enabled" = false;
+        "media.rdd-vpx.enabled" = false;
+
+        # Privacy
+        "privacy.donottrackheader.enabled" = true;
+        "privacy.trackingprotection.enabled" = true;
+        "privacy.trackingprotection.socialtracking.enabled" = true;
+        "privacy.userContext.enabled" = true;
+        "privacy.userContext.ui.enabled" = true;
+
+        "browser.send_pings" = false; # (default) Don't respect <a ping=...>
+
+        # This allows firefox devs changing options for a small amount of users to test out stuff.
+        # Not with me please ...
+        "app.normandy.enabled" = false;
+        "app.shield.optoutstudies.enabled" = false;
+
+        "beacon.enabled" = false; # No bluetooth location BS in my webbrowser please
+        "device.sensors.enabled" = false; # This isn't a phone
+        "geo.enabled" = false; # Disable geolocation alltogether
+
+        # ESNI is deprecated ECH is recommended
+        "network.dns.echconfig.enabled" = true;
+
+        # Disable telemetry for privacy reasons
+        "toolkit.telemetry.archive.enabled" = false;
+        "toolkit.telemetry.enabled" = false; # enforced by nixos
+        "toolkit.telemetry.server" = "";
+        "toolkit.telemetry.unified" = false;
+        "extensions.webcompat-reporter.enabled" = false; # don't report compability problems to mozilla
+        "datareporting.policy.dataSubmissionEnabled" = false;
+        "datareporting.healthreport.uploadEnabled" = false;
+        "browser.ping-centre.telemetry" = false;
+        "browser.urlbar.eventTelemetry.enabled" = false; # (default)
+
+        # Disable some useless stuff
+        "extensions.pocket.enabled" = false; # disable pocket, save links, send tabs
+        "extensions.abuseReport.enabled" = false; # don't show 'report abuse' in extensions
+        "extensions.formautofill.creditCards.enabled" = false; # don't auto-fill credit card information
+        "identity.fxaccounts.enabled" = false; # disable firefox login
+        "identity.fxaccounts.toolbar.enabled" = false;
+        "identity.fxaccounts.pairing.enabled" = false;
+        "identity.fxaccounts.commands.enabled" = false;
+        "browser.contentblocking.report.lockwise.enabled" = false; # don't use firefox password manger
+        "browser.uitour.enabled" = false; # no tutorial please
+        "browser.newtabpage.activity-stream.showSponsored" = false;
+        "browser.newtabpage.activity-stream.showSponsoredTopSites" = false;
+
+        # disable EME encrypted media extension (Providers can get DRM
+        # through this if they include a decryption black-box program)
+        "browser.eme.ui.enabled" = false;
+        "media.eme.enabled" = false;
+
+        # don't predict network requests
+        "network.predictor.enabled" = false;
+        "browser.urlbar.speculativeConnect.enabled" = false;
+
+        # disable annoying web features
+        "dom.push.enabled" = false; # no notifications, really...
+        "dom.push.connection.enabled" = false;
+        "dom.battery.enabled" = false; # you don't need to see my battery...
+        "dom.private-attribution.submission.enabled" = false; # No PPA for me pls
+      };
+
+      search = {
+        force = true;
+        default = "DuckDuckGo";
+        order = [
+          "DuckDuckGo"
+          "Google"
+          "GitHub"
+          "Youtube"
+        ];
+
+        engines = {
+          "Bing".metaData.hidden = true;
+          "Amazon.com".metaData.hidden = true;
+          "Google".metaData.hidden = true;
+
+          "YouTube" = {
+            iconUpdateURL = "https://youtube.com/favicon.ico";
+            updateInterval = 24 * 60 * 60 * 1000;
+            definedAliases = [ "@yt" ];
+            urls = [
+              {
+                template = "https://www.youtube.com/results";
+                params = [
+                  {
+                    name = "search_query";
+                    value = "{searchTerms}";
+                  }
+                ];
+              }
+            ];
+          };
+
+          "Google" = {
+            iconUpdateURL = "https://google.com/favicon.ico";
+            updateInterval = 24 * 60 * 60 * 1000;
+            definedAliases = [ "@g" ];
+
+            urls = [
+              {
+                template = "https://google.com/search";
+                params = [
+                  {
+                    name = "q";
+                    value = "{searchTerms}";
+                  }
+                ];
+              }
+            ];
+          };
+
+          "DuckDuckGo" = {
+            iconUpdateURL = "https://duckduckgo.com/favicon.ico";
+            updateInterval = 24 * 60 * 60 * 1000;
+            definedAliases = [ "@dd" ];
+
+            urls = [
+              {
+                template = "https://duckduckgo.com";
+                params = [
+                  {
+                    name = "q";
+                    value = "{searchTerms}";
+                  }
+                ];
+              }
+            ];
+          };
+
+          "GitHub" = {
+            iconUpdateURL = "https://github.com/favicon.ico";
+            updateInterval = 24 * 60 * 60 * 1000;
+            definedAliases = [ "@gh" ];
+
+            urls = [
+              {
+                template = "https://github.com/search";
+                params = [
+                  {
+                    name = "q";
+                    value = "{searchTerms}";
+                  }
+                ];
+              }
+            ];
+          };
+        };
+      };
+
+      extensions = with inputs.firefox-addons.packages."x86_64-linux"; [
+        bitwarden
+        ublock-origin
+        seventv
+      ];
+    };
+    profiles.empty = {
+      id = 1;
+      isDefault = false;
+    };
+    profiles.onlybetterfox = {
+      id = 2;
+      isDefault = false;
+
+      extraConfig = builtins.concatStringsSep "\n" [
+        (builtins.readFile "${betterfox}/Securefox.js")
+        (builtins.readFile "${betterfox}/Fastfox.js")
+        (builtins.readFile "${betterfox}/Peskyfox.js")
+      ];
+    };
+    profiles.onlysettings = {
+      id = 3;
+      isDefault = false;
+
+      settings = {
+        # General
+        "intl.accept_languages" = "en-US,en";
+        "browser.startup.page" = 3; # Resume previous session on startup
+        "browser.ctrlTab.sortByRecentlyUsed" = false; # (default) Who wants that?
+        "browser.download.useDownloadDir" = false; # Ask where to save stuff
+        "browser.translations.neverTranslateLanguages" = "ru"; # No need :)
+        "privacy.clearOnShutdown.history" = false; # We want to save history on exit
+        # Hi-DPI
+        "layout.css.devPixelsPerPx" = "1.25";
+        # Allow executing JS in the dev console
+        "devtools.chrome.enabled" = true;
+        # Disable browser crash reporting
+        "browser.tabs.crashReporting.sendReport" = false;
+        # Why the fuck can my search window make bell sounds
+        "accessibility.typeaheadfind.enablesound" = false;
+        # Why the fuck can my search window make bell sounds
+        "general.autoScroll" = true;
+
+        # Hardware acceleration
+        # See https://github.com/elFarto/nvidia-vaapi-driver?tab=readme-ov-file#firefox
+        "gfx.webrender.all" = true;
+        "media.ffmpeg.vaapi.enabled" = true;
+        "media.rdd-ffmpeg.enabled" = true;
+        "widget.dmabuf.force-enabled" = true;
+        "media.av1.enabled" = false; # XXX: change once I've upgraded my GPU
+        # XXX: what is this?
+        "media.ffvpx.enabled" = false;
+        "media.rdd-vpx.enabled" = false;
+
+        # Privacy
+        "privacy.donottrackheader.enabled" = true;
+        "privacy.trackingprotection.enabled" = true;
+        "privacy.trackingprotection.socialtracking.enabled" = true;
+        "privacy.userContext.enabled" = true;
+        "privacy.userContext.ui.enabled" = true;
+
+        "browser.send_pings" = false; # (default) Don't respect <a ping=...>
+
+        # This allows firefox devs changing options for a small amount of users to test out stuff.
+        # Not with me please ...
+        "app.normandy.enabled" = false;
+        "app.shield.optoutstudies.enabled" = false;
+
+        "beacon.enabled" = false; # No bluetooth location BS in my webbrowser please
+        "device.sensors.enabled" = false; # This isn't a phone
+        "geo.enabled" = false; # Disable geolocation alltogether
+
+        # ESNI is deprecated ECH is recommended
+        "network.dns.echconfig.enabled" = true;
+
+        # Disable telemetry for privacy reasons
+        "toolkit.telemetry.archive.enabled" = false;
+        "toolkit.telemetry.enabled" = false; # enforced by nixos
+        "toolkit.telemetry.server" = "";
+        "toolkit.telemetry.unified" = false;
+        "extensions.webcompat-reporter.enabled" = false; # don't report compability problems to mozilla
+        "datareporting.policy.dataSubmissionEnabled" = false;
+        "datareporting.healthreport.uploadEnabled" = false;
+        "browser.ping-centre.telemetry" = false;
+        "browser.urlbar.eventTelemetry.enabled" = false; # (default)
+
+        # Disable some useless stuff
+        "extensions.pocket.enabled" = false; # disable pocket, save links, send tabs
+        "extensions.abuseReport.enabled" = false; # don't show 'report abuse' in extensions
+        "extensions.formautofill.creditCards.enabled" = false; # don't auto-fill credit card information
+        "identity.fxaccounts.enabled" = false; # disable firefox login
+        "identity.fxaccounts.toolbar.enabled" = false;
+        "identity.fxaccounts.pairing.enabled" = false;
+        "identity.fxaccounts.commands.enabled" = false;
+        "browser.contentblocking.report.lockwise.enabled" = false; # don't use firefox password manger
+        "browser.uitour.enabled" = false; # no tutorial please
+        "browser.newtabpage.activity-stream.showSponsored" = false;
+        "browser.newtabpage.activity-stream.showSponsoredTopSites" = false;
+
+        # disable EME encrypted media extension (Providers can get DRM
+        # through this if they include a decryption black-box program)
+        "browser.eme.ui.enabled" = false;
+        "media.eme.enabled" = false;
+
+        # don't predict network requests
+        "network.predictor.enabled" = false;
+        "browser.urlbar.speculativeConnect.enabled" = false;
+
+        # disable annoying web features
+        "dom.push.enabled" = false; # no notifications, really...
+        "dom.push.connection.enabled" = false;
+        "dom.battery.enabled" = false; # you don't need to see my battery...
+        "dom.private-attribution.submission.enabled" = false; # No PPA for me pls
+      };
+    };
+    profiles.same = {
+      id = 4;
+      isDefault = false;
+
+      extraConfig = builtins.concatStringsSep "\n" [
+        (builtins.readFile "${betterfox}/Securefox.js")
+        (builtins.readFile "${betterfox}/Fastfox.js")
+        (builtins.readFile "${betterfox}/Peskyfox.js")
+      ];
+
+      settings = {
+        # General
+        "intl.accept_languages" = "en-US,en";
+        "browser.startup.page" = 3; # Resume previous session on startup
+        "browser.ctrlTab.sortByRecentlyUsed" = false; # (default) Who wants that?
+        "browser.download.useDownloadDir" = false; # Ask where to save stuff
+        "browser.translations.neverTranslateLanguages" = "ru"; # No need :)
+        "privacy.clearOnShutdown.history" = false; # We want to save history on exit
+        # Hi-DPI
+        "layout.css.devPixelsPerPx" = "1.25";
+        # Allow executing JS in the dev console
+        "devtools.chrome.enabled" = true;
+        # Disable browser crash reporting
+        "browser.tabs.crashReporting.sendReport" = false;
+        # Why the fuck can my search window make bell sounds
+        "accessibility.typeaheadfind.enablesound" = false;
+        # Why the fuck can my search window make bell sounds
+        "general.autoScroll" = true;
+
+        # Hardware acceleration
+        # See https://github.com/elFarto/nvidia-vaapi-driver?tab=readme-ov-file#firefox
+        "gfx.webrender.all" = true;
+        "media.ffmpeg.vaapi.enabled" = true;
+        "media.rdd-ffmpeg.enabled" = true;
+        "widget.dmabuf.force-enabled" = true;
+        "media.av1.enabled" = false; # XXX: change once I've upgraded my GPU
+        # XXX: what is this?
+        "media.ffvpx.enabled" = false;
+        "media.rdd-vpx.enabled" = false;
+
+        # Privacy
+        "privacy.donottrackheader.enabled" = true;
+        "privacy.trackingprotection.enabled" = true;
+        "privacy.trackingprotection.socialtracking.enabled" = true;
+        "privacy.userContext.enabled" = true;
+        "privacy.userContext.ui.enabled" = true;
+
+        "browser.send_pings" = false; # (default) Don't respect <a ping=...>
+
+        # This allows firefox devs changing options for a small amount of users to test out stuff.
+        # Not with me please ...
+        "app.normandy.enabled" = false;
+        "app.shield.optoutstudies.enabled" = false;
+
+        "beacon.enabled" = false; # No bluetooth location BS in my webbrowser please
+        "device.sensors.enabled" = false; # This isn't a phone
+        "geo.enabled" = false; # Disable geolocation alltogether
+
+        # ESNI is deprecated ECH is recommended
+        "network.dns.echconfig.enabled" = true;
+
+        # Disable telemetry for privacy reasons
+        "toolkit.telemetry.archive.enabled" = false;
+        "toolkit.telemetry.enabled" = false; # enforced by nixos
+        "toolkit.telemetry.server" = "";
+        "toolkit.telemetry.unified" = false;
+        "extensions.webcompat-reporter.enabled" = false; # don't report compability problems to mozilla
+        "datareporting.policy.dataSubmissionEnabled" = false;
+        "datareporting.healthreport.uploadEnabled" = false;
+        "browser.ping-centre.telemetry" = false;
+        "browser.urlbar.eventTelemetry.enabled" = false; # (default)
+
+        # Disable some useless stuff
+        "extensions.pocket.enabled" = false; # disable pocket, save links, send tabs
+        "extensions.abuseReport.enabled" = false; # don't show 'report abuse' in extensions
+        "extensions.formautofill.creditCards.enabled" = false; # don't auto-fill credit card information
+        "identity.fxaccounts.enabled" = false; # disable firefox login
+        "identity.fxaccounts.toolbar.enabled" = false;
+        "identity.fxaccounts.pairing.enabled" = false;
+        "identity.fxaccounts.commands.enabled" = false;
+        "browser.contentblocking.report.lockwise.enabled" = false; # don't use firefox password manger
+        "browser.uitour.enabled" = false; # no tutorial please
+        "browser.newtabpage.activity-stream.showSponsored" = false;
+        "browser.newtabpage.activity-stream.showSponsoredTopSites" = false;
+
+        # disable EME encrypted media extension (Providers can get DRM
+        # through this if they include a decryption black-box program)
+        "browser.eme.ui.enabled" = false;
+        "media.eme.enabled" = false;
+
+        # don't predict network requests
+        "network.predictor.enabled" = false;
+        "browser.urlbar.speculativeConnect.enabled" = false;
+
+        # disable annoying web features
+        "dom.push.enabled" = false; # no notifications, really...
+        "dom.push.connection.enabled" = false;
+        "dom.battery.enabled" = false; # you don't need to see my battery...
+        "dom.private-attribution.submission.enabled" = false; # No PPA for me pls
+      };
     };
   };
 
@@ -500,6 +957,7 @@
 
   programs.zsh = {
     enable = true;
+    enableCompletion = true;
   };
 
   programs.oh-my-posh = {
@@ -865,22 +1323,48 @@
         pattern = "VeryLazy";
         callback = {
           __raw = ''
-          function()
-            -- Setup some globals for debugging (lazy-loaded)
-            _G.dd = function(...)
-              Snacks.debug.inspect(...);
-            end
-            _G.bt = function()
-              Snacks.debug.backtrace();
-            end
-            vim.print = _G.dd -- Override print to use snacks for `:=` command
+            function()
+              -- Setup some globals for debugging (lazy-loaded)
+              _G.dd = function(...)
+                Snacks.debug.inspect(...);
+              end
+              _G.bt = function()
+                Snacks.debug.backtrace();
+              end
+              vim.print = _G.dd -- Override print to use snacks for `:=` command
 
-            -- Create some toggle mappings
-            Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw");
-            Snacks.toggle.diagnostics():map("<leader>ud");
-          end
+              -- Create some toggle mappings
+              Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw");
+              Snacks.toggle.diagnostics():map("<leader>ud");
+            end
           '';
         };
+      }
+      {
+        event = "BufWritePre";
+        pattern = "*";
+        callback.__raw = ''
+          function(args)
+            local bufnr = args.buf
+
+            -- Disable with a global or buffer-local variable
+            if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+              return
+            end
+
+            local bufname = vim.api.nvim_buf_get_name(bufnr)
+            if string.match(bufname, "/node_modules/") then
+              return
+            end
+
+            require("conform").format({
+              bufnr = bufnr,
+              timeout_ms = 500,
+              lsp_fallback = true,
+              async = false,
+            })
+          end
+        '';
       }
     ];
 
@@ -1276,7 +1760,7 @@
           }
         ];
       };
-      
+
       cmp-buffer = {
         enable = true;
       };
@@ -1284,7 +1768,7 @@
       cmp-path = {
         enable = true;
       };
-      
+
       cmp-nvim-lsp = {
         enable = true;
       };
@@ -1305,7 +1789,7 @@
           maxWidth = 50;
         };
       };
- 
+
       cmp = {
         enable = true;
         autoEnableSources = true;
@@ -1339,6 +1823,7 @@
                 ["<C-u>"] = cmp.mapping.scroll_docs(-4),
                 ["<C-d>"] = cmp.mapping.scroll_docs(4),
                 ["<Tab>"] = cmp.mapping(function(fallback)
+                  local luasnip = require("luasnip")
                   if luasnip.locally_jumpable(1) then
                     luasnip.jump(1)
                   else
@@ -1346,6 +1831,7 @@
                   end
                 end, { "i", "s" }),
                 ["<S-Tab>"] = cmp.mapping(function(fallback)
+                  local luasnip = require("luasnip")
                   if luasnip.locally_jumpable(-1) then
                     luasnip.jump(-1)
                   else
@@ -1412,7 +1898,12 @@
           };
           ts_ls = {
             enable = true;
-            filetypes = [ "typescript" "javascript" "typescriptreact" "javascriptreact"];
+            filetypes = [
+              "typescript"
+              "javascript"
+              "typescriptreact"
+              "javascriptreact"
+            ];
             settings = {
               preferences = {
                 quotePreference = "double";
@@ -1421,7 +1912,7 @@
           };
           tailwindcss = {
             enable = true;
-            filetypes = ["go"];
+            filetypes = [ "go" ];
             settings = {
               tailwindCSS = {
                 includeLanguages = {
@@ -1429,10 +1920,22 @@
                 };
                 experimental = {
                   classRegex = [
-                    [ "Class\\(([^)]*)\\)"   "[\"`]([^\"`]*)[\"`]" ]
-                    [ "ClassX\\(([^)]*)\\)"  "[\"`]([^\"`]*)[\"`]" ]
-                    [ "ClassIf\\(([^)]*)\\)" "[\"`]([^\"`]*)[\"`]" ]
-                    [ "Classes\\(([^)]*)\\)" "[\"`]([^\"`]*)[\"`]" ]
+                    [
+                      "Class\\(([^)]*)\\)"
+                      "[\"`]([^\"`]*)[\"`]"
+                    ]
+                    [
+                      "ClassX\\(([^)]*)\\)"
+                      "[\"`]([^\"`]*)[\"`]"
+                    ]
+                    [
+                      "ClassIf\\(([^)]*)\\)"
+                      "[\"`]([^\"`]*)[\"`]"
+                    ]
+                    [
+                      "Classes\\(([^)]*)\\)"
+                      "[\"`]([^\"`]*)[\"`]"
+                    ]
                   ];
                 };
               };
@@ -1507,5 +2010,12 @@
         end,
       })
     '';
+  };
+
+  xdg.mimeApps.defaultApplications = {
+    "text/html" = [ "firefox.desktop" ];
+    "text/xml" = [ "firefox.desktop" ];
+    "x-scheme-handler/http" = [ "firefox.desktop" ];
+    "x-scheme-handler/https" = [ "firefox.desktop" ];
   };
 }
