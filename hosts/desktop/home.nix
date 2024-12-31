@@ -117,10 +117,6 @@ in
 
       # Hide tab bar because we have tree style tabs
       userChrome = ''
-        #TabsToolbar {
-          visibility: collapse !important;
-        }
-
         #titlebar-buttonbox {
           height: 32px !important;
         }
@@ -794,6 +790,8 @@ in
           follow_mouse = 1
 
           sensitivity = 0 # -1.0 - 1.0, 0 means no modification.
+          repeat_delay = 300
+          repeat_rate = 50
       }
 
       # https://wiki.hyprland.org/Configuring/Variables/#gestures
