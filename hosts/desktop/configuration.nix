@@ -124,13 +124,47 @@
     nwg-look
     nh
     pavucontrol
+    wireguard-tools
   ];
+
+  services.resolved.enable = true;
 
   # Security
   services.fail2ban.enable = true;
   services.openssh.enable = true;
 
-  networking.firewall.enable = true;
+  networking.wireguard.enable = true;
+  networking.firewall = {
+    enable = true;
+    allowedUDPPorts = [ 0 ]; # CHANGEME
+    logReversePathDrops = true;
+
+    # CHANGEME
+    extraCommands = ''
+     ip46tables -t mangle -I nixos-fw-rpfilter -p udp -m udp --sport 26423 -j RETURN
+     ip46tables -t mangle -I nixos-fw-rpfilter -p udp -m udp --dport 26423 -j RETURN
+    '';
+    extraStopCommands = ''
+     ip46tables -t mangle -D nixos-fw-rpfilter -p udp -m udp --sport 26423 -j RETURN || true
+     ip46tables -t mangle -D nixos-fw-rpfilter -p udp -m udp --dport 26423 -j RETURN || true
+    '';
+  };
+  networking.wg-quick.interfaces = {
+    default = {
+      address = [ "" ]; #CHANGEME
+      privateKeyFile = ""; #CHANGEME
+      listenPort = 0; #CHANGEME
+      dns = [ "" ]; #CHANGEME
+      peers = [
+        {
+          publicKey = ""; #CHANGEME
+          allowedIPs = [ "" ]; #CHANGEME
+          endpoint = ""; #CHANGEME
+          persistentKeepalive = 10;
+        }
+      ];
+    };
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
