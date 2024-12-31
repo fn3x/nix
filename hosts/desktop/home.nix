@@ -94,6 +94,7 @@
     nix-s = "nh os switch ~/nixos/";
     nix-t = "nh os test ~/nixos/";
     nix-c = "nh clean all";
+    nix-u = "nh os test -u";
   };
 
   home.sessionPath = [
@@ -517,6 +518,7 @@
 
   programs.nixvim = {
     enable = true;
+    package = inputs.neovim-nightly-overlay.packages.x86_64-linux.neovim;
 
     clipboard.providers.wl-copy.enable = true;
 
@@ -858,6 +860,28 @@
           __raw = ''function()vim.highlight.on_yank({higroup = "IncSearch",timeout = 40,}) end'';
         };
       }
+      {
+        event = "User";
+        pattern = "VeryLazy";
+        callback = {
+          __raw = ''
+          function()
+            -- Setup some globals for debugging (lazy-loaded)
+            _G.dd = function(...)
+              Snacks.debug.inspect(...);
+            end
+            _G.bt = function()
+              Snacks.debug.backtrace();
+            end
+            vim.print = _G.dd -- Override print to use snacks for `:=` command
+
+            -- Create some toggle mappings
+            Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw");
+            Snacks.toggle.diagnostics():map("<leader>ud");
+          end
+          '';
+        };
+      }
     ];
 
     plugins = {
@@ -881,6 +905,7 @@
         #   navPrev = "<C-S-p>";
         # };
       };
+
       oil = {
         enable = true;
         settings = {
@@ -970,66 +995,6 @@
             };
           };
         };
-        luaConfig.pre = ''
-          vim.api.nvim_create_autocmd("User", {
-                pattern = "VeryLazy",
-                callback = function()
-                  -- Setup some globals for debugging (lazy-loaded)
-                  _G.dd = function(...)
-                    Snacks.debug.inspect(...);
-                  end
-                  _G.bt = function()
-                    Snacks.debug.backtrace();
-                  end
-                  vim.print = _G.dd -- Override print to use snacks for `:=` command
-
-                  -- Create some toggle mappings
-                  Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw");
-                  Snacks.toggle.diagnostics():map("<leader>ud");
-                end,
-              });
-
-              local progress = vim.defaulttable();
-              vim.api.nvim_create_autocmd("LspProgress", {
-                callback = function(ev)
-                  local client = vim.lsp.get_client_by_id(ev.data.client_id);
-                  local value = ev.data.params
-                      .value --[[@as {percentage?: number, title?: string, message?: string, kind: "begin" | "report" | "end"}]]
-                  if not client or type(value) ~= "table" then
-                    return
-                  end
-                  local p = progress[client.id];
-
-                  for i = 1, #p + 1 do
-                    if i == #p + 1 or p[i].token == ev.data.params.token then
-                      p[i] = {
-                        token = ev.data.params.token,
-                        msg = ("[%3d%%] %s%s"):format(
-                          value.kind == "end" and 100 or value.percentage or 100,
-                          value.title or "",
-                          value.message and (" **%s**"):format(value.message) or ""
-                        ),
-                        done = value.kind == "end",
-                      };
-                      break
-                    end
-                  end
-
-                  progress[client.id] = vim.tbl_filter(function(v)
-                    return table.insert(msg, v.msg) or not v.done
-                  end, p);
-
-                  local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" };
-                  vim.notify(table.concat(msg, "\n"), "info", {
-                    id = "lsp_progress",
-                    title = client.name,
-                    opts = function(notif)
-                      notif.icon = #progress[client.id] == 0 and " "
-                          or spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
-                    end,
-                  });
-                end,
-              })'';
       };
 
       treesitter = {
@@ -1195,7 +1160,7 @@
       gitsigns = {
         enable = true;
         settings = {
-          on_attach = ''
+          on_attach.__raw = ''
               function(bufnr)
               local gs = package.loaded.gitsigns
 
@@ -1311,6 +1276,176 @@
           }
         ];
       };
+      
+      cmp-buffer = {
+        enable = true;
+      };
+
+      cmp-path = {
+        enable = true;
+      };
+      
+      cmp-nvim-lsp = {
+        enable = true;
+      };
+
+      cmp-nvim-lsp-signature-help = {
+        enable = true;
+      };
+
+      cmp_luasnip = {
+        enable = true;
+      };
+
+      lspkind = {
+        enable = true;
+        cmp = {
+          enable = true;
+          ellipsisChar = "...";
+          maxWidth = 50;
+        };
+      };
+ 
+      cmp = {
+        enable = true;
+        autoEnableSources = true;
+        settings = {
+          sources = [
+            { name = "nvim_lsp"; }
+            { name = "luasnip"; }
+            { name = "nvim_lsp_signature_help"; }
+            { name = "path"; }
+            { name = "buffer"; }
+          ];
+          snippet.expand = ''
+            function(args)
+              require("luasnip").lsp_expand(args.body)
+            end
+          '';
+          window = {
+            completion.border = "rounded";
+            documentation.border = "rounded";
+          };
+          formatting = {
+            expandable_indicator = false;
+          };
+          mapping = {
+            __raw = ''
+              cmp.mapping.preset.insert({
+                ["<C-p>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
+                ["<C-n>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
+                ["<C-space>"] = cmp.mapping.confirm({ select = true }),
+                ["<C-y>"] = cmp.mapping.complete(),
+                ["<C-u>"] = cmp.mapping.scroll_docs(-4),
+                ["<C-d>"] = cmp.mapping.scroll_docs(4),
+                ["<Tab>"] = cmp.mapping(function(fallback)
+                  if luasnip.locally_jumpable(1) then
+                    luasnip.jump(1)
+                  else
+                    fallback()
+                  end
+                end, { "i", "s" }),
+                ["<S-Tab>"] = cmp.mapping(function(fallback)
+                  if luasnip.locally_jumpable(-1) then
+                    luasnip.jump(-1)
+                  else
+                    fallback()
+                  end
+                end, { "i", "s" }),
+              })
+            '';
+          };
+        };
+      };
+
+      lsp = {
+        enable = true;
+        inlayHints = true;
+        capabilities = ''
+          require("cmp_nvim_lsp").default_capabilities()
+        '';
+        keymaps = {
+          silent = true;
+          lspBuf = {
+            "gd" = "definition";
+            "gD" = "declaration";
+            "gi" = "implementation";
+            "<leader>ca" = "code_action";
+            "<leader>rf" = "references";
+            "<leader>rr" = "rename";
+            "K" = "hover";
+            "<C-h>" = "signature_help";
+          };
+          extra = [
+            {
+              key = "[d";
+              mode = "n";
+              action.__raw = "function() vim.diagnostic.jump({ count = 1 }) end";
+            }
+            {
+              key = "]d";
+              mode = "n";
+              action.__raw = "function() vim.diagnostic.jump({ count = -1 }) end";
+            }
+            {
+              key = "<leader>ff";
+              mode = "n";
+              action.__raw = "function() vim.lsp.buf.format({ async = false, timeout_ms = 1000 }) end";
+            }
+          ];
+        };
+        servers = {
+          html = {
+            enable = true;
+          };
+          lua_ls = {
+            enable = true;
+          };
+          nixd = {
+            enable = true;
+          };
+          gopls = {
+            enable = true;
+            settings = {
+              gofumpt = true;
+            };
+          };
+          ts_ls = {
+            enable = true;
+            filetypes = [ "typescript" "javascript" "typescriptreact" "javascriptreact"];
+            settings = {
+              preferences = {
+                quotePreference = "double";
+              };
+            };
+          };
+          tailwindcss = {
+            enable = true;
+            filetypes = ["go"];
+            settings = {
+              tailwindCSS = {
+                includeLanguages = {
+                  go = "html";
+                };
+                experimental = {
+                  classRegex = [
+                    [ "Class\\(([^)]*)\\)"   "[\"`]([^\"`]*)[\"`]" ]
+                    [ "ClassX\\(([^)]*)\\)"  "[\"`]([^\"`]*)[\"`]" ]
+                    [ "ClassIf\\(([^)]*)\\)" "[\"`]([^\"`]*)[\"`]" ]
+                    [ "Classes\\(([^)]*)\\)" "[\"`]([^\"`]*)[\"`]" ]
+                  ];
+                };
+              };
+            };
+          };
+          ols = {
+            enable = true;
+          };
+          zls = {
+            enable = true;
+          };
+        };
+      };
     };
 
     extraPlugins = [ pkgs.vimPlugins.gruvbox-material-nvim ];
@@ -1327,6 +1462,50 @@
       vim.cmd.colorscheme("gruvbox-material");
       vim.api.nvim_set_hl(0, "LineNrAbove", { fg = "#b8fcec", bold = false });
       vim.api.nvim_set_hl(0, "LineNr", { fg = "white", bold = true });
-      vim.api.nvim_set_hl(0, "LineNrBelow", { fg = "#fcd6a9", bold = false });'';
+      vim.api.nvim_set_hl(0, "LineNrBelow", { fg = "#fcd6a9", bold = false });
+      ---@type table<number, {token:lsp.ProgressToken, msg:string, done:boolean}[]>
+      local progress = vim.defaulttable()
+      vim.api.nvim_create_autocmd("LspProgress", {
+        ---@param ev {data: {client_id: integer, params: lsp.ProgressParams}}
+        callback = function(ev)
+          local client = vim.lsp.get_client_by_id(ev.data.client_id)
+          local value = ev.data.params.value --[[@as {percentage?: number, title?: string, message?: string, kind: "begin" | "report" | "end"}]]
+          if not client or type(value) ~= "table" then
+            return
+          end
+          local p = progress[client.id]
+
+          for i = 1, #p + 1 do
+            if i == #p + 1 or p[i].token == ev.data.params.token then
+              p[i] = {
+                token = ev.data.params.token,
+                msg = ("[%3d%%] %s%s"):format(
+                  value.kind == "end" and 100 or value.percentage or 100,
+                  value.title or "",
+                  value.message and (" **%s**"):format(value.message) or ""
+                ),
+                done = value.kind == "end",
+              }
+              break
+            end
+          end
+
+          local msg = {} ---@type string[]
+          progress[client.id] = vim.tbl_filter(function(v)
+            return table.insert(msg, v.msg) or not v.done
+          end, p)
+
+          local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
+          vim.notify(table.concat(msg, "\n"), "info", {
+            id = "lsp_progress",
+            title = client.name,
+            opts = function(notif)
+              notif.icon = #progress[client.id] == 0 and " "
+              or spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
+            end,
+          })
+        end,
+      })
+    '';
   };
 }

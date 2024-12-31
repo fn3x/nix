@@ -17,6 +17,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     hyprland-qtutils.url = "github:hyprwm/hyprland-qtutils";
   };
 
@@ -25,8 +26,6 @@
       self,
       nixpkgs,
       home-manager,
-      hyprland-qtutils,
-      ghostty,
       nixvim,
       ...
     }@inputs:
