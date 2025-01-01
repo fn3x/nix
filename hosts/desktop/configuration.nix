@@ -133,6 +133,10 @@
   services.fail2ban.enable = true;
   services.openssh.enable = true;
 
+  programs.gnupg.agent = {                                                      
+    enable = true;
+  };
+
   networking.wireguard.enable = true;
   networking.firewall = {
     enable = true;
