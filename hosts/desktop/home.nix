@@ -49,7 +49,6 @@ in
   home.packages = with pkgs; [
     inputs.hyprland-qtutils.packages.x86_64-linux.default
     inputs.ghostty.packages.x86_64-linux.default
-    pkgs.fontconfig
     oh-my-posh
     zig
     go
@@ -66,13 +65,15 @@ in
     gimp
     flameshot
     lazygit
+    jq
+    tldr
+    zip
   ];
 
   home.file = {
-    ".local/share/fonts".source = ../../fonts;
     ".config/ghostty/config" = {
       text = ''
-        font-family="BerkeleyMono Nerd Font Mono"
+        font-family="TX-02"
         font-size=20
         theme="rose-pine"
         cursor-style=block
@@ -89,8 +90,6 @@ in
       executable = false;
     };
   };
-
-  fonts.fontconfig.enable = true;
 
   services.flameshot = {
     enable = true;
@@ -839,6 +838,10 @@ in
     enable = true;
     userName = "Art P.";
     userEmail = "fn3x@yandex.com";
+    signing = {
+      signByDefault = false;
+      key = null;
+    };
     extraConfig = {
       init.defaultBranch = "main";
       push.autoSetupRemote = true;
@@ -1371,6 +1374,7 @@ in
         enable = true;
         package = pkgs.vimPlugins.harpoon2;
         saveOnToggle = true;
+        saveOnChange = true;
         # These keymaps are for harpoon1, not harpoon2
         # Keymaps for harpoon2 are in nixvim.keymaps
         #
