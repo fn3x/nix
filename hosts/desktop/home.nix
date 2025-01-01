@@ -46,6 +46,8 @@ in
   # release notes.
   home.stateVersion = "24.11"; # Please read the comment before changing.
 
+  fonts.fontconfig.enable = true;
+
   home.packages = with pkgs; [
     inputs.hyprland-qtutils.packages.x86_64-linux.default
     inputs.ghostty.packages.x86_64-linux.default
