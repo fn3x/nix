@@ -52,9 +52,6 @@ in
     inputs.hyprland-qtutils.packages.x86_64-linux.default
     inputs.ghostty.packages.x86_64-linux.default
     oh-my-posh
-    zig
-    go
-    nodejs_23
     telegram-desktop
     vesktop
     mattermost-desktop
