@@ -6,7 +6,7 @@
   };
 
   outputs =
-    { nixpkgs }:
+    { self, nixpkgs }:
     let
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
     in
@@ -16,6 +16,9 @@
           nodejs_23
           go_1_23
           awscli2
+          protobuf
+          protoc-gen-go
+          protoc-gen-js
         ];
       };
     };
