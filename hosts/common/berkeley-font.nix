@@ -1,8 +1,8 @@
 { pkgs }:
 
 pkgs.stdenv.mkDerivation {
-  pname = "berkeley";
-  version = "2.0";
+  pname = "berkeley-font";
+  version = "2";
 
   src = ../../../fonts/berkeley.zip;
 
