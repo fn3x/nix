@@ -533,6 +533,7 @@ in
     settings = {
       color_theme = "gruvbox_dark_v2";
       vim_keys = true;
+      update_ms = 500;
     };
   };
 
@@ -546,6 +547,9 @@ in
     nix-t = "nh os test ~/nixos/";
     nix-c = "nh clean all";
     nix-u = "nh os test -u";
+    vim = "nvim";
+    vi = "nvim";
+    nix-work = "nix-shell ~/nixos/shells/work/shell.nix";
   };
 
   home.sessionPath = [
