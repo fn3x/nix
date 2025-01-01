@@ -74,16 +74,16 @@ in
       text = ''
         font-family="TX-02"
         font-size=20
-        theme="rose-pine"
+        theme="Apple System Colors"
         cursor-style=block
         cursor-style-blink=true
+        cursor-opacity=1
+        cursor-invert-fg-bg=true
         background-blur-radius=20
         background-opacity=0.95
         title=""
         window-save-state=always
         window-decoration=false
-        shell-integration=zsh
-        shell-integration-features=sudo,no-cursor
         auto-update=check
       '';
       executable = false;
@@ -980,7 +980,7 @@ in
 
     clipboard.providers.wl-copy.enable = true;
 
-    globalOpts = {
+    opts = {
       clipboard = "unnamedplus";
 
       number = true;
@@ -997,7 +997,6 @@ in
       updatetime = 100;
 
       guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50,i:blinkwait500-blinkoff400-blinkon500-Cursor/lCursor";
-      termguicolors = true;
       mouse = "";
       undofile = true;
       undodir = "${config.home.homeDirectory}/.undodir";
@@ -1021,10 +1020,22 @@ in
     globals = {
       mapleader = " ";
       maplocalleader = " ";
+
       pumheight = 5;
       disable_autoformat = true;
       loaded_node_provider = 0;
+
+      gruvbox_material_background = "medium";
+      gruvbox_material_better_performance = 1;
+      gruvbox_material_enable_bold = 0;
+      gruvbox_material_menu_selection_background = "aqua";
+      gruvbox_material_visual = "blue background";
+      gruvbox_material_foreground = "material";
+      gruvbox_material_float_style = "bright";
+      gruvbox_material_diagnostic_virtual_text = "colored";
     };
+
+    colorscheme = "gruvbox-material";
 
     keymaps = [
       {
@@ -1954,16 +1965,6 @@ in
 
     extraPlugins = [ pkgs.vimPlugins.gruvbox-material-nvim ];
     extraConfigLua = ''
-      require("gruvbox-material").setup();
-      vim.g.gruvbox_material_background = "medium";
-      vim.g.gruvbox_material_better_performance = 1;
-      vim.g.gruvbox_material_enable_bold = 0;
-      vim.g.gruvbox_material_menu_selection_background = "aqua";
-      vim.g.gruvbox_material_visual = "blue background";
-      vim.g.gruvbox_material_foreground = "material";
-      vim.g.gruvbox_material_float_style = "bright";
-      vim.g.gruvbox_material_diagnostic_virtual_text = "colored";
-      vim.cmd.colorscheme("gruvbox-material");
       vim.api.nvim_set_hl(0, "LineNrAbove", { fg = "#b8fcec", bold = false });
       vim.api.nvim_set_hl(0, "LineNr", { fg = "white", bold = true });
       vim.api.nvim_set_hl(0, "LineNrBelow", { fg = "#fcd6a9", bold = false });
