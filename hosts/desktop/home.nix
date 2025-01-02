@@ -67,6 +67,7 @@ in
     jq
     tldr
     zip
+    inputs.mcmojave-hyprcursor.packages.x86_64-linux.default
   ];
 
   home.file = {
@@ -537,11 +538,6 @@ in
     };
   };
 
-  home.sessionVariables = {
-    EDITOR = "nvim";
-    TERMINAL = "ghostty";
-  };
-
   home.shellAliases = {
     nix-s = "nh os switch ~/nixos/";
     nix-t = "nh os test ~/nixos/";
@@ -569,10 +565,16 @@ in
   ];
 
   home.sessionVariables = {
+    EDITOR = "nvim";
+    TERMINAL = "ghostty";
     LD_LIBRARY_PATH = "~/local/lib:$LD_LIBRARY_PATH";
     MANPATH = "~/local/share/man:$MANPATH";
     COLORTERM = "truecolor";
     NVM_DIR = "~/.nvm";
+    HYPRCURSOR_THEME = "McMojave";
+    HYPRCURSOR_SIZE = 34;
+    XCURSOR_THEME = "WhiteSur Cursors";
+    XCURSOR_SIZE = 34;
   };
 
   programs.kitty.enable = true; # required for the default Hyprland config
@@ -649,8 +651,6 @@ in
 
       # See https://wiki.hyprland.org/Configuring/Environment-variables/
 
-      env = XCURSOR_SIZE,24
-      env = HYPRCURSOR_SIZE,24
       env = GBM_BACKEND,nvidia-drm
       env = LIBVA_DRIVER_NAME,nvidia
       env = __GLX_VENDOR_LIBRARY_NAME,nvidia
@@ -661,7 +661,7 @@ in
       env = XDG_CURRENT_DESKTOP,Hyprland
       env = XDG_SESSION_TYPE,wayland
       env = XDG_SESSION_DESKTOP,Hyprland
-      env = GTK_THEME,Arc-Dark
+      env = ELECTRON_OZONE_PLATFORM_HINT,auto
 
       #################
       ### AUTOSTART ###
@@ -671,14 +671,15 @@ in
       exec-once=dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
       exec-once=systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 
-      exec-once = dconf write /org/gnome/desktop/interface/gtk-theme "'Adwaita'"
-      exec-once = dconf write /org/gnome/desktop/interface/icon-theme "'Flat-Remix-Red-Dark'"
+      exec-once = dconf write /org/gnome/desktop/interface/gtk-theme "'WhiteSur-Dark'"
+      exec-once = dconf write /org/gnome/desktop/interface/icon-theme "'WhiteSur'"
       exec-once = dconf write /org/gnome/desktop/interface/document-font-name "'Noto Sans Medium 11'"
       exec-once = dconf write /org/gnome/desktop/interface/font-name "'Noto Sans Medium 11'"
       exec-once = dconf write /org/gnome/desktop/interface/monospace-font-name "'Noto Sans Mono Medium 11'"
       exec-once = swww init
       exec-once = waybar
       exec-once = dunst
+
       exec-once = [workspace 1 silent] $terminal
       exec-once = [workspace 2 silent] firefox
       exec-once = [workspace 3 silent] telegram-desktop
@@ -773,7 +774,7 @@ in
 
       # https://wiki.hyprland.org/Configuring/Variables/#misc
       misc {
-          force_default_wallpaper = 1
+          force_default_wallpaper = 0
           disable_hyprland_logo = true
       }
 
@@ -820,12 +821,6 @@ in
 
       # Fix some dragging issues with XWayland
       windowrulev2 = nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned:0
-
-      # windowrulev2 = tile,maximize,workspace 1,class:com.mitchellh.ghostty,initialClass:(- com.mitchellh.ghostty)
-      # windowrulev2 = tile,maximize,workspace 2,class:firefox,initialClass:(- firefox)
-      # windowrulev2 = tile,maximize,workspace 3,class:org.telegram.desktop,initialClass:(- org.telegram.desktop)
-      # windowrulev2 = tile,maximize,workspace 4,class:Mattermost,initialClass:(- Mattermost)
-      # windowrulev2 = tile,maximize,workspace 5,class:spotify,initialClass:(- spotify)
 
       # Fixes for flameshot on wayland
       windowrulev2 = float, class:^(flameshot)$
@@ -1006,7 +1001,7 @@ in
       undodir = "${config.home.homeDirectory}/.undodir";
       hlsearch = false;
       incsearch = true;
-      ignorecase = false;
+      ignorecase = true;
       smartcase = true;
 
       scrolloff = 8;
@@ -2023,5 +2018,33 @@ in
     "text/xml" = [ "firefox.desktop" ];
     "x-scheme-handler/http" = [ "firefox.desktop" ];
     "x-scheme-handler/https" = [ "firefox.desktop" ];
+  };
+
+  xdg.desktopEntries."org.gnome.Settings" = {
+    name = "Settings";
+    comment = "Gnome Control Center";
+    icon = "org.gnome.Settings";
+    exec = "env XDG_CURRENT_DESKTOP=gnome ${pkgs.gnome-control-center}/bin/gnome-control-center";
+    categories = [ "X-Preferences" ];
+    terminal = false;
+  };
+
+  gtk = {
+    enable = true;
+
+    theme = {
+      package = pkgs.whitesur-gtk-theme;
+      name = "WhiteSur-Dark";
+    };
+
+    cursorTheme = {
+      package = pkgs.whitesur-cursors;
+      name = "WhiteSur Cursors";
+    };
+
+    iconTheme = {
+      package = pkgs.whitesur-icon-theme;
+      name = "WhiteSur";
+    };
   };
 }

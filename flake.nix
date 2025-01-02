@@ -17,8 +17,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
+    hyprland.url = "github:hyprwm/Hyprland";
     hyprland-qtutils.url = "github:hyprwm/hyprland-qtutils";
+    mcmojave-hyprcursor.url = "github:libadoxon/mcmojave-hyprcursor";
+    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     firefox-addons = {
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
       inputs.nixpkgs.follows = "nixpkgs";

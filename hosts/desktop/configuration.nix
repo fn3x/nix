@@ -4,6 +4,7 @@
 
 {
   pkgs,
+  inputs,
   ...
 }:
 
@@ -114,7 +115,7 @@
     (pkgs.waybar.overrideAttrs (oldAttrs: {
       mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
     }))
-    gtkmm3
+    gtkmm4
     wlroots
     dunst
     libnotify
@@ -124,7 +125,7 @@
     nwg-look
     nh
     pavucontrol
-    wireguard-tools
+    wireguard-tools 
   ];
 
   services.resolved.enable = true;
@@ -183,12 +184,16 @@
   services.gnome.gnome-keyring.enable = true;
   programs.hyprland = {
     enable = true;
-    withUWSM = true; # recommended for most users
-    xwayland.enable = true; # Xwayland can be disabled.
+    withUWSM = true;
+    # set the flake package
+    package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+    # make sure to also set the portal package, so that they are in sync
+    portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
   };
 
   environment.sessionVariables = {
     WLR_NO_HARDWARE_CURSORS = "1";
+    GDK_BACKEND = "wayland";
     NIXOS_OZONE_WL = "1";
   };
 
