@@ -114,7 +114,6 @@ in
       id = 0;
       isDefault = true;
 
-      # Hide tab bar because we have tree style tabs
       userChrome = ''
         #titlebar-buttonbox {
           height: 32px !important;
@@ -137,6 +136,12 @@ in
         "browser.ctrlTab.sortByRecentlyUsed" = false; # (default) Who wants that?
         "browser.download.useDownloadDir" = false; # Ask where to save stuff
         "browser.translations.neverTranslateLanguages" = "ru"; # No need :)
+        "browser.tabs.drawInTitlebar" = true;
+        "browser.uidensity" = 0;
+        "layers.acceleration.force-enabled" = true;
+        "mozilla.widget.use-argb-visuals" = true;
+        "widget.gtk.rounded-bottom-corners.enabled" = true;
+        "svg.context-properties.content.enabled" = true;
         "privacy.clearOnShutdown.history" = false; # We want to save history on exit
         # Hi-DPI
         "layout.css.devPixelsPerPx" = "1.25";
@@ -144,7 +149,7 @@ in
         "devtools.chrome.enabled" = true;
         # Disable browser crash reporting
         "browser.tabs.crashReporting.sendReport" = false;
-        # Allow userCrome.css
+        # Allow userChrome.css
         "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
         # Why the fuck can my search window make bell sounds
         "accessibility.typeaheadfind.enablesound" = false;
