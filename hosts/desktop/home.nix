@@ -29,6 +29,7 @@ let
   };
   username = "fn3x";
   homeDirectory = "/home/${username}";
+  firefoxTheme = import ../common/whitesur-firefox.nix { inherit pkgs; };
 in
 
 {
@@ -70,6 +71,7 @@ in
     tldr
     zip
     inputs.mcmojave-hyprcursor.packages.x86_64-linux.default
+    firefoxTheme
   ];
 
   home.file = {
@@ -91,6 +93,7 @@ in
       '';
       executable = false;
     };
+    ".mozilla/firefox/default/chrome".source = firefoxTheme;
   };
 
   services.flameshot = {
@@ -115,12 +118,6 @@ in
     profiles.default = {
       id = 0;
       isDefault = true;
-
-      # userChrome = ''
-      #   #titlebar-buttonbox {
-      #     height: 32px !important;
-      #   }
-      # '';
 
       extraConfig = builtins.concatStringsSep "\n" [
         (builtins.readFile "${betterfox}/Securefox.js")
@@ -2093,8 +2090,10 @@ in
     enable = true;
 
     theme = {
-      package = pkgs.whitesur-gtk-theme;
-      name = "WhiteSur-Dark";
+      package = pkgs.whitesur-gtk-theme.overrideAttrs (oldAttrs: {
+        nautilusStyle = "glassy";
+      });
+      name = "WhiteSur";
     };
 
     cursorTheme = {
