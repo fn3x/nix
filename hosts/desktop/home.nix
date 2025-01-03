@@ -675,7 +675,7 @@ in
       exec-once=dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
       exec-once=systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 
-      exec-once = dconf write /org/gnome/desktop/interface/gtk-theme "'WhiteSur-Dark'"
+      exec-once = dconf write /org/gnome/desktop/interface/gtk-theme "'WhiteSur'"
       exec-once = dconf write /org/gnome/desktop/interface/icon-theme "'WhiteSur'"
       exec-once = dconf write /org/gnome/desktop/interface/document-font-name "'Noto Sans Medium 11'"
       exec-once = dconf write /org/gnome/desktop/interface/font-name "'Noto Sans Medium 11'"
