@@ -69,8 +69,7 @@ in
     lazygit
     jq
     tldr
-    zip
-    inputs.mcmojave-hyprcursor.packages.x86_64-linux.default
+    zip 
     firefoxTheme
   ];
 
@@ -614,8 +613,6 @@ in
     MANPATH = "~/local/share/man:$MANPATH";
     COLORTERM = "truecolor";
     NVM_DIR = "~/.nvm";
-    HYPRCURSOR_THEME = "McMojave";
-    HYPRCURSOR_SIZE = 34;
     XCURSOR_THEME = "WhiteSur Cursors";
     XCURSOR_SIZE = 34;
   };
@@ -1075,18 +1072,7 @@ in
       pumheight = 5;
       disable_autoformat = true;
       loaded_node_provider = 0;
-
-      gruvbox_material_background = "medium";
-      gruvbox_material_better_performance = 1;
-      gruvbox_material_enable_bold = 0;
-      gruvbox_material_menu_selection_background = "aqua";
-      gruvbox_material_visual = "blue background";
-      gruvbox_material_foreground = "material";
-      gruvbox_material_float_style = "bright";
-      gruvbox_material_diagnostic_virtual_text = "colored";
     };
-
-    colorscheme = "gruvbox-material";
 
     keymaps = [
       {
@@ -2058,11 +2044,74 @@ in
       };
     };
 
-    extraPlugins = [ pkgs.vimPlugins.gruvbox-material-nvim ];
+    extraPlugins = [ pkgs.vimPlugins.gruvbox-material-nvim pkgs.vimPlugins.kanagawa-nvim ];
     extraConfigLua = ''
       vim.api.nvim_set_hl(0, "LineNrAbove", { fg = "#b8fcec", bold = false });
       vim.api.nvim_set_hl(0, "LineNr", { fg = "white", bold = true });
       vim.api.nvim_set_hl(0, "LineNrBelow", { fg = "#fcd6a9", bold = false });
+
+      -- vim.g.gruvbox_material_transparent_background = 1;
+      -- vim.g.gruvbox_material_better_performance = 1;
+      -- vim.g.gruvbox_material_enable_bold = 0;
+      -- vim.g.gruvbox_material_menu_selection_background = "aqua";
+      -- vim.g.gruvbox_material_visual = "blue background";
+      -- vim.g.gruvbox_material_foreground = "material";
+      -- vim.g.gruvbox_material_float_style = "bright";
+      -- vim.g.gruvbox_material_diagnostic_virtual_text = "colored";
+      -- vim.g.gruvbox_material_disable_terminal_colors = 1;
+      -- vim.cmd("colorscheme gruvbox-material");
+
+      vim.o.background = ""
+      -- Default options:
+      require('kanagawa').setup({
+        compile = true,              -- enable compiling the colorscheme
+        undercurl = true,            -- enable undercurls
+        commentStyle = { italic = true },
+        functionStyle = {},
+        keywordStyle = { italic = true},
+        statementStyle = { bold = true },
+        typeStyle = {},
+        transparent = true,          -- do not set background color
+        dimInactive = true,         -- dim inactive window `:h hl-NormalNC`
+        terminalColors = true,       -- define vim.g.terminal_color_{0,17}
+        colors = {                   -- add/modify theme and palette colors
+          palette = {},
+          theme = { wave = {}, lotus = {}, dragon = {}, all = { ui = { bg_gutter = "none" } } },
+        },
+        overrides = function(colors) -- add/modify highlights
+          local theme = colors.theme
+          return {
+            NormalFloat = { bg = "none" },
+            FloatBorder = { bg = "none" },
+            FloatTitle = { bg = "none" },
+
+            -- Save an hlgroup with dark background and dimmed foreground
+            -- so that you can use it where your still want darker windows.
+            -- E.g.: autocmd TermOpen * setlocal winhighlight=Normal:NormalDark
+            NormalDark = { fg = theme.ui.fg_dim, bg = theme.ui.bg_m3 },
+            Pmenu = { fg = theme.ui.shade0, bg = theme.ui.bg_p1 },  -- add `blend = vim.o.pumblend` to enable transparency
+            PmenuSel = { fg = "NONE", bg = theme.ui.bg_p2 },
+            PmenuSbar = { bg = theme.ui.bg_m1 },
+            PmenuThumb = { bg = theme.ui.bg_p2 },
+          }
+        end,
+      })
+
+      -- setup must be called before loading
+      vim.cmd("colorscheme kanagawa")
+      vim.api.nvim_create_autocmd("ColorScheme", {
+        pattern = "kanagawa",
+        callback = function()
+          if vim.o.background == "light" then
+            vim.fn.system("kitty +kitten themes Kanagawa_light")
+          elseif vim.o.background == "dark" then
+            vim.fn.system("kitty +kitten themes Kanagawa_dragon")
+          else
+            vim.fn.system("kitty +kitten themes Kanagawa")
+          end
+        end,
+      })
+
       ---@type table<number, {token:lsp.ProgressToken, msg:string, done:boolean}[]>
       local progress = vim.defaulttable()
       vim.api.nvim_create_autocmd("LspProgress", {
@@ -2242,6 +2291,26 @@ in
         override_pause_level = 60;
         default_icon = "dialog-warning";
       };
+    };
+  };
+
+  home.pointerCursor = {
+    hyprcursor = {
+      enable = true;
+      size = 34;
+    };
+    package = inputs.mcmojave-hyprcursor.packages.x86_64-linux.default;
+    name = "McMojave";
+  };
+
+  services.hyprpaper = {
+    enable = true;
+    settings = {
+      ipc = "on";
+      preload = ["~/wallpapers/Ventura-dark.jpg"];
+      wallpaper = [
+        ",~/wallpapers/Ventura-dark.jpg"
+      ];
     };
   };
 }
