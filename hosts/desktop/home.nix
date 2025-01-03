@@ -90,8 +90,45 @@ in
         window-save-state=always
         window-decoration=false
         auto-update=check
-        keybind=ctrl+u=scroll_page_fractional:-0.5
-        keybind=ctrl+d=scroll_page_fractional:0.5
+
+        keybind=ctrl+a>u=scroll_page_fractional:-0.5
+        keybind=ctrl+a>d=scroll_page_fractional:0.5
+
+        keybind=ctrl+a>ctrl+j=new_split:down
+        keybind=ctrl+a>ctrl+k=new_split:up
+        keybind=ctrl+a>ctrl+h=new_split:left
+        keybind=ctrl+a>ctrl+l=new_split:right
+        keybind=ctrl+a>c=new_split:auto
+
+        keybind=ctrl+a>j=goto_split:down
+        keybind=ctrl+a>k=goto_split:up
+        keybind=ctrl+a>h=goto_split:left
+        keybind=ctrl+a>l=goto_split:right
+        keybind=ctrl+a>n=goto_split:next
+        keybind=ctrl+a>p=goto_split:previous
+
+        keybind=ctrl+a>f=toggle_split_zoom
+
+        keybind=ctrl+a>t=new_tab
+
+        keybind=ctrl+a>1=goto_tab:1
+        keybind=ctrl+a>2=goto_tab:2
+        keybind=ctrl+a>3=goto_tab:3
+        keybind=ctrl+a>4=goto_tab:4
+        keybind=ctrl+a>5=goto_tab:5
+        keybind=ctrl+a>6=goto_tab:6
+        keybind=ctrl+a>7=goto_tab:7
+        keybind=ctrl+a>8=goto_tab:8
+        keybind=ctrl+a>9=goto_tab:9
+
+        keybind=ctrl+a>shift+j=resize_split:down,10
+        keybind=ctrl+a>shift+k=resize_split:up,10
+        keybind=ctrl+a>shift+h=resize_split:left,10
+        keybind=ctrl+a>shift+k=resize_split:right,10
+
+        keybind=ctrl+a>equal=equalize_splits
+
+        keybind=ctrl+a>s=toggle_tab_overview
       '';
       executable = false;
     };
