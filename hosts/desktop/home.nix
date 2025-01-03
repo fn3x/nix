@@ -90,6 +90,8 @@ in
         window-save-state=always
         window-decoration=false
         auto-update=check
+        keybind=ctrl+u=scroll_page_fractional:-0.5
+        keybind=ctrl+d=scroll_page_fractional:0.5
       '';
       executable = false;
     };
