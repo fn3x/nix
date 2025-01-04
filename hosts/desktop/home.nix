@@ -587,7 +587,7 @@ in
     nix-u = "nh os test -u";
     vim = "nvim";
     vi = "nvim";
-    nix-work = "nix-shell ~/nixos/shells/work/shell.nix";
+    nix-work = "nix develop ~/nixos/shells/work#work";
   };
 
   home.sessionPath = [
