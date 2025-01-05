@@ -59,18 +59,29 @@ in
     vesktop
     mattermost-desktop
     spotify
+    cantarell-fonts
+    noto-fonts
+    noto-fonts-emoji
     fd
     ripgrep
     tmux
     vlc
     btop
     gimp
-    flameshot
     lazygit
     jq
     tldr
     zip 
     firefoxTheme
+    dbeaver-bin
+    mysql_jdbc
+    openssl
+    grim
+    gamescope
+    vulkan-loader
+    vulkan-tools
+    vulkan-validation-layers
+    libglvnd
   ];
 
   home.file = {
@@ -90,44 +101,44 @@ in
         window-decoration=false
         auto-update=check
 
-        keybind=ctrl+a>u=scroll_page_fractional:-0.5
-        keybind=ctrl+a>d=scroll_page_fractional:0.5
+        keybind=ctrl+b>u=scroll_page_fractional:-0.5
+        keybind=ctrl+b>d=scroll_page_fractional:0.5
 
-        keybind=ctrl+a>ctrl+j=new_split:down
-        keybind=ctrl+a>ctrl+k=new_split:up
-        keybind=ctrl+a>ctrl+h=new_split:left
-        keybind=ctrl+a>ctrl+l=new_split:right
-        keybind=ctrl+a>c=new_split:auto
+        keybind=ctrl+b>ctrl+j=new_split:down
+        keybind=ctrl+b>ctrl+k=new_split:up
+        keybind=ctrl+b>ctrl+h=new_split:left
+        keybind=ctrl+b>ctrl+l=new_split:right
+        keybind=ctrl+b>c=new_split:auto
 
-        keybind=ctrl+a>j=goto_split:down
-        keybind=ctrl+a>k=goto_split:up
-        keybind=ctrl+a>h=goto_split:left
-        keybind=ctrl+a>l=goto_split:right
-        keybind=ctrl+a>n=goto_split:next
-        keybind=ctrl+a>p=goto_split:previous
+        keybind=ctrl+b>j=goto_split:down
+        keybind=ctrl+b>k=goto_split:up
+        keybind=ctrl+b>h=goto_split:left
+        keybind=ctrl+b>l=goto_split:right
+        keybind=ctrl+b>n=goto_split:next
+        keybind=ctrl+b>p=goto_split:previous
 
-        keybind=ctrl+a>f=toggle_split_zoom
+        keybind=ctrl+b>f=toggle_split_zoom
 
-        keybind=ctrl+a>t=new_tab
+        keybind=ctrl+b>t=new_tab
 
-        keybind=ctrl+a>1=goto_tab:1
-        keybind=ctrl+a>2=goto_tab:2
-        keybind=ctrl+a>3=goto_tab:3
-        keybind=ctrl+a>4=goto_tab:4
-        keybind=ctrl+a>5=goto_tab:5
-        keybind=ctrl+a>6=goto_tab:6
-        keybind=ctrl+a>7=goto_tab:7
-        keybind=ctrl+a>8=goto_tab:8
-        keybind=ctrl+a>9=goto_tab:9
+        keybind=ctrl+b>1=goto_tab:1
+        keybind=ctrl+b>2=goto_tab:2
+        keybind=ctrl+b>3=goto_tab:3
+        keybind=ctrl+b>4=goto_tab:4
+        keybind=ctrl+b>5=goto_tab:5
+        keybind=ctrl+b>6=goto_tab:6
+        keybind=ctrl+b>7=goto_tab:7
+        keybind=ctrl+b>8=goto_tab:8
+        keybind=ctrl+b>9=goto_tab:9
 
-        keybind=ctrl+a>shift+j=resize_split:down,10
-        keybind=ctrl+a>shift+k=resize_split:up,10
-        keybind=ctrl+a>shift+h=resize_split:left,10
-        keybind=ctrl+a>shift+k=resize_split:right,10
+        keybind=ctrl+b>shift+j=resize_split:down,10
+        keybind=ctrl+b>shift+k=resize_split:up,10
+        keybind=ctrl+b>shift+h=resize_split:left,10
+        keybind=ctrl+b>shift+k=resize_split:right,10
 
-        keybind=ctrl+a>equal=equalize_splits
+        keybind=ctrl+b>equal=equalize_splits
 
-        keybind=ctrl+a>s=toggle_tab_overview
+        keybind=ctrl+b>s=toggle_tab_overview
       '';
       executable = false;
     };
@@ -136,6 +147,19 @@ in
 
   services.flameshot = {
     enable = true;
+    package = pkgs.flameshot.overrideAttrs (oldAttrs: {
+      src = pkgs.fetchFromGitHub {
+        owner = "flameshot-org";
+        repo = "flameshot";
+        rev = "3d21e4967b68e9ce80fb2238857aa1bf12c7b905";
+        sha256 = "sha256-OLRtF/yjHDN+sIbgilBZ6sBZ3FO6K533kFC1L2peugc=";
+      };
+      cmakeFlags = [
+        "-DUSE_WAYLAND_CLIPBOARD=1"
+        "-DUSE_WAYLAND_GRIM=1"
+      ];
+      buildInputs = oldAttrs.buildInputs ++ [ pkgs.libsForQt5.kguiaddons ];
+    });
     settings.General = {
       showStartupLaunchMessage = false;
       saveLastRegion = true;
@@ -576,7 +600,7 @@ in
     settings = {
       color_theme = "gruvbox_dark_v2";
       vim_keys = true;
-      update_ms = 500;
+      update_ms = 100;
     };
   };
 
@@ -615,6 +639,7 @@ in
     NVM_DIR = "~/.nvm";
     XCURSOR_THEME = "WhiteSur Cursors";
     XCURSOR_SIZE = 34;
+    GTK_THEME = "WhiteSur";
   };
 
   programs.kitty.enable = true; # required for the default Hyprland config
@@ -659,6 +684,7 @@ in
           "$mod, J, togglesplit, # dwindle"
           "$mod, SPACE, exec, $menu"
           "$mod SHIFT, S, exec, XDG_CURRENT_DESKTOP=sway flameshot gui"
+          "$mod,F,fullscreen"
         ]
         ++ (
           # workspaces
@@ -702,6 +728,7 @@ in
       env = XDG_SESSION_TYPE,wayland
       env = XDG_SESSION_DESKTOP,Hyprland
       env = ELECTRON_OZONE_PLATFORM_HINT,auto
+      env = WLR_NO_HARDWARE_CURSORS,1
 
       #################
       ### AUTOSTART ###
@@ -724,7 +751,8 @@ in
       exec-once = [workspace 2 silent] firefox
       exec-once = [workspace 3 silent] telegram-desktop
       exec-once = [workspace 4 silent] mattermost-desktop
-      exec-once = [workspace 5 silent] spotify
+      exec-once = [workspace 5 silent] spotify --enable-features=UseOzonePlatform --ozone-platform=wayland --uri=%U
+      exec-once = [workspace 6 silent] vesktop --enable-features=UseOzonePlatform --ozone-platform=wayland --uri=%U
 
       #####################
       ### LOOK AND FEEL ###
@@ -746,7 +774,7 @@ in
           resize_on_border = true
 
           # Please see https://wiki.hyprland.org/Configuring/Tearing/ before you turn this on
-          allow_tearing = false
+          allow_tearing = true
 
           layout = dwindle
       }
@@ -869,6 +897,13 @@ in
       # set this to your leftmost monitor id, otherwise you have to move your cursor to the leftmost monitor
       # before executing flameshot
       windowrulev2 = monitor 1, class:^(flameshot)$
+
+      windowrulev2 = fullscreen,class:^steam_app\d+$
+      windowrulev2 = monitor 1,class:^steam_app_\d+$
+      windowrulev2 = workspace 10,class:^steam_app_\d+$
+      windowrulev2 = immediate,class:^(gamescope)$
+      windowrulev2 = immediate,class:^(cs2)$
+      workspace = 9, border:false, rounding:false
     '';
   };
 

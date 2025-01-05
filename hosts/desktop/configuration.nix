@@ -58,7 +58,7 @@
   services.printing.enable = true;
 
   # Enable sound with pipewire.
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
 
   security.rtkit.enable = true;
   services.pipewire = {
@@ -72,6 +72,8 @@
   programs.ssh = {
     startAgent = true;
   };
+
+  programs.steam.enable = true;
 
   programs.zsh = {
     enable = true;
@@ -115,8 +117,8 @@
     (pkgs.waybar.overrideAttrs (oldAttrs: {
       mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
     }))
-    gtkmm4
-    wlroots
+    gtk3
+    gtk4
     dunst
     libnotify
     rofi-wayland
@@ -126,6 +128,9 @@
     nh
     pavucontrol
     wireguard-tools 
+    qt5.qtwayland
+    libsForQt5.qt5ct
+    libva
   ];
 
   services.resolved.enable = true;
@@ -193,7 +198,7 @@
 
   environment.sessionVariables = {
     WLR_NO_HARDWARE_CURSORS = "1";
-    GDK_BACKEND = "wayland";
+    GDK_BACKEND = "wayland,x11";
     NIXOS_OZONE_WL = "1";
   };
 
