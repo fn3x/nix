@@ -960,6 +960,8 @@ in
       #### SWAY NOTIFICATIONS ####
       ############################
 
+      windowrule = float,class:^(Swaync)$
+      focus_behavior = smart_no_focus
       layerrule = blur, swaync-control-center
       layerrule = blur, swaync-notification-window
       layerrule = ignorezero, swaync-control-center
@@ -2499,15 +2501,16 @@ in
         position = "top";
         reload_style_on_change = true;
         modules-left = [
-          "custom/notification"
-          "clock"
-          "tray"
+          "bluetooth"
+          "network"
         ];
         modules-center = [ "hyprland/workspaces" ];
         modules-right = [
+          "custom/notification"
+          "sway/language"
+          "clock"
           "group/expand"
-          "bluetooth"
-          "network"
+          "tray"
         ];
 
         "hyprland/workspaces" = {
@@ -2742,8 +2745,8 @@ in
     enable = true;
     settings = {
       "$schema" = "${pkgs.swaynotificationcenter}/configSchema.json";
-      positionX = "left";
-      positionY = "bottom";
+      positionX = "right";
+      positionY = "top";
       layer = "overlay";
       control-center-layer = "top";
       layer-shell = true;
