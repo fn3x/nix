@@ -71,7 +71,7 @@ in
     lazygit
     jq
     tldr
-    zip 
+    zip
     firefoxTheme
     dbeaver-bin
     mysql_jdbc
@@ -82,6 +82,7 @@ in
     vulkan-tools
     vulkan-validation-layers
     libglvnd
+    wofi
   ];
 
   home.file = {
@@ -164,6 +165,135 @@ in
       showStartupLaunchMessage = false;
       saveLastRegion = true;
     };
+  };
+
+  programs.wofi = {
+    enable = true;
+    settings = {
+      allow_images = true;
+      show = "drun";
+      width = 500;
+      height = 400;
+      always_parse_args = true;
+      show_all = true;
+      term = "ghostty";
+      hide_scroll = true;
+      print_command = true;
+      insensitive = true;
+      columns = 1;
+    };
+    style = ''
+      @define-color mauve  @color9;
+      @define-color red  @color9;
+      @define-color lavender  @color7;
+      @define-color text  @color7;
+
+      * {
+        font-family: 'CodeNewRoman Nerd Font Mono', monospace;
+        font-size: 17px;
+        outline: none;
+        border: none;
+      }
+      window {
+        all:unset;
+        padding: 20px;
+        border-radius: 10px;
+        background-color: alpha(@background,.5);
+        animation: fadeIn .5s ease-in-out;
+      }
+      /* Slide In */
+      @keyframes slideIn {
+        0% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+      #inner-box {
+        margin: 2px;
+        padding: 5px;
+        border: none;
+        background-color: @base;
+        animation: slideIn 1s ease-in-out;
+      }
+      @keyframes fadeIn{
+          0% {
+            border-radius: 100px;
+          }
+          100% {
+            border-radius: 10px;
+          }
+      }
+      #outer-box {
+        border-radius: .5em;
+        border: none
+        background-color: @base;
+      }
+      #scroll {
+        margin: 0px;
+        padding: 30px;
+        border: none;
+        background-color: @base;
+        animation: fadeIn .8s ease-in-out;
+      }
+      #input {
+        all:unset;
+        margin-left:20px;
+        margin-right:20px;
+        margin-top:20px;
+        padding: 20px;
+        border: none;
+        outline: none;
+        color: @text;
+        background-color: @base;
+        animation: slideIn 1s ease-in-out;
+        box-shadow: 1px 1px 5px rgba(0, 0, 0, .2);
+        border-radius:10;
+      }
+      #input image {
+        border: none;
+        color: @red;
+        outline: none;
+      }
+      #input * {
+        border: none;
+        border: none;
+        outline: none;
+      }
+      #input:focus {
+        outline: none;
+        border: none;
+        box-shadow: 1px 1px 5px rgba(0, 0, 0, .2);
+        border-radius:10;
+      }
+      #text {
+        margin: 5px;
+        border: none;
+        color: @text;
+        outline: none;
+      }
+      #entry {
+        background-color: @base;
+        border: none;
+      }
+      #entry arrow {
+        border: none;
+        color: @lavender;
+      }
+      #entry:selected {
+        box-shadow: 1px 1px 5px rgba(255,255,255, .03);
+        border: none;
+        border-radius:20;
+      }
+      #entry:selected #text {
+        color: @mauve;
+      }
+      #entry:drop(active) {
+        background-color: @lavender !important;
+        animation: fadeIn 1s ease-in-out;
+      }
+    '';
   };
 
   programs.firefox = {
@@ -2036,7 +2166,10 @@ in
       };
     };
 
-    extraPlugins = [ pkgs.vimPlugins.gruvbox-material-nvim pkgs.vimPlugins.kanagawa-nvim ];
+    extraPlugins = [
+      pkgs.vimPlugins.gruvbox-material-nvim
+      pkgs.vimPlugins.kanagawa-nvim
+    ];
     extraConfigLua = ''
       vim.api.nvim_set_hl(0, "LineNrAbove", { fg = "#b8fcec", bold = false });
       vim.api.nvim_set_hl(0, "LineNr", { fg = "white", bold = true });
@@ -2299,10 +2432,131 @@ in
     enable = true;
     settings = {
       ipc = "on";
-      preload = ["~/wallpapers/Ventura-dark.jpg"];
+      preload = [ "~/wallpapers/Ventura-dark.jpg" ];
       wallpaper = [
         ",~/wallpapers/Ventura-dark.jpg"
       ];
+    };
+  };
+
+  programs.waybar = {
+    enable = true;
+    settings = {
+      layer = "top";
+      position = "top";
+      reload_style_on_change = true;
+      modules-left = [
+        "custom/notification"
+        "clock"
+        "tray"
+      ];
+      modules-center = [ "hyprland/workspaces" ];
+      modules-right = [
+        "group/expand"
+        "bluetooth"
+        "network"
+      ];
+
+      "hyprland/workspaces" = {
+        "format" = "{icon}";
+        "format-icons" = {
+          "active" = "";
+          "default" = "";
+          "empty" = "";
+        };
+      };
+      "custom/notification" = {
+        "tooltip" = false;
+        "format" = "";
+        "on-click" = "swaync-client -t -sw";
+        "escape" = true;
+      };
+      "clock" = {
+        "format" = "{=%I=%M=%S %p} ";
+        "interval" = 1;
+        "tooltip-format" = "<tt>{calendar}</tt>";
+        "calendar" = {
+          "format" = {
+            "months" = "<span color='#000000'><b>{}</b></span>";
+            "weekdays" = "<span color='#000000'><b>{}</b></span>";
+            "today" = "<span color='#000000'><b>{}</b></span>";
+          };
+        };
+        "actions" = {
+          "on-click-right" = "shift_down";
+          "on-click" = "shift_up";
+        };
+      };
+      "network" = {
+        "format-ethernet" = "";
+        "format-disconnected" = "";
+        "tooltip-format-disconnected" = "Error";
+        "tooltip-format-ethernet" = "{ifname} 🖧 ";
+        "on-click" = "ghostty nmtui";
+      };
+      "bluetooth" = {
+        "format-on" = "󰂯";
+        "format-off" = "BT-off";
+        "format-disabled" = "󰂲";
+        "format-connected-battery" = "{device_battery_percentage}% 󰂯";
+        "format-alt" = "{device_alias} 󰂯";
+        "tooltip-format" = "{controller_alias}\t{controller_address}\n\n{num_connections} connected";
+        "tooltip-format-connected" =
+          "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}";
+        "tooltip-format-enumerate-connected" = "{device_alias}\n{device_address}";
+        "tooltip-format-enumerate-connected-battery" =
+          "{device_alias}\n{device_address}\n{device_battery_percentage}%";
+        "on-click-right" = "blueman-manager";
+      };
+      "custom/expand" = {
+        "format" = "";
+        "tooltip" = false;
+      };
+      "custom/endpoint" = {
+        "format" = "|";
+        "tooltip" = false;
+      };
+      "group/expand" = {
+        "orientation" = "horizontal";
+        drawer = {
+          transition-duration = 600;
+          transition-to-left = true;
+          click-to-reveal = true;
+        };
+        "modules" = [
+          "custom/expand"
+          "custom/colorpicker"
+          "cpu"
+          "memory"
+          "temperature"
+          "custom/endpoint"
+        ];
+      };
+      "custom/colorpicker" = {
+        "format" = "{}";
+        "return-type" = "json";
+        "interval" = "once";
+        exec = pkgs.writeShellScript "colorpicker" ''
+          echo "from within waybar"
+        '';
+        "on-click" = "~/.config/waybar/scripts/colorpicker.sh";
+        "signal" = 1;
+      };
+      "cpu" = {
+        "format" = "󰻠";
+        "tooltip" = true;
+      };
+      "memory" = {
+        "format" = "";
+      };
+      "temperature" = {
+        "critical-threshold" = 80;
+        "format" = "";
+      };
+      "tray" = {
+        "icon-size" = 14;
+        "spacing" = 10;
+      };
     };
   };
 }

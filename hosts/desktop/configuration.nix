@@ -119,9 +119,10 @@
     }))
     gtk3
     gtk4
-    dunst
+    swaynotificationcenter
+    hyprpicker
+    bluez
     libnotify
-    rofi-wayland
     git
     font-awesome
     nwg-look
