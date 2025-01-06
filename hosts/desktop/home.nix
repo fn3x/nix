@@ -30,6 +30,7 @@ let
   username = "fn3x";
   homeDirectory = "/home/${username}";
   firefoxTheme = import ../common/whitesur-firefox.nix { inherit pkgs; };
+  waybarScript = import ../common/scripts/colorpicker.nix { inherit pkgs; };
 in
 
 {
@@ -83,6 +84,10 @@ in
     vulkan-validation-layers
     libglvnd
     wofi
+    waybarScript
+    nerd-fonts.code-new-roman
+    pywal16
+    swww
   ];
 
   home.file = {
@@ -144,6 +149,33 @@ in
       executable = false;
     };
     ".mozilla/firefox/default/chrome".source = firefoxTheme;
+    "${homeDirectory}/.config/wal/templates/colors-hyprland" = {
+      text = ''
+        {background}
+
+        $foreground = rgb({foreground.strip})
+        $background = rgb({background.strip})
+        $wallpaper = rgb({wallpaper.strip})
+
+        $color0 = rgb({color0.strip})
+        $color1 = rgb({color1.strip})
+        $color2 = rgb({color2.strip})
+        $color3 = rgb({color3.strip})
+        $color4 = rgb({color4.strip})
+        $color5 = rgb({color5.strip})
+        $color6 = rgb({color6.strip})
+        $color7 = rgb({color7.strip})
+        $color8 = rgb({color8.strip})
+        $color9 = rgb({color9.strip})
+        $color10 = rgb({color10.strip})
+        $color11 = rgb({color11.strip})
+        $color12 = rgb({color12.strip})
+        $color13 = rgb({color13.strip})
+        $color14 = rgb({color14.strip})
+        $color15 = rgb({color15.strip})
+      '';
+      executable = false;
+    };
   };
 
   services.flameshot = {
@@ -165,135 +197,6 @@ in
       showStartupLaunchMessage = false;
       saveLastRegion = true;
     };
-  };
-
-  programs.wofi = {
-    enable = true;
-    settings = {
-      allow_images = true;
-      show = "drun";
-      width = 500;
-      height = 400;
-      always_parse_args = true;
-      show_all = true;
-      term = "ghostty";
-      hide_scroll = true;
-      print_command = true;
-      insensitive = true;
-      columns = 1;
-    };
-    style = ''
-      @define-color mauve  @color9;
-      @define-color red  @color9;
-      @define-color lavender  @color7;
-      @define-color text  @color7;
-
-      * {
-        font-family: 'CodeNewRoman Nerd Font Mono', monospace;
-        font-size: 17px;
-        outline: none;
-        border: none;
-      }
-      window {
-        all:unset;
-        padding: 20px;
-        border-radius: 10px;
-        background-color: alpha(@background,.5);
-        animation: fadeIn .5s ease-in-out;
-      }
-      /* Slide In */
-      @keyframes slideIn {
-        0% {
-          opacity: 0;
-        }
-        100% {
-          opacity: 1;
-        }
-      }
-      #inner-box {
-        margin: 2px;
-        padding: 5px;
-        border: none;
-        background-color: @base;
-        animation: slideIn 1s ease-in-out;
-      }
-      @keyframes fadeIn{
-          0% {
-            border-radius: 100px;
-          }
-          100% {
-            border-radius: 10px;
-          }
-      }
-      #outer-box {
-        border-radius: .5em;
-        border: none
-        background-color: @base;
-      }
-      #scroll {
-        margin: 0px;
-        padding: 30px;
-        border: none;
-        background-color: @base;
-        animation: fadeIn .8s ease-in-out;
-      }
-      #input {
-        all:unset;
-        margin-left:20px;
-        margin-right:20px;
-        margin-top:20px;
-        padding: 20px;
-        border: none;
-        outline: none;
-        color: @text;
-        background-color: @base;
-        animation: slideIn 1s ease-in-out;
-        box-shadow: 1px 1px 5px rgba(0, 0, 0, .2);
-        border-radius:10;
-      }
-      #input image {
-        border: none;
-        color: @red;
-        outline: none;
-      }
-      #input * {
-        border: none;
-        border: none;
-        outline: none;
-      }
-      #input:focus {
-        outline: none;
-        border: none;
-        box-shadow: 1px 1px 5px rgba(0, 0, 0, .2);
-        border-radius:10;
-      }
-      #text {
-        margin: 5px;
-        border: none;
-        color: @text;
-        outline: none;
-      }
-      #entry {
-        background-color: @base;
-        border: none;
-      }
-      #entry arrow {
-        border: none;
-        color: @lavender;
-      }
-      #entry:selected {
-        box-shadow: 1px 1px 5px rgba(255,255,255, .03);
-        border: none;
-        border-radius:20;
-      }
-      #entry:selected #text {
-        color: @mauve;
-      }
-      #entry:drop(active) {
-        background-color: @lavender !important;
-        animation: fadeIn 1s ease-in-out;
-      }
-    '';
   };
 
   programs.firefox = {
@@ -780,7 +683,7 @@ in
       "$mod" = "ALT";
       "$terminal" = "ghostty";
       "$fileManager" = "dolphin";
-      "$menu" = "rofi -show drun -show-icons";
+      "$menu" = "wofi --show drun";
       bindl = [
         ", XF86AudioNext, exec, playerctl next"
         ", XF86AudioPause, exec, playerctl play-pause"
@@ -865,7 +768,6 @@ in
       #################
 
       # from hyprland wiki - should speed up launches of apps
-      exec-once=dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
       exec-once=systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 
       exec-once = dconf write /org/gnome/desktop/interface/gtk-theme "'WhiteSur'"
@@ -873,16 +775,18 @@ in
       exec-once = dconf write /org/gnome/desktop/interface/document-font-name "'Noto Sans Medium 11'"
       exec-once = dconf write /org/gnome/desktop/interface/font-name "'Noto Sans Medium 11'"
       exec-once = dconf write /org/gnome/desktop/interface/monospace-font-name "'Noto Sans Mono Medium 11'"
-      exec-once = swww init
+
+      exec-once = wal -s -t --cols-16 -i "~/wallpapers/Ventura-dark.jpg"
       exec-once = waybar
-      exec-once = dunst
+      exec-once = swww-daemon
+      exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+      exec-once = swaync
 
       exec-once = [workspace 1 silent] $terminal
       exec-once = [workspace 2 silent] firefox
       exec-once = [workspace 3 silent] telegram-desktop
       exec-once = [workspace 4 silent] mattermost-desktop
-      exec-once = [workspace 5 silent] spotify --enable-features=UseOzonePlatform --ozone-platform=wayland --uri=%U
-      exec-once = [workspace 6 silent] vesktop --enable-features=UseOzonePlatform --ozone-platform=wayland --uri=%U
+      exec-once = [workspace 5 silent] spotify --enable-features=UseOzonePlatform --ozone-platform=wayland
 
       #####################
       ### LOOK AND FEEL ###
@@ -1034,6 +938,33 @@ in
       windowrulev2 = immediate,class:^(gamescope)$
       windowrulev2 = immediate,class:^(cs2)$
       workspace = 9, border:false, rounding:false
+
+      ############
+      ###WAYBAR###
+      ############
+
+      layerrule = blur, waybar
+      layerrule = ignorezero, waybar
+      layerrule = ignorealpha 0.5, waybar
+
+      ############
+      ####WOFI####
+      ############
+
+      layerrule = blur, wofi
+      layerrule = ignorezero, wofi
+      layerrule = ignorealpha 0.5, wofi
+
+      ############################
+      #### SWAY NOTIFICATIONS ####
+      ############################
+
+      layerrule = blur, swaync-control-center
+      layerrule = blur, swaync-notification-window
+      layerrule = ignorezero, swaync-control-center
+      layerrule = ignorezero, swaync-notification-window
+      layerrule = ignorealpha 0.5, swaync-control-center
+      layerrule = ignorealpha 0.5, swaync-notification-window
     '';
   };
 
@@ -2321,7 +2252,7 @@ in
   };
 
   services.dunst = {
-    enable = true;
+    enable = false; # trying out wofi for now
     settings = {
       global = {
         monitor = 0;
@@ -2428,135 +2359,831 @@ in
     name = "McMojave";
   };
 
-  services.hyprpaper = {
+  programs.wofi = {
     enable = true;
     settings = {
-      ipc = "on";
-      preload = [ "~/wallpapers/Ventura-dark.jpg" ];
-      wallpaper = [
-        ",~/wallpapers/Ventura-dark.jpg"
-      ];
+      allow_images = true;
+      show = "drun";
+      width = 500;
+      height = 400;
+      always_parse_args = true;
+      show_all = true;
+      term = "$TERMINAL";
+      hide_scroll = true;
+      print_command = true;
+      insensitive = true;
+      columns = 1;
     };
+    style = ''
+      @import url('${config.xdg.cacheHome}/wal/colors-waybar.css');
+
+      @define-color mauve  @color9;
+      @define-color red  @color9;
+      @define-color lavender  @color7;
+      @define-color text  @color7;
+
+      * {
+        font-family: 'CodeNewRoman Nerd Font Mono', monospace;
+        font-size: 17px;
+        outline: none;
+        border: none;
+      }
+      window {
+        all:unset;
+        padding: 20px;
+        border-radius: 10px;
+        background-color: alpha(@background,.5);
+        animation: fadeIn .5s ease-in-out;
+      }
+      /* Slide In */
+      @keyframes slideIn {
+        0% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+      #inner-box {
+        margin: 2px;
+        padding: 5px;
+        border: none;
+        background-color: @base;
+        animation: slideIn 1s ease-in-out;
+      }
+      @keyframes fadeIn{
+          0% {
+            border-radius: 100px;
+          }
+          100% {
+            border-radius: 10px;
+          }
+      }
+      #outer-box {
+        border-radius: .5em;
+        border: none
+        background-color: @base;
+      }
+      #scroll {
+        margin: 0px;
+        padding: 30px;
+        border: none;
+        background-color: @base;
+        animation: fadeIn .8s ease-in-out;
+      }
+      #input {
+        all:unset;
+        margin-left:20px;
+        margin-right:20px;
+        margin-top:20px;
+        padding: 20px;
+        border: none;
+        outline: none;
+        color: @text;
+        background-color: @base;
+        animation: slideIn 1s ease-in-out;
+        box-shadow: 1px 1px 5px rgba(0, 0, 0, .2);
+        border-radius:10;
+      }
+      #input image {
+        border: none;
+        color: @red;
+        outline: none;
+      }
+      #input * {
+        border: none;
+        border: none;
+        outline: none;
+      }
+      #input:focus {
+        outline: none;
+        border: none;
+        box-shadow: 1px 1px 5px rgba(0, 0, 0, .2);
+        border-radius:10;
+      }
+      #text {
+        margin: 5px;
+        border: none;
+        color: @text;
+        outline: none;
+      }
+      #entry {
+        background-color: @base;
+        border: none;
+      }
+      #entry arrow {
+        border: none;
+        color: @lavender;
+      }
+      #entry:selected {
+        box-shadow: 1px 1px 5px rgba(255,255,255, .03);
+        border: none;
+        border-radius:20;
+      }
+      #entry:selected #text {
+        color: @mauve;
+      }
+      #entry:drop(active) {
+        background-color: @lavender !important;
+        animation: fadeIn 1s ease-in-out;
+      }
+    '';
   };
 
   programs.waybar = {
     enable = true;
     settings = {
-      layer = "top";
-      position = "top";
-      reload_style_on_change = true;
-      modules-left = [
-        "custom/notification"
-        "clock"
-        "tray"
-      ];
-      modules-center = [ "hyprland/workspaces" ];
-      modules-right = [
-        "group/expand"
-        "bluetooth"
-        "network"
-      ];
+      mainBar = {
+        layer = "top";
+        position = "top";
+        reload_style_on_change = true;
+        modules-left = [
+          "custom/notification"
+          "clock"
+          "tray"
+        ];
+        modules-center = [ "hyprland/workspaces" ];
+        modules-right = [
+          "group/expand"
+          "bluetooth"
+          "network"
+        ];
 
-      "hyprland/workspaces" = {
-        "format" = "{icon}";
-        "format-icons" = {
-          "active" = "";
-          "default" = "";
-          "empty" = "";
-        };
-      };
-      "custom/notification" = {
-        "tooltip" = false;
-        "format" = "";
-        "on-click" = "swaync-client -t -sw";
-        "escape" = true;
-      };
-      "clock" = {
-        "format" = "{=%I=%M=%S %p} ";
-        "interval" = 1;
-        "tooltip-format" = "<tt>{calendar}</tt>";
-        "calendar" = {
-          "format" = {
-            "months" = "<span color='#000000'><b>{}</b></span>";
-            "weekdays" = "<span color='#000000'><b>{}</b></span>";
-            "today" = "<span color='#000000'><b>{}</b></span>";
+        "hyprland/workspaces" = {
+          "format" = "{icon}";
+          "format-icons" = {
+            "active" = "";
+            "default" = "";
+            "empty" = "";
           };
         };
-        "actions" = {
-          "on-click-right" = "shift_down";
-          "on-click" = "shift_up";
+        "custom/notification" = {
+          tooltip = false;
+          format = "";
+          on-click = "swaync-client -t -sw";
+          escape = true;
         };
-      };
-      "network" = {
-        "format-ethernet" = "";
-        "format-disconnected" = "";
-        "tooltip-format-disconnected" = "Error";
-        "tooltip-format-ethernet" = "{ifname} 🖧 ";
-        "on-click" = "ghostty nmtui";
-      };
-      "bluetooth" = {
-        "format-on" = "󰂯";
-        "format-off" = "BT-off";
-        "format-disabled" = "󰂲";
-        "format-connected-battery" = "{device_battery_percentage}% 󰂯";
-        "format-alt" = "{device_alias} 󰂯";
-        "tooltip-format" = "{controller_alias}\t{controller_address}\n\n{num_connections} connected";
-        "tooltip-format-connected" =
-          "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}";
-        "tooltip-format-enumerate-connected" = "{device_alias}\n{device_address}";
-        "tooltip-format-enumerate-connected-battery" =
-          "{device_alias}\n{device_address}\n{device_battery_percentage}%";
-        "on-click-right" = "blueman-manager";
-      };
-      "custom/expand" = {
-        "format" = "";
-        "tooltip" = false;
-      };
-      "custom/endpoint" = {
-        "format" = "|";
-        "tooltip" = false;
-      };
-      "group/expand" = {
-        "orientation" = "horizontal";
-        drawer = {
-          transition-duration = 600;
-          transition-to-left = true;
-          click-to-reveal = true;
+        clock = {
+          format = "{:%d.%m.%Y %H:%M:%S}";
+          interval = 1;
+          tooltip-format = "<tt>{calendar}</tt>";
+          calendar = {
+            format = {
+              months = "<span color='#000000'><b>{}</b></span>";
+              weekdays = "<span color='#000000'><b>{}</b></span>";
+              today = "<span color='#000000'><b>{}</b></span>";
+            };
+          };
+          actions = {
+            on-click-right = "shift_down";
+            on-click = "shift_up";
+          };
         };
-        "modules" = [
-          "custom/expand"
-          "custom/colorpicker"
-          "cpu"
-          "memory"
-          "temperature"
-          "custom/endpoint"
-        ];
-      };
-      "custom/colorpicker" = {
-        "format" = "{}";
-        "return-type" = "json";
-        "interval" = "once";
-        exec = pkgs.writeShellScript "colorpicker" ''
-          echo "from within waybar"
-        '';
-        "on-click" = "~/.config/waybar/scripts/colorpicker.sh";
-        "signal" = 1;
-      };
-      "cpu" = {
-        "format" = "󰻠";
-        "tooltip" = true;
-      };
-      "memory" = {
-        "format" = "";
-      };
-      "temperature" = {
-        "critical-threshold" = 80;
-        "format" = "";
-      };
-      "tray" = {
-        "icon-size" = 14;
-        "spacing" = 10;
+        network = {
+          "format-ethernet" = "";
+          "format-disconnected" = "";
+          "tooltip-format-disconnected" = "Error";
+          "tooltip-format-ethernet" = "{ifname} 🖧 ";
+          "on-click" = "$TERMINAL nmtui";
+        };
+        bluetooth = {
+          format-on = "󰂯";
+          format-off = "BT-off";
+          format-disabled = "󰂲";
+          format-connected-battery = "{device_battery_percentage}% 󰂯";
+          format-alt = "{device_alias} 󰂯";
+          tooltip-format = "{controller_alias}\t{controller_address}\n\n{num_connections} connected";
+          tooltip-format-connected = "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}";
+          tooltip-format-enumerate-connected = "{device_alias}\n{device_address}";
+          tooltip-format-enumerate-connected-battery = "{device_alias}\n{device_address}\n{device_battery_percentage}%";
+          on-click-right = "blueman-manager";
+        };
+        "group/expand" = {
+          orientation = "horizontal";
+          drawer = {
+            transition-duration = 600;
+            transition-to-left = true;
+            click-to-reveal = true;
+          };
+          "custom/expand" = {
+            format = "";
+            tooltip = false;
+          };
+          "custom/colorpicker" = {
+            format = "{}";
+            return-type = "json";
+            interval = "once";
+            exec = "${waybarScript}/bin/sh -j";
+            on-click = "${waybarScript}/bin/sh";
+            signal = 1;
+          };
+          cpu = {
+            format = "󰻠";
+            tooltip = true;
+          };
+          memory = {
+            format = "";
+          };
+          temperature = {
+            critical-threshold = 80;
+            format = "";
+          };
+          "custom/endpoint" = {
+            format = "|";
+            tooltip = false;
+          };
+        };
+        tray = {
+          icon-size = 14;
+          spacing = 10;
+        };
       };
     };
+    style = ''
+      @import url('${config.xdg.cacheHome}/wal/colors-waybar.css');
+
+      * {
+          font-size:15px;
+          font-family: "CodeNewRoman Nerd Font Propo";
+      }
+      window#waybar {
+          all:unset;
+      }
+      .modules-left {
+          padding:7px;
+          margin:5px;
+          border-radius:10px;
+          background: alpha(@background,.5);
+          box-shadow: 0px 0px 2px rgba(0, 0, 0, .5);
+      }
+      .modules-center {
+          padding:7px;
+          margin:5px;
+          border-radius:10px;
+          background: alpha(@background,.5);
+          box-shadow: 0px 0px 2px rgba(0, 0, 0, .5);
+      }
+      .modules-right {
+          padding:7px;
+          margin:5px;
+          border-radius:10px;
+          background: alpha(@background,.5);
+          box-shadow: 0px 0px 2px rgba(0, 0, 0, .5);
+      }
+      tooltip {
+          background:rgb(50,50,50)
+      }
+      #clock:hover, #custom-pacman:hover, #custom-notification:hover,#bluetooth:hover,#network:hover,#battery:hover, #cpu:hover,#memory:hover,#temperature:hover {
+          transition: all .3s ease;
+          color:@color0;
+      }
+      #custom-notification {
+          padding: 0px 5px;
+          transition: all .3s ease;
+          color:@color7;
+      }
+      #clock {
+          padding: 0px 5px;
+          color:@color7;
+          transition: all .3s ease;
+      }
+      #custom-pacman {
+          padding: 0px 5px;
+          transition: all .3s ease;
+          color:@color7;
+      }
+      #workspaces {
+          padding: 0px 5px;
+      }
+      #workspaces button {
+          all:unset;
+          padding: 0px 5px;
+          color: rgba(0,0,0,0);
+          transition: all .5s ease;
+          text-shadow: 0px 0px 1px rgba(0, 0, 0, .5);
+      }
+      #workspaces button:hover {
+          transition: all .5s ease;
+          color:rgba(0,0,0,0);
+          text-shadow: 0px 0px 1px rgba(0, 0, 0, .6);
+      }
+      #workspaces button.active {
+          color: @color9;
+          border: none;
+          transition: all .5s ease;
+      }
+      #workspaces button.empty {
+          color: rgba(0,0,0,0);
+          border: none;
+          text-shadow: 0px 0px 1.5px rgba(0, 0, 0, .2);
+      }
+      #workspaces button.empty:hover {
+          color: rgba(0,0,0,0);
+          border: none;
+          text-shadow: 0px 0px 1.5px rgba(0, 0, 0, .5);
+      }
+      #workspaces button.empty.active {
+          color: @color9;
+          border: none;
+          transition: all .5s ease;
+      }
+      #bluetooth {
+          padding: 0px 5px;
+          transition: all .3s ease;
+          color:@color7;
+      }
+      #network {
+          padding: 0px 5px;
+          transition: all .3s ease;
+          color:@color7;
+      }
+      #group-expand {
+          padding: 0px 5px;
+          transition: all .3s ease; 
+      }
+      #custom-expand {
+          padding: 0px 5px;
+          color:alpha(@foreground,.2);
+          text-shadow: 0px 0px 2px rgba(0, 0, 0, .7);
+          transition: all .3s ease;
+      }
+      #custom-expand:hover {
+          color:rgba(255,255,255,.2);
+          text-shadow: 0px 0px 2px rgba(255, 255, 255, .5);
+      }
+      #custom-colorpicker {
+          padding: 0px 5px;
+      }
+      #cpu,#memory,#temperature {
+          padding: 0px 5px;
+          transition: all .3s ease;
+          color:@color7;
+      }
+      #custom-endpoint {
+          color:transparent;
+          text-shadow: 0px 0px 1.5px rgba(0, 0, 0, 1);
+      }
+      #tray {
+          padding: 0px 5px;
+          transition: all .3s ease;
+      }
+      #tray menu * {
+          padding: 0px 5px;
+          transition: all .3s ease;
+      }
+      #tray menu separator {
+          padding: 0px 5px;
+          transition: all .3s ease;
+      }
+    '';
+  };
+  services.swaync = {
+    enable = true;
+    settings = {
+      "$schema" = "${pkgs.swaynotificationcenter}/configSchema.json";
+      positionX = "left";
+      positionY = "bottom";
+      layer = "overlay";
+      control-center-layer = "top";
+      layer-shell = true;
+      cssPriority = "application";
+      control-center-width = 350;
+      control-center-margin-top = 10;
+      control-center-margin-bottom = 10;
+      control-center-margin-right = 0;
+      control-center-margin-left = 0;
+      notification-2fa-action = true;
+      notification-inline-replies = true;
+      notification-window-width = 350;
+      notification-icon-size = 60;
+      notification-body-image-height = 180;
+      notification-body-image-width = 180;
+      timeout = 12;
+      timeout-low = 6;
+      timeout-critical = 1;
+      fit-to-screen = true;
+      keyboard-shortcuts = true;
+      image-visibility = "when available";
+      transition-time = 200;
+      hide-on-clear = false;
+      hide-on-action = true;
+      script-fail-notify = true;
+      widgets = [
+        "mpris"
+        "title"
+        "notifications"
+        "volume"
+        "backlight"
+        "buttons-grid"
+      ];
+      widget-config = {
+        title = {
+          text = "Notification Center";
+          clear-all-button = true;
+          button-text = "󰆴";
+        };
+        label = {
+          max-lines = 1;
+          text = "Notification Center!";
+        };
+        mpris = {
+          image-size = 80;
+          image-radius = 0;
+        };
+        volume = {
+          label = "󰕾 ";
+        };
+        backlight = {
+          label = "󰃟 ";
+        };
+        buttons-grid = {
+          "actions" = [
+            {
+              label = "󰝟";
+              command = "pactl set-sink-mute @DEFAULT_SINK@ toggle";
+              type = "toggle";
+            }
+            {
+              label = "󰍭";
+              command = "pactl set-source-mute @DEFAULT_SOURCE@ toggle";
+              type = "toggle";
+            }
+            {
+              label = "";
+              command = "$TERMINAL nmtui";
+            }
+            {
+              label = "";
+              command = "blueman-manager";
+            }
+            {
+              label = "󰤄";
+              command = "swaync-client -d";
+              type = "toggle";
+            }
+            {
+              label = "󰀟";
+              command = "gnome-network-displays";
+            }
+            {
+              label = "󰈙";
+              command = "$TERMINAL bash -i -c 'Docs'";
+            }
+            {
+              label = "";
+              command = "$TERMINAL bash -i -c 'Settings'";
+
+            }
+            {
+              label = "";
+              command = "$TERMINAL bash -i -c 'tasks'";
+
+            }
+            {
+              label = "";
+              command = "hyprlock";
+            }
+            {
+              label = "";
+              command = "reboot";
+            }
+            {
+              label = "";
+              command = "systemctl poweroff";
+            }
+          ];
+        };
+      };
+    };
+    style = ''
+      @import url('${config.xdg.cacheHome}/wal/colors-waybar.css');
+
+      @define-color mpris-album-art-overlay rgba(0, 0, 0, 0.55);
+      @define-color mpris-button-hover rgba(0, 0, 0, 0.50);
+      @define-color text @color7;
+      @define-color bg alpha(@background,.5);
+      @define-color bg-hover rgba(50,50,50,.8);
+      @define-color mycolor @color9;
+      @define-color border-color alpha(@mycolor, 0.15);
+
+      @keyframes fadeIn{
+        0% {
+            padding-left:20;
+            margin-left:50;
+            margin-right:50;
+        }
+        100% {
+            padding:0;
+            margin:0;
+        }
+      }
+      * {
+          outline:none;
+      }
+      .control-center .notification-row {
+          background-color: unset;
+      }
+      .control-center .notification-row .notification-background .notification,
+      .control-center .notification-row .notification-background .notification .notification-content,
+      .floating-notifications .notification-row .notification-background .notification,
+      .floating-notifications.background .notification-background .notification .notification-content {
+      }
+      .notification {
+          background: alpha(@mycolor,.5);
+      }
+
+      .control-center .notification-row .notification-background .notification {
+          margin-top: 0.150rem;
+          box-shadow: 1px 1px 5px rgba(0, 0, 0, .3);
+          background: alpha(@mycolor,.3);
+
+      }
+      .floating-notifications .notification {
+          animation: fadeIn .5s ease-in-out;
+      }
+
+      .control-center .notification-row .notification-background .notification box,
+      .control-center .notification-row .notification-background .notification widget,
+      .control-center .notification-row .notification-background .notification .notification-content,
+      .floating-notifications .notification-row .notification-background .notification box,
+      .floating-notifications .notification-row .notification-background .notification widget,
+      .floating-notifications.background .notification-background .notification .notification-content {
+          border-radius: 0.818rem;
+      }
+      .notification widget:hover {
+          background:alpha(@mycolor,.2);
+      }
+      .floating-notifications.background .notification-background .notification .notification-content,
+      .control-center .notification-background .notification .notification-content {
+          padding-top: 0.818rem;
+          padding-right: unset;
+          margin-right: unset;
+      }
+
+      .control-center .notification-row .notification-background .notification.low .notification-content label,
+      .control-center .notification-row .notification-background .notification.normal .notification-content label,
+      .floating-notifications.background .notification-background .notification.low .notification-content label,
+      .floating-notifications.background .notification-background .notification.normal .notification-content label {
+          padding-top:10px;
+          padding-left:10px;
+          padding-right:10px;
+      }
+
+      .control-center .notification-row .notification-background .notification..notification-content image,
+      .control-center .notification-row .notification-background .notification.normal .notification-content image,
+      .floating-notifications.background .notification-background .notification.low .notification-content image,
+      .floating-notifications.background .notification-background .notification.normal .notification-content image {
+          background-color: unset;
+      }
+
+      .control-center .notification-row .notification-background .notification.low .notification-content .body,
+      .control-center .notification-row .notification-background .notification.normal .notification-content .body,
+      .floating-notifications.background .notification-background .notification.low .notification-content .body,
+      .floating-notifications.background .notification-background .notification.normal .notification-content .body {
+          color: @text;
+      }
+
+      .control-center .notification-row .notification-background .notification.critical .notification-content,
+      .floating-notifications.background .notification-background .notification.critical .notification-content {
+          background-color: #ffb4a9;
+      }
+
+      .control-center .notification-row .notification-background .notification.critical .notification-content image,
+      .floating-notifications.background .notification-background .notification.critical .notification-content image{
+          background-color: unset;
+          color: #ffb4a9;
+      }
+
+      .control-center .notification-row .notification-background .notification.critical .notification-content label,
+      .floating-notifications.background .notification-background .notification.critical .notification-content label {
+          color: #680003;
+      }
+      .notification-content{
+          padding:5;
+      }
+      .control-center .notification-row .notification-background .notification .notification-content .summary,
+      .floating-notifications.background .notification-background .notification .notification-content .summary {
+          font-family: 'CodeNewRoman Nerd Font Propo';
+          font-size: 0.9909rem;
+          font-weight: 500;
+      }
+      .control-center .notification-row .notification-background .notification .notification-content .time,
+      .floating-notifications.background .notification-background .notification .notification-content .time {
+          font-size: 0.8291rem;
+          font-weight: 500;
+          margin-right: 1rem;
+          padding-right: unset;
+      }
+      .control-center .notification-row .notification-background .notification .notification-content .body,
+      .floating-notifications.background .notification-background .notification .notification-content .body {
+          font-family: 'CodeNewRoman Nerd Font Propo';
+          font-size: 0.8891rem;
+          font-weight: 400;
+          margin-top: 0.310rem;
+          padding-right: unset;
+          margin-right: unset;
+      }
+      .control-center .notification-row .close-button,
+      .floating-notifications.background .close-button {
+          all:unset;
+          background-color: unset;
+          border-radius: 0%;
+          border: none;
+          box-shadow: none;
+          margin-right: 0px;
+          margin-top: 3px;
+          margin-bottom: unset;
+          padding-bottom: unset;
+          min-height: 20px;
+          min-width: 20px;
+          text-shadow: none;
+          color:@text;
+      }
+      .control-center .notification-row .close-button:hover,
+      .floating-notifications.background .close-button:hover {
+          all:unset;
+          background-color: @bg;
+          border-radius: 100%;
+          border: none;
+          box-shadow: none;
+          margin-right: 0px;
+          margin-top: 3px;
+          margin-bottom: unset;
+          padding-bottom: unset;
+          min-height: 20px;
+          min-width: 20px;
+          text-shadow: none;
+          color:@text;
+      }
+      .control-center {
+          background: @bg;
+          color: @text;
+          border-radius: 0px 10px 10px 0px;
+          border:none;
+          box-shadow: 1px 1px 5px rgba(0, 0, 0, .65);
+      }
+      .widget-title {
+          padding:unset;
+          margin:unset;
+          color: @text;
+          padding-left:20px;
+          padding-top:20px;
+      }
+      .widget-title > button {
+          padding:unset;
+          margin:unset;
+          font-size: initial;
+          color: @text;
+          text-shadow: none;
+          background: rgba(255,85,85,.3);
+          border: none;
+          box-shadow: none;
+          border-radius: 12px;
+          padding:0px 10px;
+          margin-right:20px;
+          margin-top:3px;
+          transition: all .7s ease;
+      }
+      .widget-title > button:hover {
+          border: none;
+          background: @bg-hover;
+          transition: all .7s ease;
+          box-shadow: 0px 0px 5px rgba(0, 0, 0, .65);
+      }
+      .widget-label {
+          margin: 8px;
+      }
+      .widget-label > label {
+          font-size: 1.1rem;
+      }
+      .widget-mpris {
+      }
+      .widget-mpris .widget-mpris-player {
+          padding: 16px;
+          margin: 16px 20px;
+          background-color: @mpris-album-art-overlay;
+          border-radius: 12px;
+          box-shadow: 1px 1px 5px rgba(0, 0, 0, .65);
+      }
+      .widget-mpris .widget-mpris-player button:hover {
+          all: unset;
+          background: @bg-hover;
+          text-shadow: none;
+          border-radius: 15px;
+          border: none; 
+          padding: 5px; 
+          margin: 5px;
+          transition: all 0.5s ease; 
+      }
+      .widget-mpris .widget-mpris-player button {
+          color:@text;
+          text-shadow: none;
+          border-radius: 15px;
+          border: none;
+          padding: 5px;
+          margin: 5px;
+          transition: all 0.5s ease;
+      }
+      .widget-mpris .widget-mpris-player button:not(.selected) {
+          background: transparent;
+          border: 2px solid transparent;
+      }
+      .widget-mpris .widget-mpris-player button:hover {
+          border: 2px solid transparent;
+      }
+
+      .widget-mpris .widget-mpris-player .widget-mpris-album-art {
+          border-radius: 20px;
+          box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.75);
+      }
+      .widget-mpris .widget-mpris-player .widget-mpris-title {
+          font-weight: bold;
+          font-size: 1.25rem;
+      }
+      .widget-mpris .widget-mpris-player .widget-mpris-subtitle {
+          font-size: 1.1rem;
+      }
+      .widget-mpris .widget-mpris-player > box > button:hover {
+          background-color: @mpris-button-hover;
+      }
+      .widget-buttons-grid {
+          font-family:"CodeNewRoman Nerd Font Propo";
+          padding-left: 8px;
+          padding-right: 8px;
+          padding-bottom: 8px;
+          margin: 10px;
+          border-radius: 12px;
+          background:transparent;
+      }
+      .widget-buttons-grid>flowbox>flowboxchild>button label {
+          font-size: 20px;
+          color: @text;
+          transition: all .7s ease;
+      }
+      .widget-buttons-grid>flowbox>flowboxchild>button:hover label {
+          font-size: 20px;
+          color: @background;
+          transition: all .7s ease;
+      }
+      .widget-buttons-grid > flowbox > flowboxchild > button {
+          background: transparent;
+          border-radius: 12px;
+          text-shadow:none;
+          box-shadow: 0px 0px 8px rgba(255,255,255, .02);
+          transition: all .5s ease;
+      }
+      .widget-buttons-grid > flowbox > flowboxchild > button:hover {
+          background: @color5;
+          box-shadow: 0px 0px 2px rgba(0, 0, 0, .2);
+          transition: all .5s ease;
+      }
+      .widget-buttons-grid > flowbox > flowboxchild > button.toggle:checked {
+          background: alpha(@mycolor,.5);
+      }
+      .widget-menubar > box > .menu-button-bar > button {
+          border: none;
+          background: transparent;
+      }
+      .topbar-buttons > button {
+          border: none;
+          background: transparent;
+      }
+      trough {
+          border-radius: 20px;
+          background: transparent;
+      }
+      trough highlight {
+          padding: 5px;
+          background: alpha(@mycolor,.5);
+          border-radius: 20px;
+          box-shadow: 0px 0px 5px rgba(0, 0, 0, .5);
+          transition: all .7s ease;
+      }
+      trough highlight:hover {
+          padding: 5px;
+          background: alpha(@mycolor,.5);
+          border-radius: 20px;
+          box-shadow: 0px 0px 5px rgba(0, 0, 0, 1);
+          transition: all .7s ease;
+      }
+      trough slider {
+          background: transparent;
+      }
+      trough slider:hover {
+          background: transparent;
+      }
+      .widget-volume {
+          background-color: transparent;
+          padding: 8px;
+          margin: 8px;
+          border-radius: 12px;
+      }
+      .widget-backlight {
+          background-color: transparent;
+          padding: 8px;
+          margin: 8px;
+          border-radius: 12px;
+      }
+    '';
   };
 }
