@@ -776,9 +776,10 @@ in
       exec-once = dconf write /org/gnome/desktop/interface/font-name "'Noto Sans Medium 11'"
       exec-once = dconf write /org/gnome/desktop/interface/monospace-font-name "'Noto Sans Mono Medium 11'"
 
-      exec-once = wal -s -t --cols-16 -i "~/wallpapers/Ventura-dark.jpg"
+      exec-once = wal -i "./wallpapers/WhiteSur-morning.jpg" -not-set --cols16
       exec-once = waybar
       exec-once = swww-daemon
+      exec-once = swww img "./wallpapers/WhiteSur-morning.jpg"
       exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
       exec-once = swaync
 
