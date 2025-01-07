@@ -97,6 +97,8 @@
       "docker"
       "networkmanager"
       "wheel"
+      "audio"
+      "video"
     ];
     shell = pkgs.zsh;
   };
