@@ -673,6 +673,18 @@ in
     XCURSOR_THEME = "WhiteSur Cursors";
     XCURSOR_SIZE = 34;
     GTK_THEME = "WhiteSur";
+    SDL_VIDEODRIVER = "wayland";
+    QT_QPA_PLATFORM = "wayland;xcb";
+    QT_WAYLAND_DISABLE_WINDOWDECORATION = 1;
+    _JAVA_AWT_WM_NONREPARENTING = 1;
+    GBM_BACKEND = "nvidia-drm";
+    LIBVA_DRIVER_NAME = "nvidia";
+    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+    GDK_BACKEND = "wayland,x11,*";
+    CLUTTER_BACKEND = "wayland";
+    XDG_SESSION_TYPE = "wayland";
+    ELECTRON_OZONE_PLATFORM_HINT = "auto";
+    WLR_NO_HARDWARE_CURSORS = 1;
   };
 
   programs.kitty.enable = true; # required for the default Hyprland config
@@ -750,18 +762,8 @@ in
 
       # See https://wiki.hyprland.org/Configuring/Environment-variables/
 
-      env = GBM_BACKEND,nvidia-drm
-      env = LIBVA_DRIVER_NAME,nvidia
-      env = __GLX_VENDOR_LIBRARY_NAME,nvidia
-      env = GDK_BACKEND,wayland,x11,*
-      env = QT_QPA_PLATFORM,wayland;xcb
-      env = SDL_VIDEODRIVER,wayland
-      env = CLUTTER_BACKEND,wayland
       env = XDG_CURRENT_DESKTOP,Hyprland
-      env = XDG_SESSION_TYPE,wayland
       env = XDG_SESSION_DESKTOP,Hyprland
-      env = ELECTRON_OZONE_PLATFORM_HINT,auto
-      env = WLR_NO_HARDWARE_CURSORS,1
 
       #################
       ### AUTOSTART ###
@@ -960,8 +962,8 @@ in
       #### SWAY NOTIFICATIONS ####
       ############################
 
-      windowrule = float,class:^(Swaync)$
-      focus_behavior = smart_no_focus
+      windowrule = nofocus,class:^(Swaync)$
+      windowrule = noinitialfocus,class:^(Swaync)$
       layerrule = blur, swaync-control-center
       layerrule = blur, swaync-notification-window
       layerrule = ignorezero, swaync-control-center
