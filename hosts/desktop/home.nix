@@ -199,6 +199,10 @@ in
     };
   };
 
+  programs.gpg = {
+    enable = true;
+  };
+
   programs.firefox = {
     enable = true;
     package = pkgs.firefox.overrideAttrs (old: {
@@ -978,7 +982,7 @@ in
     userName = "Art P.";
     userEmail = "fn3x@yandex.com";
     signing = {
-      signByDefault = false;
+      signByDefault = true;
       key = null;
     };
     extraConfig = {
