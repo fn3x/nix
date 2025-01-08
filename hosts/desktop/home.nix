@@ -2015,7 +2015,10 @@ in
             "<leader>rf" = "references";
             "<leader>rr" = "rename";
             "K" = "hover";
-            "<C-h>" = "signature_help";
+            "<C-h>" = {
+              mode = "i";
+              action = "signature_help";
+            };
           };
           extra = [
             {
