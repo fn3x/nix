@@ -77,6 +77,8 @@
 
   programs.zsh = {
     enable = true;
+    enableCompletion = true;
+    histSize = 10000;
     shellInit = ''
       # Start ssh-agent if not already running
       if ! pgrep -u "$USER" ssh-agent > /dev/null 2>&1; then
@@ -132,6 +134,7 @@
     pavucontrol
     wireguard-tools 
     qt5.qtwayland
+    qt6.qtwayland
     libsForQt5.qt5ct
     libva
   ];

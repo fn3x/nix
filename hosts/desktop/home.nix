@@ -692,6 +692,11 @@ in
   };
 
   programs.kitty.enable = true; # required for the default Hyprland config
+  qt = {
+    enable = true;
+    platformTheme.name = "gtk";
+    style.name = "WhiteSur";
+  };
 
   wayland.windowManager.hyprland = {
     enable = true;
@@ -946,6 +951,10 @@ in
       windowrulev2 = immediate,class:^(cs2)$
       workspace = 9, border:false, rounding:false
 
+      windowrulev2 = float,class:^(org.telegram.desktop|telegramdesktop)$,title:^(Media viewer)$
+      windowrule = float,^(pavucontrol)$
+      windowrule = float,^(blueman-manager)$
+
       ############
       ###WAYBAR###
       ############
@@ -1102,6 +1111,15 @@ in
   programs.zsh = {
     enable = true;
     enableCompletion = true;
+    enableVteIntegration = true;
+    autosuggestion.enable = true;
+    dirHashes = {
+      work = "~/work";
+      personal = "~/personal";
+      dl = "~/Downloads";
+    };
+    historySubstringSearch.enable = true;
+    syntaxHighlighting.enable = true;
   };
 
   programs.oh-my-posh = {
@@ -2508,6 +2526,7 @@ in
       mainBar = {
         layer = "top";
         position = "top";
+        layer-shell = true;
         reload_style_on_change = true;
         modules-left = [
           "bluetooth"
