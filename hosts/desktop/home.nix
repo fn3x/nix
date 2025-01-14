@@ -196,6 +196,8 @@ in
     settings.General = {
       showStartupLaunchMessage = false;
       saveLastRegion = true;
+      showDesktopNotification = false;
+      jpegQuality = 100;
     };
   };
 
