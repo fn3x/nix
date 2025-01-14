@@ -1140,7 +1140,7 @@ in
 
   programs.nixvim = {
     enable = true;
-    package = inputs.neovim-nightly-overlay.packages.x86_64-linux.neovim;
+    # package = inputs.neovim-nightly-overlay.packages.x86_64-linux.neovim;
 
     clipboard.providers.wl-copy.enable = true;
 
@@ -2035,12 +2035,13 @@ in
             "<leader>rf" = "references";
             "<leader>rr" = "rename";
             "K" = "hover";
-            "<C-h>" = {
-              mode = "i";
-              action = "signature_help";
-            };
           };
           extra = [
+            {
+              key = "<C-h>";
+              mode = "i";
+              action.__raw = "vim.lsp.buf.signature_help";
+            }
             {
               key = "[d";
               mode = "n";
@@ -2242,6 +2243,9 @@ in
             end,
           })
         end,
+      })
+      vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
+        silent = true,
       })
     '';
   };
