@@ -68,7 +68,6 @@ in
     tmux
     vlc
     btop
-    gimp
     lazygit
     jq
     tldr
@@ -89,6 +88,8 @@ in
     pywal16
     swww
     protonup
+    thunderbird
+    inkscape
   ];
 
   home.file = {
