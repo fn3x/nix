@@ -88,6 +88,7 @@ in
     nerd-fonts.code-new-roman
     pywal16
     swww
+    protonup
   ];
 
   home.file = {
@@ -106,6 +107,8 @@ in
         window-save-state=always
         window-decoration=false
         auto-update=check
+        shell-integration=zsh
+        shell-integration-features=true
 
         keybind=ctrl+b>u=scroll_page_fractional:-0.5
         keybind=ctrl+b>d=scroll_page_fractional:0.5
@@ -173,6 +176,32 @@ in
         $color13 = rgb({color13.strip})
         $color14 = rgb({color14.strip})
         $color15 = rgb({color15.strip})
+      '';
+      executable = false;
+    };
+    "${homeDirectory}/.config/uwsm/env" = {
+      text = ''
+        export XCURSOR_THEME = "WhiteSur Cursors"
+        export XCURSOR_SIZE = 34
+        export GTK_THEME = "WhiteSur"
+        export SDL_VIDEODRIVER = "wayland"
+        export QT_QPA_PLATFORM = "wayland;xcb"
+        export QT_WAYLAND_DISABLE_WINDOWDECORATION = 1
+        export _JAVA_AWT_WM_NONREPARENTING = 1
+        export GBM_BACKEND = "nvidia-drm"
+        export LIBVA_DRIVER_NAME = "nvidia"
+        export __GLX_VENDOR_LIBRARY_NAME = "nvidia"
+        export GDK_BACKEND = "wayland,x11,*"
+        export __GL_VRR_ALLOWED = 0
+        export CLUTTER_BACKEND = "wayland"
+        export ELECTRON_OZONE_PLATFORM_HINT = "auto"
+        export WLR_NO_HARDWARE_CURSORS = 1
+      '';
+      executable = false;
+    };
+    "${homeDirectory}/.config/uwsm/env-hyprland" = {
+      text = ''
+        export HYPRLAND_NO_SD_VARS=1
       '';
       executable = false;
     };
@@ -314,8 +343,8 @@ in
 
         # disable EME encrypted media extension (Providers can get DRM
         # through this if they include a decryption black-box program)
-        "browser.eme.ui.enabled" = false;
-        "media.eme.enabled" = false;
+        "browser.eme.ui.enabled" = true;
+        "media.eme.enabled" = true;
 
         # don't predict network requests
         "network.predictor.enabled" = false;
@@ -676,21 +705,7 @@ in
     MANPATH = "~/local/share/man:$MANPATH";
     COLORTERM = "truecolor";
     NVM_DIR = "~/.nvm";
-    XCURSOR_THEME = "WhiteSur Cursors";
-    XCURSOR_SIZE = 34;
-    GTK_THEME = "WhiteSur";
-    SDL_VIDEODRIVER = "wayland";
-    QT_QPA_PLATFORM = "wayland;xcb";
-    QT_WAYLAND_DISABLE_WINDOWDECORATION = 1;
-    _JAVA_AWT_WM_NONREPARENTING = 1;
-    GBM_BACKEND = "nvidia-drm";
-    LIBVA_DRIVER_NAME = "nvidia";
-    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
-    GDK_BACKEND = "wayland,x11,*";
-    CLUTTER_BACKEND = "wayland";
-    XDG_SESSION_TYPE = "wayland";
-    ELECTRON_OZONE_PLATFORM_HINT = "auto";
-    WLR_NO_HARDWARE_CURSORS = 1;
+    STEAM_EXTRA_COMPAT_TOOLS_PATHS = "\\\${HOME}/.steam/root/compatibilitytools.d";
   };
 
   programs.kitty.enable = true; # required for the default Hyprland config
@@ -702,11 +717,12 @@ in
 
   wayland.windowManager.hyprland = {
     enable = true;
+    systemd.enable = false;
     settings = {
       "$mod" = "ALT";
-      "$terminal" = "ghostty";
-      "$fileManager" = "dolphin";
-      "$menu" = "wofi --show drun";
+      "$terminal" = "uwsm app -- ghostty";
+      "$fileManager" = "uwsm app -- dolphin";
+      "$menu" = "uwsm app -- $(wofi --show drun --define=drun-print_desktop_file=true)";
       bindl = [
         ", XF86AudioNext, exec, playerctl next"
         ", XF86AudioPause, exec, playerctl play-pause"
@@ -739,7 +755,7 @@ in
           "$mod, P, pseudo, # dwindle"
           "$mod, J, togglesplit, # dwindle"
           "$mod, SPACE, exec, $menu"
-          "$mod SHIFT, S, exec, XDG_CURRENT_DESKTOP=sway flameshot gui"
+          "$mod SHIFT, S, exec, uwsm app -- XDG_CURRENT_DESKTOP=sway flameshot gui"
           "$mod,F,fullscreen"
         ]
         ++ (
@@ -781,7 +797,7 @@ in
       #################
 
       # from hyprland wiki - should speed up launches of apps
-      exec-once=systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+      exec-once = systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 
       exec-once = dconf write /org/gnome/desktop/interface/gtk-theme "'WhiteSur'"
       exec-once = dconf write /org/gnome/desktop/interface/icon-theme "'WhiteSur'"
@@ -789,18 +805,18 @@ in
       exec-once = dconf write /org/gnome/desktop/interface/font-name "'Noto Sans Medium 11'"
       exec-once = dconf write /org/gnome/desktop/interface/monospace-font-name "'Noto Sans Mono Medium 11'"
 
-      exec-once = wal -i "./wallpapers/WhiteSur-morning.jpg" -not-set --cols16
-      exec-once = waybar
-      exec-once = swww-daemon
-      exec-once = swww img "./wallpapers/WhiteSur-morning.jpg"
+      exec-once = uwsm app -- wal -i "./wallpapers/WhiteSur-morning.jpg" -not-set --cols16
+      exec-once = uwsm app -- waybar
+      exec-once = uwsm app -- swww-daemon
+      exec-once = uwsm app -- swww img "./wallpapers/WhiteSur-morning.jpg"
       exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
-      exec-once = swaync
+      exec-once = uwsm app -- swaync
 
       exec-once = [workspace 1 silent] $terminal
-      exec-once = [workspace 2 silent] firefox
-      exec-once = [workspace 3 silent] telegram-desktop
-      exec-once = [workspace 4 silent] mattermost-desktop
-      exec-once = [workspace 5 silent] spotify --enable-features=UseOzonePlatform --ozone-platform=wayland
+      exec-once = [workspace 2 silent] uwsm app -- firefox
+      exec-once = [workspace 3 silent] uwsm app -- telegram-desktop
+      exec-once = [workspace 4 silent] uwsm app -- mattermost-desktop
+      exec-once = [workspace 5 silent] uwsm app -- spotify --enable-features=UseOzonePlatform --ozone-platform=wayland
 
       #####################
       ### LOOK AND FEEL ###
@@ -985,6 +1001,8 @@ in
       layerrule = ignorezero, swaync-notification-window
       layerrule = ignorealpha 0.5, swaync-control-center
       layerrule = ignorealpha 0.5, swaync-notification-window
+
+      exec-once = uwsm finalize
     '';
   };
 

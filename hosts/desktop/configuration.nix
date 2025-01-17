@@ -60,6 +60,7 @@
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
 
+  security.polkit.enable = true;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -74,6 +75,8 @@
   };
 
   programs.steam.enable = true;
+  programs.steam.gamescopeSession.enable = true;
+  programs.gamemode.enable = true;
 
   programs.zsh = {
     enable = true;
@@ -133,10 +136,8 @@
     nh
     pavucontrol
     wireguard-tools 
-    qt5.qtwayland
-    qt6.qtwayland
-    libsForQt5.qt5ct
     libva
+    mangohud
   ];
 
   services.resolved.enable = true;
@@ -193,6 +194,11 @@
   # Enable the gnome-keyring secrets vault.
   # Will be exposed through DBus to programs willing to store secrets.
   services.gnome.gnome-keyring.enable = true;
+
+  programs.uwsm = {
+    enable = true;
+  };
+
   programs.hyprland = {
     enable = true;
     withUWSM = true;
