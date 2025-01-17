@@ -21,12 +21,17 @@
           protobuf
           protoc-gen-go
           protoc-gen-js
+          dbmate
+          docker
         ];
-      };
 
-      inherit NPM_CONFIG_PREFIX;
-      shellHook = ''
-        export PATH="${NPM_CONFIG_PREFIX}/bin:$PATH"
-      '';
+        inherit NPM_CONFIG_PREFIX;
+
+        buildInputs = [ pkgs.docker ];
+        shellHook = ''
+          export PATH="${NPM_CONFIG_PREFIX}/bin:$PATH"
+          export DOCKER_HOST="unix://$XDG_RUNTIME_DIR/docker.sock"
+        '';
+      };
     };
 }
