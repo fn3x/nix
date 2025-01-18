@@ -1,6 +1,4 @@
 {
-  description = "Work Development";
-
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
   };
@@ -34,6 +32,11 @@
           export PATH="${NPM_CONFIG_PREFIX}/bin:$PATH"
           export DOCKER_HOST="unix://$XDG_RUNTIME_DIR/docker.sock"
         '';
+      };
+      devShells.x86_64-linux.zig = pkgs.mkShell {
+        packages = with pkgs; [
+          zig
+        ];
       };
     };
 }

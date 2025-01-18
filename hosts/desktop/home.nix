@@ -680,7 +680,8 @@ in
     nix-u = "nh os test -u";
     vim = "nvim";
     vi = "nvim";
-    nix-work = "nix develop ~/nixos/shells/work#work";
+    nix-work = "nix develop ~/nixos/shells#work";
+    nix-zig = "nix develop ~/nixos/shells#zig";
   };
 
   home.sessionPath = [
