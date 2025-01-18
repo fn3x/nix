@@ -20,7 +20,9 @@
           awscli2
           protobuf
           protoc-gen-go
+          protoc-gen-go-grpc
           protoc-gen-js
+          sqlc
           dbmate
           docker
         ];
