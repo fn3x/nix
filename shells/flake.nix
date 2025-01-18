@@ -33,10 +33,5 @@
           export DOCKER_HOST="unix://$XDG_RUNTIME_DIR/docker.sock"
         '';
       };
-      devShells.x86_64-linux.zig = pkgs.mkShell {
-        packages = with pkgs; [
-          zig
-        ];
-      };
     };
 }
