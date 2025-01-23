@@ -31,6 +31,7 @@ let
   homeDirectory = "/home/${username}";
   firefoxTheme = import ../common/whitesur-firefox.nix { inherit pkgs; };
   waybarScript = import ../common/scripts/colorpicker.nix { inherit pkgs; };
+  teamspeak6_client = import ../../modules/nixos/teamspeak.nix { inherit pkgs; };
 in
 
 {
@@ -55,6 +56,7 @@ in
   home.packages = with pkgs; [
     inputs.hyprland-qtutils.packages.x86_64-linux.default
     inputs.ghostty.packages.x86_64-linux.default
+    teamspeak6_client
     oh-my-posh
     telegram-desktop
     vesktop
@@ -90,6 +92,7 @@ in
     protonup
     thunderbird
     inkscape
+    xwaylandvideobridge
   ];
 
   home.file = {
@@ -203,6 +206,13 @@ in
     "${homeDirectory}/.config/uwsm/env-hyprland" = {
       text = ''
         export HYPRLAND_NO_SD_VARS=1
+      '';
+      executable = false;
+    };
+    "${homeDirectory}/.config/chromium-flags.conf" = {
+      text = ''
+        --enable-features=UseOzonePlatform
+        --ozone-platform=wayland
       '';
       executable = false;
     };
@@ -708,6 +718,9 @@ in
     COLORTERM = "truecolor";
     NVM_DIR = "~/.nvm";
     STEAM_EXTRA_COMPAT_TOOLS_PATHS = "\\\${HOME}/.steam/root/compatibilitytools.d";
+    WLR_NO_HARDWARE_CURSORS = "1";
+    GDK_BACKEND = "wayland,x11";
+    NIXOS_OZONE_WL = "1";
   };
 
   programs.kitty.enable = true; # required for the default Hyprland config
@@ -720,6 +733,7 @@ in
   wayland.windowManager.hyprland = {
     enable = true;
     systemd.enable = false;
+    xwayland.enable = true;
     settings = {
       "$mod" = "ALT";
       "$terminal" = "uwsm app -- ghostty";
@@ -757,7 +771,7 @@ in
           "$mod, P, pseudo, # dwindle"
           "$mod, J, togglesplit, # dwindle"
           "$mod, SPACE, exec, $menu"
-          "$mod SHIFT, S, exec, uwsm app -- XDG_CURRENT_DESKTOP=sway flameshot gui"
+          "$mod SHIFT, S, exec, XDG_CURRENT_DESKTOP=sway flameshot gui"
           "$mod,F,fullscreen"
         ]
         ++ (
@@ -785,14 +799,15 @@ in
       # See https://wiki.hyprland.org/Configuring/Monitors/
       monitor = DP-1, 2560x1440@170.00Hz, 0x0, 1
 
+      xwayland {
+        force_zero_scaling = true
+      }
+
       #############################
       ### ENVIRONMENT VARIABLES ###
       #############################
 
       # See https://wiki.hyprland.org/Configuring/Environment-variables/
-
-      env = XDG_CURRENT_DESKTOP,Hyprland
-      env = XDG_SESSION_DESKTOP,Hyprland
 
       #################
       ### AUTOSTART ###
@@ -813,12 +828,13 @@ in
       exec-once = uwsm app -- swww img "./wallpapers/WhiteSur-morning.jpg"
       exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
       exec-once = uwsm app -- swaync
+      exec-once = uwsm app -- xwaylandvideobridge
 
       exec-once = [workspace 1 silent] $terminal
       exec-once = [workspace 2 silent] uwsm app -- firefox
       exec-once = [workspace 3 silent] uwsm app -- telegram-desktop
-      exec-once = [workspace 4 silent] uwsm app -- mattermost-desktop
-      exec-once = [workspace 5 silent] uwsm app -- spotify --enable-features=UseOzonePlatform --ozone-platform=wayland
+      exec-once = [workspace 4 silent] uwsm app -- mattermost-desktop --disable-features=UseOzonePlatform --ozone-platform=x11
+      exec-once = [workspace 5 silent] uwsm app -- spotify --disable-features=UseOzonePlatform --ozone-platform=x11
 
       #####################
       ### LOOK AND FEEL ###
@@ -1005,6 +1021,13 @@ in
       layerrule = ignorealpha 0.5, swaync-notification-window
 
       exec-once = uwsm finalize
+
+      windowrulev2 = opacity 0.0 override, class:^(xwaylandvideobridge)$
+      windowrulev2 = noanim, class:^(xwaylandvideobridge)$
+      windowrulev2 = noinitialfocus, class:^(xwaylandvideobridge)$
+      windowrulev2 = maxsize 1 1, class:^(xwaylandvideobridge)$
+      windowrulev2 = noblur, class:^(xwaylandvideobridge)$
+      windowrulev2 = nofocus, class:^(xwaylandvideobridge)$
     '';
   };
 

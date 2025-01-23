@@ -1,74 +1,55 @@
 {
-  lib,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  copyDesktopItems,
-  makeDesktopItem,
-  makeWrapper,
-  alsa-lib,
-  at-spi2-atk,
-  atk,
-  cairo,
-  cups,
-  dbus,
-  gcc-unwrapped,
-  gdk-pixbuf,
-  glib,
-  gtk3,
-  libdrm,
-  libnotify,
-  libpulseaudio,
-  libxkbcommon,
-  libgbm,
-  nss,
-  udev,
-  xorg,
+  pkgs,
+  ...
 }:
 
-stdenv.mkDerivation rec {
+pkgs.stdenv.mkDerivation rec {
   pname = "teamspeak6-client";
-  version = "6.0.0-beta1";
+  version = "6.0.0-beta2";
 
-  src = fetchurl {
+  src = pkgs.fetchurl {
     url = "https://files.teamspeak-services.com/pre_releases/client/${version}/teamspeak-client.tar.gz";
-    sha256 = "1ad0e437b4931669e0976365c10b5000e16e88c7b5fc2d26acb4c95f644817b4";
+    sha256 = "de334fbf7b90d91ced475a785d034b520e4856bbd6fdd71db6a5dd88624a552b";
   };
 
   sourceRoot = ".";
 
   propagatedBuildInputs = [
-    alsa-lib
-    at-spi2-atk
-    atk
-    cairo
-    cups.lib
-    dbus
-    gcc-unwrapped.lib
-    gdk-pixbuf
-    glib
-    gtk3
-    libdrm
-    libnotify
-    libpulseaudio
-    libxkbcommon
-    libgbm
-    nss
-    xorg.libX11
-    xorg.libXScrnSaver
-    xorg.libXdamage
-    xorg.libXfixes
-    xorg.libxshmfence
+    pkgs.alsa-lib
+    pkgs.at-spi2-atk
+    pkgs.atk
+    pkgs.cairo
+    pkgs.cups.lib
+    pkgs.dbus
+    pkgs.gcc-unwrapped.lib
+    pkgs.gdk-pixbuf
+    pkgs.glib
+    pkgs.gtk3
+    pkgs.libdrm
+    pkgs.libnotify
+    pkgs.libpulseaudio
+    pkgs.libxkbcommon
+    pkgs.libgbm
+    pkgs.nss
+    pkgs.xorg.libX11
+    pkgs.xorg.libXScrnSaver
+    pkgs.xorg.libXdamage
+    pkgs.xorg.libXfixes
+    pkgs.xorg.libxshmfence
+    pkgs.xorg.libXtst
+    pkgs.xorg.libXext
+    pkgs.libglvnd
+    pkgs.mesa
   ];
 
   nativeBuildInputs = [
-    autoPatchelfHook
-    copyDesktopItems
-    makeWrapper
+    pkgs.autoPatchelfHook
+    pkgs.copyDesktopItems
+    pkgs.makeWrapper
   ];
 
   desktopItems = [
-    (makeDesktopItem {
+    (pkgs.makeDesktopItem {
       name = "TeamSpeak";
       exec = "TeamSpeak";
       icon = pname;
@@ -95,12 +76,13 @@ stdenv.mkDerivation rec {
     cp logo-256.png $out/share/icons/hicolor/64x64/apps/${pname}.png
 
     makeWrapper $out/share/${pname}/TeamSpeak $out/bin/TeamSpeak \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ udev ]}"
+      --prefix LD_LIBRARY_PATH : "${pkgs.lib.makeLibraryPath [ pkgs.udev pkgs.libglvnd pkgs.mesa ]}" \
+      --set LIBGL_ALWAYS_SOFTWARE '0'
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = with pkgs.lib; {
     description = "TeamSpeak voice communication tool (beta version)";
     homepage = "https://teamspeak.com/";
     license = {

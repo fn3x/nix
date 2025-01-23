@@ -7,12 +7,21 @@
   inputs,
   ...
 }:
-
+let
+  pkgs-unstable = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+in 
 {
   imports = [
     ./hardware-configuration.nix
     ../../modules/nixos/nvidia.nix
   ];
+
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+    package = pkgs-unstable.mesa.drivers;
+    package32 = pkgs-unstable.pkgsi686Linux.mesa.drivers;
+  };
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -206,12 +215,6 @@
     package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
     # make sure to also set the portal package, so that they are in sync
     portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
-  };
-
-  environment.sessionVariables = {
-    WLR_NO_HARDWARE_CURSORS = "1";
-    GDK_BACKEND = "wayland,x11";
-    NIXOS_OZONE_WL = "1";
   };
 
   environment.pathsToLink = [ "/share/zsh" ];
