@@ -92,7 +92,7 @@ in
     protonup
     thunderbird
     inkscape
-    xwaylandvideobridge
+    libreoffice-still
   ];
 
   home.file = {
@@ -828,7 +828,6 @@ in
       exec-once = uwsm app -- swww img "./wallpapers/WhiteSur-morning.jpg"
       exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
       exec-once = uwsm app -- swaync
-      exec-once = uwsm app -- xwaylandvideobridge
 
       exec-once = [workspace 1 silent] $terminal
       exec-once = [workspace 2 silent] uwsm app -- firefox
