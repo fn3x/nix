@@ -2039,7 +2039,7 @@ in
                 ["<C-y>"] = cmp.mapping.complete(),
                 ["<C-u>"] = cmp.mapping.scroll_docs(-4),
                 ["<C-d>"] = cmp.mapping.scroll_docs(4),
-                ["<Tab>"] = cmp.mapping(function(fallback)
+                ["<C-Tab>"] = cmp.mapping(function(fallback)
                   local luasnip = require("luasnip")
                   if luasnip.locally_jumpable(1) then
                     luasnip.jump(1)
@@ -2047,7 +2047,7 @@ in
                     fallback()
                   end
                 end, { "i", "s" }),
-                ["<S-Tab>"] = cmp.mapping(function(fallback)
+                ["<C-S-Tab>"] = cmp.mapping(function(fallback)
                   local luasnip = require("luasnip")
                   if luasnip.locally_jumpable(-1) then
                     luasnip.jump(-1)
@@ -2230,18 +2230,6 @@ in
 
       -- setup must be called before loading
       vim.cmd("colorscheme kanagawa")
-      vim.api.nvim_create_autocmd("ColorScheme", {
-        pattern = "kanagawa",
-        callback = function()
-          if vim.o.background == "light" then
-            vim.fn.system("kitty +kitten themes Kanagawa_light")
-          elseif vim.o.background == "dark" then
-            vim.fn.system("kitty +kitten themes Kanagawa_dragon")
-          else
-            vim.fn.system("kitty +kitten themes Kanagawa")
-          end
-        end,
-      })
 
       ---@type table<number, {token:lsp.ProgressToken, msg:string, done:boolean}[]>
       local progress = vim.defaulttable()
