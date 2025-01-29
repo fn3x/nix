@@ -147,7 +147,7 @@ in
         keybind=ctrl+b>shift+j=resize_split:down,10
         keybind=ctrl+b>shift+k=resize_split:up,10
         keybind=ctrl+b>shift+h=resize_split:left,10
-        keybind=ctrl+b>shift+k=resize_split:right,10
+        keybind=ctrl+b>shift+l=resize_split:right,10
 
         keybind=ctrl+b>equal=equalize_splits
 
