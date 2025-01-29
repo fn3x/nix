@@ -2168,6 +2168,9 @@ in
           zls = {
             enable = true;
           };
+          protols = {
+            enable = true;
+          };
         };
       };
     };
