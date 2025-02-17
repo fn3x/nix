@@ -93,6 +93,7 @@ in
     thunderbird
     inkscape
     libreoffice-still
+    xwaylandvideobridge
   ];
 
   home.file = {
@@ -1052,7 +1053,7 @@ in
   };
 
   programs.tmux = {
-    enable = true;
+    enable = false;
     keyMode = "vi";
     disableConfirmationPrompt = true;
     sensibleOnTop = true;

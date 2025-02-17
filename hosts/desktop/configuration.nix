@@ -144,6 +144,7 @@ in
     nwg-look
     nh
     pavucontrol
+    wireplumber
     wireguard-tools 
     libva
     mangohud
@@ -231,8 +232,10 @@ in
     };
   };
 
-  xdg.portal.enable = true;
-  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland pkgs.xdg-desktop-portal-gtk ];
+  };
 
   nix.settings.experimental-features = [
     "nix-command"
