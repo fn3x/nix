@@ -59,7 +59,9 @@ in
     teamspeak6_client
     oh-my-posh
     telegram-desktop
-    vesktop
+    (vesktop.override {
+      electron = pkgs.electron_32;
+    })
     mattermost-desktop
     spotify
     cantarell-fonts
