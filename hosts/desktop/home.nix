@@ -96,6 +96,8 @@ in
     inkscape
     libreoffice-still
     xwaylandvideobridge
+    rustdesk
+    lutris
   ];
 
   home.file = {
