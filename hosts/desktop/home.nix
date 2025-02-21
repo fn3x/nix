@@ -98,6 +98,7 @@ in
     xwaylandvideobridge
     rustdesk
     lutris
+    kooha
   ];
 
   home.file = {
