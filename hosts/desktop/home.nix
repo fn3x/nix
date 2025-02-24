@@ -99,6 +99,7 @@ in
     rustdesk
     lutris
     kooha
+    protontricks
   ];
 
   home.file = {
