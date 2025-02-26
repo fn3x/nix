@@ -95,11 +95,14 @@ in
     thunderbird
     inkscape
     libreoffice-still
-    xwaylandvideobridge
+    logmein-hamachi
+    kdePackages.xwaylandvideobridge
     rustdesk
     lutris
     kooha
     protontricks
+    winetricks
+    wine-staging
   ];
 
   home.file = {
