@@ -103,6 +103,9 @@ in
     protontricks
     winetricks
     wine-staging
+    (vivaldi.override {
+      commandLineArgs = [ "--force-device-scale-factor=1.25" ];
+    })
   ];
 
   home.file = {
