@@ -105,6 +105,14 @@ in
     wine-staging
   ];
 
+  stylix = {
+    enable = true;
+    serif = {
+      package = inputs.apple-fonts.packages.${pkgs.system}.sf-pro-nerd;
+      name = "SFProDisplay Nerd Font";
+    };
+  };
+
   home.file = {
     ".config/ghostty/config" = {
       text = ''

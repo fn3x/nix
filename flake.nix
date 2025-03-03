@@ -26,6 +26,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     impermanence.url = "github:nix-community/impermanence";
+    stylix.url = "github:danth/stylix";
   };
 
   outputs =
@@ -35,6 +36,7 @@
       home-manager,
       nixvim,
       impermanence,
+      stylix,
       ...
     }@inputs:
     let
@@ -47,6 +49,7 @@
           modules = [
             ./hosts/desktop/configuration.nix
             impermanence.nixosModules.impermanence
+            stylix.nixosModules.stylix
             home-manager.nixosModules.home-manager
             {
               home-manager.extraSpecialArgs = { inherit inputs outputs; };
