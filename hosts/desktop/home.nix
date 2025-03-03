@@ -24,8 +24,8 @@ let
   betterfox = pkgs.fetchFromGitHub {
     owner = "yokoffing";
     repo = "Betterfox";
-    rev = "116.1";
-    hash = "sha256-Ai8Szbrk/4FhGhS4r5gA2DqjALFRfQKo2a/TwWCIA6g=";
+    rev = "135.0";
+    hash = "sha256-5fD8ffAyIgQYJ0Z/bMEpqf17YghVQNaK+giZ1Tyk6/Q=";
   };
   username = "fn3x";
   homeDirectory = "/home/${username}";
@@ -103,9 +103,6 @@ in
     protontricks
     winetricks
     wine-staging
-    (vivaldi.override {
-      commandLineArgs = [ "--force-device-scale-factor=1.25" ];
-    })
   ];
 
   home.file = {
