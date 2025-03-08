@@ -27,6 +27,7 @@
     };
     impermanence.url = "github:nix-community/impermanence";
     stylix.url = "github:danth/stylix";
+    apple-fonts.url = "github:fn3x/apple-fonts.nix";
   };
 
   outputs =
@@ -49,7 +50,6 @@
           modules = [
             ./hosts/desktop/configuration.nix
             impermanence.nixosModules.impermanence
-            stylix.nixosModules.stylix
             home-manager.nixosModules.home-manager
             {
               home-manager.extraSpecialArgs = { inherit inputs outputs; };
@@ -67,7 +67,7 @@
         "fn3x@desktop" = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
           extraSpecialArgs = { inherit inputs outputs; };
-          modules = [ ./hosts/desktop/home.nix ];
+          modules = [ ./hosts/desktop/home.nix stylix.homeManagerModules.stylix ];
         };
       };
     };

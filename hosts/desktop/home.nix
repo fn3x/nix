@@ -103,15 +103,26 @@ in
     protontricks
     winetricks
     wine-staging
+    redisinsight
   ];
 
-  stylix = {
-    enable = true;
-    serif = {
-      package = inputs.apple-fonts.packages.${pkgs.system}.sf-pro-nerd;
-      name = "SFProDisplay Nerd Font";
-    };
-  };
+  # stylix = {
+  #   enable = true;
+  #   fonts = {
+  #     serif = {
+  #       package = inputs.apple-fonts.packages.${pkgs.system}.sf-pro-nerd;
+  #       name = "SFProDisplay Nerd Font";
+  #     };
+  #     sansSerif = {
+  #       package = inputs.apple-fonts.packages.${pkgs.system}.sf-pro-nerd;
+  #       name = "SFProDisplay Nerd Font";
+  #     };
+  #     monospace = {
+  #       package = pkgs.nerd-fonts.caskaydia-cove;
+  #       name = "CaskaydiaCove Nerd Font Mono";
+  #     };
+  #   };
+  # };
 
   home.file = {
     ".config/ghostty/config" = {
@@ -791,6 +802,8 @@ in
           "$mod, SPACE, exec, $menu"
           "$mod SHIFT, S, exec, XDG_CURRENT_DESKTOP=sway flameshot gui"
           "$mod,F,fullscreen"
+          "$mod,M, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+
         ]
         ++ (
           # workspaces
@@ -1204,12 +1217,19 @@ in
 
     clipboard.providers.wl-copy.enable = true;
 
-    performance = {
-      byteCompileLua = {
-        enable = true;
-        initLua = true;
-        nvimRuntime = true;
-        plugins = true;
+    colorschemes.gruvbox = {
+      enable = true;
+      autoLoad = true;
+      settings = {
+        italic = {
+          strings = false;
+          emphasis = false;
+          comments = true;
+          operators = false;
+          folds = false;
+        };
+        transparent_mode = true;
+        invert_selection = true;
       };
     };
 
@@ -2193,64 +2213,49 @@ in
       };
     };
 
-    extraPlugins = [
-      pkgs.vimPlugins.gruvbox-material-nvim
-      pkgs.vimPlugins.kanagawa-nvim
-    ];
     extraConfigLua = ''
       vim.api.nvim_set_hl(0, "LineNrAbove", { fg = "#b8fcec", bold = false });
       vim.api.nvim_set_hl(0, "LineNr", { fg = "white", bold = true });
       vim.api.nvim_set_hl(0, "LineNrBelow", { fg = "#fcd6a9", bold = false });
 
-      -- vim.g.gruvbox_material_transparent_background = 1;
-      -- vim.g.gruvbox_material_better_performance = 1;
-      -- vim.g.gruvbox_material_enable_bold = 0;
-      -- vim.g.gruvbox_material_menu_selection_background = "aqua";
-      -- vim.g.gruvbox_material_visual = "blue background";
-      -- vim.g.gruvbox_material_foreground = "material";
-      -- vim.g.gruvbox_material_float_style = "bright";
-      -- vim.g.gruvbox_material_diagnostic_virtual_text = "colored";
-      -- vim.g.gruvbox_material_disable_terminal_colors = 1;
-      -- vim.cmd("colorscheme gruvbox-material");
-
-      vim.o.background = ""
+      vim.o.background = "dark"
       -- Default options:
-      require('kanagawa').setup({
-        compile = true,              -- enable compiling the colorscheme
-        undercurl = true,            -- enable undercurls
-        commentStyle = { italic = true },
-        functionStyle = {},
-        keywordStyle = { italic = true},
-        statementStyle = { bold = true },
-        typeStyle = {},
-        transparent = true,          -- do not set background color
-        dimInactive = true,         -- dim inactive window `:h hl-NormalNC`
-        terminalColors = true,       -- define vim.g.terminal_color_{0,17}
-        colors = {                   -- add/modify theme and palette colors
-          palette = {},
-          theme = { wave = {}, lotus = {}, dragon = {}, all = { ui = { bg_gutter = "none" } } },
-        },
-        overrides = function(colors) -- add/modify highlights
-          local theme = colors.theme
-          return {
-            NormalFloat = { bg = "none" },
-            FloatBorder = { bg = "none" },
-            FloatTitle = { bg = "none" },
-
-            -- Save an hlgroup with dark background and dimmed foreground
-            -- so that you can use it where your still want darker windows.
-            -- E.g.: autocmd TermOpen * setlocal winhighlight=Normal:NormalDark
-            NormalDark = { fg = theme.ui.fg_dim, bg = theme.ui.bg_m3 },
-            Pmenu = { fg = theme.ui.shade0, bg = theme.ui.bg_p1 },  -- add `blend = vim.o.pumblend` to enable transparency
-            PmenuSel = { fg = "NONE", bg = theme.ui.bg_p2 },
-            PmenuSbar = { bg = theme.ui.bg_m1 },
-            PmenuThumb = { bg = theme.ui.bg_p2 },
-          }
-        end,
-      })
+      -- require('kanagawa').setup({
+      --   compile = true,              -- enable compiling the colorscheme
+      --   undercurl = true,            -- enable undercurls
+      --   commentStyle = { italic = true },
+      --   functionStyle = {},
+      --   keywordStyle = { italic = true},
+      --   statementStyle = { bold = true },
+      --   typeStyle = {},
+      --   transparent = true,          -- do not set background color
+      --   dimInactive = true,         -- dim inactive window `:h hl-NormalNC`
+      --   terminalColors = true,       -- define vim.g.terminal_color_{0,17}
+      --   colors = {                   -- add/modify theme and palette colors
+      --     palette = {},
+      --     theme = { wave = {}, lotus = {}, dragon = {}, all = { ui = { bg_gutter = "none" } } },
+      --   },
+      --   overrides = function(colors) -- add/modify highlights
+      --     local theme = colors.theme
+      --     return {
+      --       NormalFloat = { bg = "none" },
+      --       FloatBorder = { bg = "none" },
+      --       FloatTitle = { bg = "none" },
+      --
+      --       -- Save an hlgroup with dark background and dimmed foreground
+      --       -- so that you can use it where your still want darker windows.
+      --       -- E.g.: autocmd TermOpen * setlocal winhighlight=Normal:NormalDark
+      --       NormalDark = { fg = theme.ui.fg_dim, bg = theme.ui.bg_m3 },
+      --       Pmenu = { fg = theme.ui.shade0, bg = theme.ui.bg_p1 },  -- add `blend = vim.o.pumblend` to enable transparency
+      --       PmenuSel = { fg = "NONE", bg = theme.ui.bg_p2 },
+      --       PmenuSbar = { bg = theme.ui.bg_m1 },
+      --       PmenuThumb = { bg = theme.ui.bg_p2 },
+      --     }
+      --   end,
+      -- })
 
       -- setup must be called before loading
-      vim.cmd("colorscheme kanagawa")
+      -- vim.cmd("colorscheme kanagawa")
 
       ---@type table<number, {token:lsp.ProgressToken, msg:string, done:boolean}[]>
       local progress = vim.defaulttable()
