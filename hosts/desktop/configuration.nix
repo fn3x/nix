@@ -57,6 +57,8 @@ in
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
 
+  services.logmein-hamachi.enable = true;
+
   # Configure keymap in X11
   services.xserver.xkb = {
     layout = "us,ru";
@@ -121,8 +123,6 @@ in
   hardware.bluetooth.powerOnBoot = true;
   services.blueman.enable = true;
 
-  programs.firefox.enable = true;
-
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
@@ -146,14 +146,7 @@ in
     pavucontrol
     wireplumber
     wireguard-tools 
-    libva
     mangohud
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-ugly
-    gst_all_1.gst-vaapi 
   ];
 
   services.resolved.enable = true;
@@ -240,11 +233,16 @@ in
 
   xdg.portal = {
     enable = true;
-    extraPortals = [ inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland pkgs.xdg-desktop-portal-gtk ];
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   };
 
   nix.settings.experimental-features = [
     "nix-command"
     "flakes"
   ];
+
+  nix.settings = {
+    substituters = ["https://hyprland.cachix.org"];
+    trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
+  };
 }

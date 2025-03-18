@@ -1,130 +1,98 @@
 {
   lib,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  dpkg,
-  wrapGAppsHook4,
-  alsa-lib,
-  at-spi2-atk,
-  at-spi2-core,
-  cairo,
-  cups,
-  curl,
-  dbus,
-  expat,
-  ffmpeg,
-  fontconfig,
-  freetype,
-  glib,
-  glibc,
-  gtk3,
-  gtk4,
-  libcanberra,
-  liberation_ttf,
-  libexif,
-  libglvnd,
-  libkrb5,
-  libnotify,
-  libpulseaudio,
-  libu2f-host,
-  libva,
-  libxkbcommon,
-  mesa,
-  nspr,
-  nss,
-  pango,
-  pciutils,
-  pipewire,
-  qt6,
-  speechd,
-  systemd,
-  udev,
-  _7zz,
-  libva-vdpau-driver,
-  vulkan-loader,
-  wayland,
-  wget,
-  xdg-utils,
-  xfce,
-  xorg,
+  pkgs,
+  ...
 }:
-stdenv.mkDerivation rec {
+pkgs.stdenv.mkDerivation rec {
   pname = "thorium-browser";
   version = "130.0.6723.174";
 
-  src = fetchurl {
+  src = pkgs.fetchurl {
     url = "https://github.com/Alex313031/thorium/releases/download/M${version}/thorium-browser_${version}_AVX2.deb";
-    hash = "sha256-Xc6jw1CLn+a0mQ2GYyVPajM6Wk/gZEqfhs7KWldESic=";
+    hash = "sha256-TeDwx7Bqy0NSaNBMuzCf4O+rgWjB/tmIvDgJQnGVSGY=";
   };
 
   nativeBuildInputs = [
-    autoPatchelfHook
-    dpkg
-    wrapGAppsHook4
-    qt6.wrapQtAppsHook
+    pkgs.autoPatchelfHook
+    pkgs.dpkg
+    pkgs.wrapGAppsHook4
+    pkgs.copyDesktopItems
+    pkgs.qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    stdenv.cc.cc.lib
-    alsa-lib
-    at-spi2-atk
-    at-spi2-core
-    cairo
-    cups
-    curl
-    dbus
-    expat
-    ffmpeg
-    fontconfig
-    freetype
-    glib
-    glibc
-    gtk3
-    gtk4
-    libcanberra
-    liberation_ttf
-    libexif
-    libglvnd
-    libkrb5
-    libnotify
-    libpulseaudio
-    libu2f-host
-    libva
-    libxkbcommon
-    mesa
-    nspr
-    nss
-    qt6.qtbase
-    pango
-    pciutils
-    pipewire
-    speechd
-    udev
-    _7zz
-    libva-vdpau-driver
-    vulkan-loader
-    wayland
-    wget
-    xdg-utils
-    xfce.exo
-    xorg.libxcb
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXtst
-    xorg.libXxf86vm
+    pkgs.stdenv.cc.cc.lib
+    pkgs.alsa-lib
+    pkgs.at-spi2-atk
+    pkgs.at-spi2-core
+    pkgs.cairo
+    pkgs.cups
+    pkgs.curl
+    pkgs.dbus
+    pkgs.expat
+    pkgs.ffmpeg
+    pkgs.fontconfig
+    pkgs.freetype
+    pkgs.glib
+    pkgs.glibc
+    pkgs.gtk3
+    pkgs.gtk4
+    pkgs.libcanberra
+    pkgs.liberation_ttf
+    pkgs.libexif
+    pkgs.libglvnd
+    pkgs.libkrb5
+    pkgs.libnotify
+    pkgs.libpulseaudio
+    pkgs.libu2f-host
+    pkgs.libva
+    pkgs.libxkbcommon
+    pkgs.mesa
+    pkgs.nspr
+    pkgs.nss
+    pkgs.qt6.qtbase
+    pkgs.pango
+    pkgs.pciutils
+    pkgs.pipewire
+    pkgs.speechd
+    pkgs.udev
+    pkgs._7zz
+    pkgs.libva-vdpau-driver
+    pkgs.vulkan-loader
+    pkgs.wayland
+    pkgs.wget
+    pkgs.xdg-utils
+    pkgs.xfce.exo
+    pkgs.xorg.libxcb
+    pkgs.xorg.libX11
+    pkgs.xorg.libXcursor
+    pkgs.xorg.libXcomposite
+    pkgs.xorg.libXdamage
+    pkgs.xorg.libXext
+    pkgs.xorg.libXfixes
+    pkgs.xorg.libXi
+    pkgs.xorg.libXrandr
+    pkgs.xorg.libXrender
+    pkgs.xorg.libXtst
+    pkgs.xorg.libXxf86vm
+  ];
+
+  desktopItems = [
+    (pkgs.makeDesktopItem {
+      name = "Thorium";
+      exec = "thorium-browser";
+      icon = pname;
+      desktopName = pname;
+      comment = "Compiler-optimized Chromium fork";
+      categories = [
+        "Network"
+      ];
+    })
   ];
 
   # Needed to make the process get past zygote_linux fork()'ing
   runtimeDependencies = [
-    systemd
+    pkgs.systemd
   ];
 
   autoPatchelfIgnoreMissingDeps = [
@@ -165,9 +133,9 @@ stdenv.mkDerivation rec {
     description = "Compiler-optimized Chromium fork";
     homepage = "https://thorium.rocks";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ rgri ];
+    maintainers = with maintainers; [ fn3x ];
     license = licenses.bsd3;
     platforms = ["x86_64-linux"];
-    mainProgram = "thorium-browser";
+    mainProgram = "thorium-browser --high-dpi-support=1 --force-device-scale-factor=1.25";
   };
 }
