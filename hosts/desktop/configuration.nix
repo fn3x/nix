@@ -7,21 +7,11 @@
   inputs,
   ...
 }:
-let
-  pkgs-unstable = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system};
-in 
 {
   imports = [
     ./hardware-configuration.nix
     ../../modules/nixos/nvidia.nix
   ];
-
-  hardware.graphics = {
-    enable = true;
-    enable32Bit = true;
-    package = pkgs-unstable.mesa.drivers;
-    package32 = pkgs-unstable.pkgsi686Linux.mesa.drivers;
-  };
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;

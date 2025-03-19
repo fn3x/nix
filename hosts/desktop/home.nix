@@ -39,9 +39,7 @@ in
     teamspeak6_client
     oh-my-posh
     telegram-desktop
-    (vesktop.override {
-      electron = pkgs.electron_32;
-    })
+    vesktop
     mattermost-desktop
     spotify
     cantarell-fonts
@@ -72,7 +70,6 @@ in
     inkscape
     libreoffice-still
     logmein-hamachi
-    rustdesk
     lutris
     redisinsight
     thorium-browser
@@ -198,7 +195,6 @@ in
         export GDK_BACKEND = "wayland,x11,*"
         export __GL_VRR_ALLOWED = 0
         export CLUTTER_BACKEND = "wayland"
-        export ELECTRON_OZONE_PLATFORM_HINT = "auto"
         export WLR_NO_HARDWARE_CURSORS = 1
       '';
       executable = false;
@@ -380,6 +376,8 @@ in
       ### ENVIRONMENT VARIABLES ###
       #############################
 
+      env = ELECTRON_OZONE_PLATFORM_HINT,auto
+
       # See https://wiki.hyprland.org/Configuring/Environment-variables/
 
       #################
@@ -403,10 +401,10 @@ in
       exec-once = uwsm app -- swaync
 
       exec-once = [workspace 1 silent] $terminal
-      exec-once = [workspace 2 silent] uwsm app -- thorium-browser --disable-features=UseOzonePlatform --ozone-platform=x11 --high-dpi-support=1 --force-device-scale-factor=1.25
+      exec-once = [workspace 2 silent] uwsm app -- thorium-browser --high-dpi-support=1 --force-device-scale-factor=1.25
       exec-once = [workspace 3 silent] uwsm app -- telegram-desktop
-      exec-once = [workspace 4 silent] uwsm app -- mattermost-desktop --disable-features=UseOzonePlatform --ozone-platform=x11
-      exec-once = [workspace 5 silent] uwsm app -- spotify --disable-features=UseOzonePlatform --ozone-platform=x11
+      exec-once = [workspace 4 silent] uwsm app -- mattermost-desktop --disable-features=UseOzonePlatform --ozone-platform=wayland
+      exec-once = [workspace 5 silent] uwsm app -- spotify --disable-features=UseOzonePlatform --ozone-platform=wayland
 
       #####################
       ### LOOK AND FEEL ###
@@ -560,8 +558,6 @@ in
       workspace = 9, border:false, rounding:false
 
       windowrulev2 = float,class:^(org.telegram.desktop|telegramdesktop)$,title:^(Media viewer)$
-      windowrule = float,^(pavucontrol)$
-      windowrule = float,^(blueman-manager)$
 
       ############
       ###WAYBAR###
