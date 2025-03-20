@@ -4,7 +4,9 @@
   pkgs,
   ...
 }:
-
+let
+  pkgs-unstable = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+in
 {
   # Load nvidia driver for Xorg and Wayland
   services.xserver.videoDrivers = [ "nvidia" ];
@@ -13,11 +15,16 @@
     graphics = {
       enable = true;
       enable32Bit = true;
+      package = pkgs-unstable.mesa;
+      package32 = pkgs-unstable.pkgsi686Linux.mesa;
+      extraPackages = with pkgs; [ nvidia-vaapi-driver ];
     };
 
     nvidia = {
       # Modesetting is required.
       modesetting.enable = true;
+
+      forceFullCompositionPipeline = false;
 
       # Nvidia power management. Experimental, and can cause sleep/suspend to fail.
       # Enable this if you have graphical corruption issues or application crashes after waking
@@ -43,7 +50,7 @@
       nvidiaSettings = true;
 
       # Optionally, you may need to select the appropriate driver version for your specific GPU.
-      package = config.boot.kernelPackages.nvidiaPackages.production;
+      package = config.boot.kernelPackages.nvidiaPackages.beta;
     };
   };
 

@@ -48,6 +48,13 @@
         desktop = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [
+            {
+              nixpkgs.config = {
+                permittedInsecurePackages = [
+                  "electron-32.3.3"
+                ];
+              };
+            }
             ./hosts/desktop/configuration.nix
             impermanence.nixosModules.impermanence
             home-manager.nixosModules.home-manager

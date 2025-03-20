@@ -180,25 +180,6 @@ in
       '';
       executable = false;
     };
-    "${homeDirectory}/.config/uwsm/env" = {
-      text = ''
-        export XCURSOR_THEME = "WhiteSur Cursors"
-        export XCURSOR_SIZE = 34
-        export GTK_THEME = "WhiteSur"
-        export SDL_VIDEODRIVER = "wayland"
-        export QT_QPA_PLATFORM = "wayland;xcb"
-        export QT_WAYLAND_DISABLE_WINDOWDECORATION = 1
-        export _JAVA_AWT_WM_NONREPARENTING = 1
-        export GBM_BACKEND = "nvidia-drm"
-        export LIBVA_DRIVER_NAME = "nvidia"
-        export __GLX_VENDOR_LIBRARY_NAME = "nvidia"
-        export GDK_BACKEND = "wayland,x11,*"
-        export __GL_VRR_ALLOWED = 0
-        export CLUTTER_BACKEND = "wayland"
-        export WLR_NO_HARDWARE_CURSORS = 1
-      '';
-      executable = false;
-    };
     "${homeDirectory}/.config/uwsm/env-hyprland" = {
       text = ''
         export HYPRLAND_NO_SD_VARS=1
@@ -209,6 +190,15 @@ in
       text = ''
         --enable-features=UseOzonePlatform
         --ozone-platform=wayland
+      '';
+      executable = false;
+    };
+    "${homeDirectory}/.config/hypr/xdph.conf" = {
+      text = ''
+        screencopy {
+          max_fps = 60
+          allow_token_by_default = true
+        }
       '';
       executable = false;
     };
@@ -285,9 +275,23 @@ in
     COLORTERM = "truecolor";
     NVM_DIR = "~/.nvm";
     STEAM_EXTRA_COMPAT_TOOLS_PATHS = "\\\${HOME}/.steam/root/compatibilitytools.d";
-    WLR_NO_HARDWARE_CURSORS = "1";
-    GDK_BACKEND = "wayland,x11";
-    NIXOS_OZONE_WL = "1";
+    XCURSOR_THEME = "WhiteSur Cursors";
+    XCURSOR_SIZE = 34;
+    GTK_THEME = "WhiteSur";
+    SDL_VIDEODRIVER = "wayland";
+    QT_QPA_PLATFORM = "wayland;xcb";
+    QT_WAYLAND_DISABLE_WINDOWDECORATION = 1;
+    _JAVA_AWT_WM_NONREPARENTING = 1;
+    GBM_BACKEND = "nvidia-drm";
+    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+    GDK_BACKEND = "wayland,x11,*";
+    __GL_VRR_ALLOWED = 0;
+    CLUTTER_BACKEND = "wayland";
+    WLR_NO_HARDWARE_CURSORS = 1;
+    ELECTRON_OZONE_PLATFORM_HINT = "x11";
+    NIXOS_OZONE_WL = 1;
+    WLR_XWAYLAND_FORCE_VSYNC = 1;
+    LIBVA_DRIVER_NAME = "nvidia";
   };
 
   programs.kitty.enable = true; # required for the default Hyprland config
@@ -341,7 +345,6 @@ in
           "$mod SHIFT, S, exec, XDG_CURRENT_DESKTOP=sway flameshot gui"
           "$mod,F,fullscreen"
           "$mod,M, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
-
         ]
         ++ (
           # workspaces
@@ -372,20 +375,9 @@ in
         force_zero_scaling = true
       }
 
-      #############################
-      ### ENVIRONMENT VARIABLES ###
-      #############################
-
-      env = ELECTRON_OZONE_PLATFORM_HINT,auto
-
-      # See https://wiki.hyprland.org/Configuring/Environment-variables/
-
       #################
       ### AUTOSTART ###
       #################
-
-      # from hyprland wiki - should speed up launches of apps
-      exec-once = systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 
       exec-once = dconf write /org/gnome/desktop/interface/gtk-theme "'WhiteSur'"
       exec-once = dconf write /org/gnome/desktop/interface/icon-theme "'WhiteSur'"
@@ -403,8 +395,8 @@ in
       exec-once = [workspace 1 silent] $terminal
       exec-once = [workspace 2 silent] uwsm app -- thorium-browser --high-dpi-support=1 --force-device-scale-factor=1.25
       exec-once = [workspace 3 silent] uwsm app -- telegram-desktop
-      exec-once = [workspace 4 silent] uwsm app -- mattermost-desktop --disable-features=UseOzonePlatform --ozone-platform=wayland
-      exec-once = [workspace 5 silent] uwsm app -- spotify --disable-features=UseOzonePlatform --ozone-platform=wayland
+      exec-once = [workspace 4 silent] uwsm app -- mattermost-desktop
+      exec-once = [workspace 5 silent] uwsm app -- spotify
 
       #####################
       ### LOOK AND FEEL ###

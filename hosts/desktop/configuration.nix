@@ -65,6 +65,7 @@
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
+    wireplumber.enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
@@ -134,7 +135,6 @@
     nwg-look
     nh
     pavucontrol
-    wireplumber
     wireguard-tools 
     mangohud
   ];
@@ -194,10 +194,6 @@
   # Will be exposed through DBus to programs willing to store secrets.
   services.gnome.gnome-keyring.enable = true;
 
-  programs.uwsm = {
-    enable = true;
-  };
-
   programs.hyprland = {
     enable = true;
     withUWSM = true;
@@ -232,6 +228,7 @@
   ];
 
   nix.settings = {
+    auto-optimise-store = true;
     substituters = ["https://hyprland.cachix.org"];
     trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
   };
