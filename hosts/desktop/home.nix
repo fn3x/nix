@@ -74,10 +74,15 @@ in
     thorium-browser
   ];
 
-  stylix.fonts = {
-    serif = {
-      package = inputs.apple-fonts.packages.${pkgs.system}.sf-pro-nerd;
-      name = "SFProDisplay Nerd Font";
+  stylix = {
+    fonts = {
+      serif = {
+        package = inputs.apple-fonts.packages.${pkgs.system}.sf-pro-nerd;
+        name = "SFProDisplay Nerd Font";
+      };
+    };
+    targets = {
+      ghostty.enable = false;
     };
   };
 
