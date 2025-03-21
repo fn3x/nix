@@ -80,12 +80,15 @@ pkgs.stdenv.mkDerivation rec {
   desktopItems = [
     (pkgs.makeDesktopItem {
       name = "Thorium";
-      exec = "thorium-browser";
-      icon = pname;
+      genericName = "WebBrowser";
+      exec = "thorium-browser --high-dpi-support=1 --force-device-scale-factor=1.25";
+      icon = "thorium";
       desktopName = pname;
       comment = "Compiler-optimized Chromium fork";
+      mimeTypes = [ "text/html" "text/xml" ];
       categories = [
         "Network"
+        "WebBrowser"
       ];
     })
   ];
@@ -108,9 +111,6 @@ pkgs.stdenv.mkDerivation rec {
     cp -vr etc $out
     cp -vr opt $out
     ln -sf $out/opt/chromium.org/thorium/thorium-browser $out/bin/thorium-browser
-    substituteInPlace $out/share/applications/thorium-shell.desktop \
-      --replace /usr/bin $out/bin \
-      --replace /opt $out/opt
     substituteInPlace $out/share/applications/thorium-browser.desktop \
       --replace /usr/bin $out/bin \
       --replace StartupWMClass=thorium StartupWMClass=thorium-browser \
@@ -124,11 +124,6 @@ pkgs.stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  postPatchMkspecs = ''
-    substituteInPlace $out/bin/..thorium-shell-wrapped-wrapped \
-      --replace /opt $out/opt
-  '';
-
   meta = with lib; {
     description = "Compiler-optimized Chromium fork";
     homepage = "https://thorium.rocks";
@@ -136,6 +131,6 @@ pkgs.stdenv.mkDerivation rec {
     maintainers = with maintainers; [ fn3x ];
     license = licenses.bsd3;
     platforms = ["x86_64-linux"];
-    mainProgram = "thorium-browser --high-dpi-support=1 --force-device-scale-factor=1.25";
+    mainProgram = "thorium-browser";
   };
 }

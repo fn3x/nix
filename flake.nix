@@ -22,7 +22,7 @@
     mcmojave-hyprcursor.url = "github:libadoxon/mcmojave-hyprcursor";
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     impermanence.url = "github:nix-community/impermanence";
-    # stylix.url = "github:danth/stylix";
+    stylix.url = "github:danth/stylix";
     apple-fonts.url = "github:fn3x/apple-fonts.nix";
   };
 
@@ -62,6 +62,7 @@
               home-manager.backupFileExtension = "backup";
               home-manager.users.fn3x = import ./hosts/desktop/home.nix;
             }
+            inputs.stylix.nixosModules.stylix
           ];
         };
       };

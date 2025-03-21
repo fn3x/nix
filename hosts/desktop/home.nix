@@ -35,6 +35,7 @@ in
   home.packages = with pkgs; [
     inputs.hyprland-qtutils.packages.x86_64-linux.default
     inputs.ghostty.packages.x86_64-linux.default
+    inputs.apple-fonts.packages.${pkgs.system}.sf-pro-nerd
     teamspeak6_client
     oh-my-posh
     telegram-desktop
@@ -72,6 +73,13 @@ in
     redisinsight
     thorium-browser
   ];
+
+  stylix.fonts = {
+    serif = {
+      package = inputs.apple-fonts.packages.${pkgs.system}.sf-pro-nerd;
+      name = "SFProDisplay Nerd Font";
+    };
+  };
 
   home.file = {
     ".config/ghostty/config" = {
