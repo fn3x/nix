@@ -9,7 +9,6 @@
 let
   username = "fn3x";
   homeDirectory = "/home/${username}";
-  waybarScript = import ../common/scripts/colorpicker.nix { inherit pkgs; };
   teamspeak6_client = import ../../modules/nixos/teamspeak.nix { inherit pkgs; };
   thorium-browser = import ../../modules/nixos/thorium.nix { inherit pkgs lib; };
 in
@@ -63,7 +62,6 @@ in
     vulkan-validation-layers
     libglvnd
     wofi
-    waybarScript
     nerd-fonts.code-new-roman
     pywal16
     swww
@@ -74,24 +72,6 @@ in
     redisinsight
     thorium-browser
   ];
-
-  # stylix = {
-  #   enable = true;
-  #   fonts = {
-  #     serif = {
-  #       package = inputs.apple-fonts.packages.${pkgs.system}.sf-pro-nerd;
-  #       name = "SFProDisplay Nerd Font";
-  #     };
-  #     sansSerif = {
-  #       package = inputs.apple-fonts.packages.${pkgs.system}.sf-pro-nerd;
-  #       name = "SFProDisplay Nerd Font";
-  #     };
-  #     monospace = {
-  #       package = pkgs.nerd-fonts.caskaydia-cove;
-  #       name = "CaskaydiaCove Nerd Font Mono";
-  #     };
-  #   };
-  # };
 
   home.file = {
     ".config/ghostty/config" = {
@@ -2192,14 +2172,6 @@ in
           "custom/expand" = {
             format = "";
             tooltip = false;
-          };
-          "custom/colorpicker" = {
-            format = "{}";
-            return-type = "json";
-            interval = "once";
-            exec = "${waybarScript}/bin/sh -j";
-            on-click = "${waybarScript}/bin/sh";
-            signal = 1;
           };
           cpu = {
             format = "󰻠";

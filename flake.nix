@@ -21,12 +21,8 @@
     hyprland-qtutils.url = "github:hyprwm/hyprland-qtutils";
     mcmojave-hyprcursor.url = "github:libadoxon/mcmojave-hyprcursor";
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
-    firefox-addons = {
-      url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     impermanence.url = "github:nix-community/impermanence";
-    stylix.url = "github:danth/stylix";
+    # stylix.url = "github:danth/stylix";
     apple-fonts.url = "github:fn3x/apple-fonts.nix";
   };
 
@@ -37,7 +33,6 @@
       home-manager,
       nixvim,
       impermanence,
-      stylix,
       ...
     }@inputs:
     let
@@ -47,6 +42,7 @@
       nixosConfigurations = {
         desktop = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
+          system = "x86_64-linux";
           modules = [
             {
               nixpkgs.config = {
@@ -74,7 +70,7 @@
         "fn3x@desktop" = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
           extraSpecialArgs = { inherit inputs outputs; };
-          modules = [ ./hosts/desktop/home.nix stylix.homeManagerModules.stylix ];
+          modules = [ ./hosts/desktop/home.nix ];
         };
       };
     };
