@@ -36,7 +36,6 @@ in
     inputs.hyprland-qtutils.packages.x86_64-linux.default
     inputs.ghostty.packages.x86_64-linux.default
     inputs.apple-fonts.packages.${pkgs.system}.sf-pro-nerd
-    teamspeak6_client
     oh-my-posh
     telegram-desktop
     vesktop
@@ -72,6 +71,7 @@ in
     lutris
     redisinsight
     thorium-browser
+    teamspeak6-client
   ];
 
   stylix = {
