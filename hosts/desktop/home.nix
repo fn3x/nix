@@ -9,7 +9,6 @@
 let
   username = "fn3x";
   homeDirectory = "/home/${username}";
-  teamspeak6_client = import ../../modules/nixos/teamspeak.nix { inherit pkgs; };
   thorium-browser = import ../../modules/nixos/thorium.nix { inherit pkgs lib; };
 in
 
@@ -69,7 +68,6 @@ in
     libreoffice-still
     logmein-hamachi
     lutris
-    redisinsight
     thorium-browser
     teamspeak6-client
   ];
@@ -2346,6 +2344,12 @@ in
       }
     '';
   };
+
+  programs.obs-studio = {
+    enable = true;
+    plugins = [ pkgs.obs-studio-plugins.wlrobs pkgs.obs-studio-plugins.obs-backgroundremoval pkgs.obs-studio-plugins.obs-pipewire-audio-capture ];
+  };
+
   services.swaync = {
     enable = true;
     settings = {
