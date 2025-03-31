@@ -70,6 +70,8 @@ in
     lutris
     thorium-browser
     teamspeak6-client
+    qbittorrent
+    playerctl
   ];
 
   stylix = {
@@ -302,9 +304,8 @@ in
       "$fileManager" = "uwsm app -- dolphin";
       "$menu" = "uwsm app -- $(wofi --show drun --define=drun-print_desktop_file=true)";
       bindl = [
-        ", XF86AudioNext, exec, playerctl next"
-        ", XF86AudioPause, exec, playerctl play-pause"
         ", XF86AudioPlay, exec, playerctl play-pause"
+        ", XF86AudioNext, exec, playerctl next"
         ", XF86AudioPrev, exec, playerctl previous"
       ];
       bindel = [
@@ -336,6 +337,7 @@ in
           "$mod SHIFT, S, exec, XDG_CURRENT_DESKTOP=sway flameshot gui"
           "$mod,F,fullscreen"
           "$mod,M, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+          "SUPER, Space, exec, ${pkgs.hyprland}/bin/hyprctl switchxkblayout next && ${pkgs.procps}/bin/pkill -RTMIN+1 waybar"
         ]
         ++ (
           # workspaces
@@ -1598,22 +1600,6 @@ in
                 ["<C-y>"] = cmp.mapping.complete(),
                 ["<C-u>"] = cmp.mapping.scroll_docs(-4),
                 ["<C-d>"] = cmp.mapping.scroll_docs(4),
-                ["<C-Tab>"] = cmp.mapping(function(fallback)
-                  local luasnip = require("luasnip")
-                  if luasnip.locally_jumpable(1) then
-                    luasnip.jump(1)
-                  else
-                    fallback()
-                  end
-                end, { "i", "s" }),
-                ["<C-S-Tab>"] = cmp.mapping(function(fallback)
-                  local luasnip = require("luasnip")
-                  if luasnip.locally_jumpable(-1) then
-                    luasnip.jump(-1)
-                  else
-                    fallback()
-                  end
-                end, { "i", "s" }),
               })
             '';
           };
@@ -1629,30 +1615,11 @@ in
         keymaps = {
           silent = true;
           lspBuf = {
+            "<leader>ca" = "code_action";
             "gd" = "definition";
             "gD" = "declaration";
-            "gi" = "implementation";
-            "<leader>ca" = "code_action";
-            "<leader>rf" = "references";
-            "<leader>rr" = "rename";
-            "K" = "hover";
           };
           extra = [
-            {
-              key = "<C-h>";
-              mode = "i";
-              action.__raw = "vim.lsp.buf.signature_help";
-            }
-            {
-              key = "[d";
-              mode = "n";
-              action.__raw = "function() vim.diagnostic.jump({ count = 1 }) end";
-            }
-            {
-              key = "]d";
-              mode = "n";
-              action.__raw = "function() vim.diagnostic.jump({ count = -1 }) end";
-            }
             {
               key = "<leader>ff";
               mode = "n";
@@ -1740,43 +1707,6 @@ in
       vim.api.nvim_set_hl(0, "LineNrBelow", { fg = "#fcd6a9", bold = false });
 
       vim.o.background = "dark"
-      -- Default options:
-      -- require('kanagawa').setup({
-      --   compile = true,              -- enable compiling the colorscheme
-      --   undercurl = true,            -- enable undercurls
-      --   commentStyle = { italic = true },
-      --   functionStyle = {},
-      --   keywordStyle = { italic = true},
-      --   statementStyle = { bold = true },
-      --   typeStyle = {},
-      --   transparent = true,          -- do not set background color
-      --   dimInactive = true,         -- dim inactive window `:h hl-NormalNC`
-      --   terminalColors = true,       -- define vim.g.terminal_color_{0,17}
-      --   colors = {                   -- add/modify theme and palette colors
-      --     palette = {},
-      --     theme = { wave = {}, lotus = {}, dragon = {}, all = { ui = { bg_gutter = "none" } } },
-      --   },
-      --   overrides = function(colors) -- add/modify highlights
-      --     local theme = colors.theme
-      --     return {
-      --       NormalFloat = { bg = "none" },
-      --       FloatBorder = { bg = "none" },
-      --       FloatTitle = { bg = "none" },
-      --
-      --       -- Save an hlgroup with dark background and dimmed foreground
-      --       -- so that you can use it where your still want darker windows.
-      --       -- E.g.: autocmd TermOpen * setlocal winhighlight=Normal:NormalDark
-      --       NormalDark = { fg = theme.ui.fg_dim, bg = theme.ui.bg_m3 },
-      --       Pmenu = { fg = theme.ui.shade0, bg = theme.ui.bg_p1 },  -- add `blend = vim.o.pumblend` to enable transparency
-      --       PmenuSel = { fg = "NONE", bg = theme.ui.bg_p2 },
-      --       PmenuSbar = { bg = theme.ui.bg_m1 },
-      --       PmenuThumb = { bg = theme.ui.bg_p2 },
-      --     }
-      --   end,
-      -- })
-
-      -- setup must be called before loading
-      -- vim.cmd("colorscheme kanagawa")
 
       ---@type table<number, {token:lsp.ProgressToken, msg:string, done:boolean}[]>
       local progress = vim.defaulttable()
@@ -1824,6 +1754,15 @@ in
       vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
         silent = true,
       })
+
+      vim.diagnostic.config({
+        virtual_lines = {
+         -- Only show virtual line diagnostics for the current cursor line
+         current_line = true,
+        },
+      })
+
+      vim.o.winborder = "rounded"
     '';
   };
 
@@ -2114,13 +2053,15 @@ in
         modules-left = [
           "bluetooth"
           "network"
+          "pulseaudio"
+          "custom/keyboard-layout"
+          "group/resources"
         ];
         modules-center = [ "hyprland/workspaces" ];
         modules-right = [
-          "custom/notification"
-          "sway/language"
-          "clock"
           "group/expand"
+          "custom/notification"
+          "clock"
           "tray"
         ];
 
@@ -2173,33 +2114,69 @@ in
           tooltip-format-enumerate-connected-battery = "{device_alias}\n{device_address}\n{device_battery_percentage}%";
           on-click-right = "blueman-manager";
         };
-        "group/expand" = {
-          orientation = "horizontal";
+
+        "group/resources" = {
+          orientation = "inherit";
           drawer = {
-            transition-duration = 600;
-            transition-to-left = true;
-            click-to-reveal = true;
+            "transition-duration" = 500;
+            "children-class" = "resources-drawer";
+            "transition-left-to-right" = true;
+            "click-to-reveal" = true;
           };
-          "custom/expand" = {
-            format = "";
-            tooltip = false;
-          };
-          cpu = {
-            format = "󰻠";
-            tooltip = true;
-          };
-          memory = {
-            format = "";
-          };
-          temperature = {
-            critical-threshold = 80;
-            format = "";
-          };
-          "custom/endpoint" = {
-            format = "|";
-            tooltip = false;
+          modules = [ "cpu" "temperature" "disk" ];
+        };
+
+        cpu = {
+          interval = 5;
+          format = " {usage}%";
+          states = {
+            warning = 70;
+            critical = 90;
           };
         };
+
+        temperature = {
+          "critical-threshold" = 80;
+          "format-critical" = " {temperatureC}°C";
+          format = " {temperatureC}°C";
+          "tooltip-format" = "  󰍽: s-tui\n {temperatureC}° Celsius\n{temperatureF}° Fahrenheit\n{temperatureK}° Kelvin";
+        };
+
+        disk = {
+          interval = 600;
+          format = "󰋊 {percentage_used}%";
+          path = "/";
+          "tooltip-format" = "    󰍽: dua\nTotal: {total}\n Used: {used} ({percentage_used}%)\n Free: {free} ({percentage_free}%)";
+        };
+
+        memory = {
+          interval = 5;
+          format = " {}%";
+          states = {
+            warning = 70;
+            critical = 90;
+          };
+          "tooltip-format" = "        󰍽: btm\n   Memory: {total} GiB\n   In use: {used} GiB ({percentage}%)\nAvailable: {avail} GiB\n     Swap: {swapTotal} GiB\n   In use: {swapUsed} GiB ({swapPercentage}%)\nAvailable: {swapAvail} GiB";
+        };
+
+        wireplumber = {
+          format = "{icon} {volume}%";
+          "format-muted" = "󰝟 muted";
+          "on-click" = "pavucontrol";
+          "on-click-right" = "pamixer --toggle-mute";
+          "format-icons" = [ "󰕿" "󰖀" "󰕾" ];
+          "tooltip-format" = "L󰍽: pavucontrol\nR󰍽: Toggle mute\nNode: {node_name}";
+        };
+          
+        "custom/keyboard-layout" = {
+          "exec" = "${pkgs.hyprland}/bin/hyprctl -j devices | ${pkgs.jq}/bin/jq -r '.keyboards[0].active_keymap'";
+          "format" = "";
+          "tooltip-format" = "󰍽: cheatsheet\nLayout: {0}";
+          "interval" = 30; #set only as a fallback; use signal to update the module more immediately
+          "signal" = 1;
+          "on-click" = "hyprctl switchxkblayout all next";
+        };
+
         tray = {
           icon-size = 14;
           spacing = 10;
@@ -2798,5 +2775,12 @@ in
           border-radius: 12px;
       }
     '';
+  };
+
+  dconf.settings = {
+    "org/virt-manager/virt-manager/connections" = {
+      autoconnect = ["qemu:///system"];
+      uris = ["qemu:///system"];
+    };
   };
 }
