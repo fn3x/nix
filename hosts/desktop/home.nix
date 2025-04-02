@@ -752,7 +752,7 @@ in
           folds = false;
         };
         transparent_mode = true;
-        invert_selection = true;
+        invert_selection = false;
       };
     };
 
@@ -1141,6 +1141,17 @@ in
             })
           end
         '';
+      }
+      {
+        event = "LspAttach";
+        callback = {
+          __raw = ''function(ev)
+            local client = vim.lsp.get_client_by_id(ev.data.client_id)
+            if client:supports_method('textDocument/completion') then
+              vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
+            end
+          end'';
+        };
       }
     ];
 
@@ -1538,80 +1549,32 @@ in
         ];
       };
 
-      cmp-buffer = {
-        enable = true;
-      };
-
-      cmp-path = {
-        enable = true;
-      };
-
-      cmp-nvim-lsp = {
-        enable = true;
-      };
-
-      cmp-nvim-lsp-signature-help = {
-        enable = true;
-      };
-
-      cmp_luasnip = {
-        enable = true;
-      };
-
-      lspkind = {
-        enable = true;
-        cmp = {
-          enable = true;
-          ellipsisChar = "...";
-          maxWidth = 50;
-        };
-      };
-
-      cmp = {
-        enable = true;
-        autoEnableSources = true;
-        settings = {
-          sources = [
-            { name = "nvim_lsp"; }
-            { name = "luasnip"; }
-            { name = "nvim_lsp_signature_help"; }
-            { name = "path"; }
-            { name = "buffer"; }
-            { name = "render-markdown"; }
-          ];
-          snippet.expand = ''
-            function(args)
-              require("luasnip").lsp_expand(args.body)
-            end
-          '';
-          window = {
-            completion.border = "rounded";
-            documentation.border = "rounded";
-          };
-          formatting = {
-            expandable_indicator = false;
-          };
-          mapping = {
-            __raw = ''
-              cmp.mapping.preset.insert({
-                ["<C-p>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
-                ["<C-n>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
-                ["<C-space>"] = cmp.mapping.confirm({ select = true }),
-                ["<C-y>"] = cmp.mapping.complete(),
-                ["<C-u>"] = cmp.mapping.scroll_docs(-4),
-                ["<C-d>"] = cmp.mapping.scroll_docs(4),
-              })
-            '';
-          };
-        };
-      };
+      # blink-cmp = {
+      #   enable = true;
+      #   settings = {
+      #     snippets = { preset = "luasnip"; };
+      #     sources = {
+      #       default = [ "lsp" "path" "snippets" "buffer" ];
+      #     };
+      #     completion = {
+      #       ghost_text.enabled = true;
+      #     };
+      #     keymap = {
+      #       "<C-space>" = [
+      #         "select_and_accept"
+      #       ];
+      #       "<C-y>" = [
+      #         "show"
+      #         "show_documentation"
+      #         "hide_documentation"
+      #       ];
+      #     };
+      #   };
+      # };
 
       lsp = {
         enable = true;
         inlayHints = false;
-        capabilities = ''
-          require("cmp_nvim_lsp").default_capabilities()
-        '';
         keymaps = {
           silent = true;
           lspBuf = {
@@ -1757,8 +1720,8 @@ in
 
       vim.diagnostic.config({
         virtual_lines = {
-         -- Only show virtual line diagnostics for the current cursor line
-         current_line = true,
+          -- Only show virtual line diagnostics for the current cursor line
+          current_line = true,
         },
       })
 
