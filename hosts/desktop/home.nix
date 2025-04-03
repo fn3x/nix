@@ -72,6 +72,7 @@ in
     teamspeak6-client
     qbittorrent
     playerctl
+    anydesk
   ];
 
   stylix = {
