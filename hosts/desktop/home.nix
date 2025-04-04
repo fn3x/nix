@@ -1140,18 +1140,13 @@ in
           end
         '';
       }
-      {
-        event = "LspAttach";
-        callback = {
-          __raw = ''function(ev)
-            local client = vim.lsp.get_client_by_id(ev.data.client_id)
-            if client:supports_method('textDocument/completion') then
-              vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
-            end
-          end'';
-        };
-      }
     ];
+
+    highlightOverride = {
+      Pmenu = {
+        bg = "none";
+      };
+    };
 
     plugins = {
       harpoon = {
@@ -1547,28 +1542,79 @@ in
         ];
       };
 
-      # blink-cmp = {
-      #   enable = true;
-      #   settings = {
-      #     snippets = { preset = "luasnip"; };
-      #     sources = {
-      #       default = [ "lsp" "path" "snippets" "buffer" ];
-      #     };
-      #     completion = {
-      #       ghost_text.enabled = true;
-      #     };
-      #     keymap = {
-      #       "<C-space>" = [
-      #         "select_and_accept"
-      #       ];
-      #       "<C-y>" = [
-      #         "show"
-      #         "show_documentation"
-      #         "hide_documentation"
-      #       ];
-      #     };
-      #   };
-      # };
+      lspkind = {
+        enable = true;
+      };
+
+      blink-cmp = {
+        enable = true;
+        settings = {
+          snippets = { preset = "luasnip"; };
+          sources = {
+            default = [ "lsp" "path" "snippets" "buffer" ];
+          };
+          completion = {
+            ghost_text.enabled = false;
+            documentation = {
+              auto_show = true;
+              auto_show_delay_ms = 300;
+            };
+            menu = {
+              auto_show = true;
+              draw = {
+                columns.__raw = ''{
+                  { "label", "label_description", gap = 1 },
+                  { "kind_icon", gap = 1, "kind" }
+                }'';
+                components = {
+                  kind_icon = {
+                    text.__raw = ''
+                      function(ctx)
+                        local lspkind = require("lspkind")
+                        local icon = ctx.kind_icon
+                        if vim.tbl_contains({ "Path" }, ctx.source_name) then
+                            local dev_icon, _ = require("nvim-web-devicons").get_icon(ctx.label)
+                            if dev_icon then
+                                icon = dev_icon
+                            end
+                        else
+                            icon = require("lspkind").symbolic(ctx.kind, {
+                                mode = "symbol",
+                            })
+                        end
+
+                        return icon .. ctx.icon_gap
+                      end
+                    '';
+                    highlight.__raw = ''
+                      function(ctx)
+                        local hl = ctx.kind_hl
+                        if vim.tbl_contains({ "Path" }, ctx.source_name) then
+                          local dev_icon, dev_hl = require("nvim-web-devicons").get_icon(ctx.label)
+                          if dev_icon then
+                            hl = dev_hl
+                          end
+                        end
+                        return hl
+                      end
+                    '';
+                  };
+                };
+              };
+            };
+          };
+          keymap = {
+            "<C-space>" = [
+              "select_and_accept"
+            ];
+            "<C-y>" = [
+              "show"
+              "show_documentation"
+              "hide_documentation"
+            ];
+          };
+        };
+      };
 
       lsp = {
         enable = true;
