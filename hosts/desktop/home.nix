@@ -182,15 +182,13 @@ in
     };
     "${homeDirectory}/.config/chromium-flags.conf" = {
       text = ''
-        --enable-features=UseOzonePlatform
-        --ozone-platform=wayland
+        --enable-features=UseOzonePlatform --ozone-platform=wayland
       '';
       executable = false;
     };
     "${homeDirectory}/.config/hypr/xdph.conf" = {
       text = ''
         screencopy {
-          max_fps = 60
           allow_token_by_default = true
         }
       '';
@@ -282,9 +280,9 @@ in
     __GL_VRR_ALLOWED = 0;
     CLUTTER_BACKEND = "wayland";
     WLR_NO_HARDWARE_CURSORS = 1;
-    ELECTRON_OZONE_PLATFORM_HINT = "x11";
+    ELECTRON_OZONE_PLATFORM_HINT = "wayland";
     NIXOS_OZONE_WL = 1;
-    WLR_XWAYLAND_FORCE_VSYNC = 1;
+    WLR_XWAYLAND_FORCE_VSYNC = 0;
     LIBVA_DRIVER_NAME = "nvidia";
   };
 
@@ -308,8 +306,6 @@ in
         ", XF86AudioPlay, exec, playerctl play-pause"
         ", XF86AudioNext, exec, playerctl next"
         ", XF86AudioPrev, exec, playerctl previous"
-      ];
-      bindel = [
         ",XF86AudioRaiseVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"
         ",XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
         ",XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
@@ -538,10 +534,11 @@ in
 
       windowrulev2 = fullscreen,class:^steam_app\d+$
       windowrulev2 = monitor 1,class:^steam_app_\d+$
-      windowrulev2 = workspace 10,class:^steam_app_\d+$
+      windowrulev2 = fullscreen,class:^(cs2)$
+      windowrulev2 = workspace 9,class:^steam_app_\d+$
       windowrulev2 = immediate,class:^(gamescope)$
       windowrulev2 = immediate,class:^(cs2)$
-      workspace = 9, border:false, rounding:false
+      windowrulev2 = immediate,class:^steam_app\d+$
 
       windowrulev2 = float,class:^(org.telegram.desktop|telegramdesktop)$,title:^(Media viewer)$
 

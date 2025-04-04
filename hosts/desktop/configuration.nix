@@ -145,6 +145,8 @@
   services.fail2ban.enable = true;
   services.openssh.enable = true;
 
+  services.clipboard-sync.enable = true;
+
   programs.gnupg.agent = {                                                      
     enable = true;
   };

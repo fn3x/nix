@@ -24,6 +24,7 @@
     impermanence.url = "github:nix-community/impermanence";
     stylix.url = "github:danth/stylix";
     apple-fonts.url = "github:fn3x/apple-fonts.nix";
+    clipboard-sync.url = "github:fn3x/clipboard-sync";
   };
 
   outputs =
@@ -33,6 +34,7 @@
       home-manager,
       nixvim,
       impermanence,
+      clipboard-sync,
       ...
     }@inputs:
     let
@@ -53,6 +55,7 @@
             }
             ./hosts/desktop/configuration.nix
             impermanence.nixosModules.impermanence
+            clipboard-sync.nixosModules.default
             home-manager.nixosModules.home-manager
             {
               home-manager.extraSpecialArgs = { inherit inputs outputs; };
