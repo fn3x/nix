@@ -535,10 +535,12 @@ in
       windowrulev2 = fullscreen,class:^steam_app\d+$
       windowrulev2 = monitor 1,class:^steam_app_\d+$
       windowrulev2 = fullscreen,class:^(cs2)$
+      windowrulev2 = fullscreen,class:^(csgo_linux64)$
       windowrulev2 = workspace 9,class:^steam_app_\d+$
       windowrulev2 = immediate,class:^(gamescope)$
       windowrulev2 = immediate,class:^(cs2)$
       windowrulev2 = immediate,class:^steam_app\d+$
+      windowrulev2 = immediate,class:^(csgo_linux64)
 
       windowrulev2 = float,class:^(org.telegram.desktop|telegramdesktop)$,title:^(Media viewer)$
 
@@ -1413,6 +1415,14 @@ in
           };
           "<leader>;" = {
             action = "resume";
+            mode = "n";
+            options = {
+              noremap = true;
+              silent = true;
+            };
+          };
+          "<leader>ds" = {
+            action = "lsp_document_symbols";
             mode = "n";
             options = {
               noremap = true;
