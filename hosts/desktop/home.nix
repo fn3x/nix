@@ -37,7 +37,6 @@ in
     inputs.apple-fonts.packages.${pkgs.system}.sf-pro-nerd
     oh-my-posh
     telegram-desktop
-    vesktop
     mattermost-desktop
     spotify
     cantarell-fonts
@@ -73,6 +72,11 @@ in
     qbittorrent
     playerctl
     anydesk
+    river
+    wine
+    winetricks
+    kdePackages.xwaylandvideobridge
+    vesktop
   ];
 
   stylix = {
@@ -180,12 +184,12 @@ in
       '';
       executable = false;
     };
-    "${homeDirectory}/.config/chromium-flags.conf" = {
-      text = ''
-        --enable-features=UseOzonePlatform --ozone-platform=wayland
-      '';
-      executable = false;
-    };
+    # "${homeDirectory}/.config/chromium-flags.conf" = {
+    #   text = ''
+    #     --enable-features=UseOzonePlatform --ozone-platform=wayland
+    #   '';
+    #   executable = false;
+    # };
     "${homeDirectory}/.config/hypr/xdph.conf" = {
       text = ''
         screencopy {
@@ -280,8 +284,6 @@ in
     __GL_VRR_ALLOWED = 0;
     CLUTTER_BACKEND = "wayland";
     WLR_NO_HARDWARE_CURSORS = 1;
-    ELECTRON_OZONE_PLATFORM_HINT = "wayland";
-    NIXOS_OZONE_WL = 1;
     WLR_XWAYLAND_FORCE_VSYNC = 0;
     LIBVA_DRIVER_NAME = "nvidia";
   };
@@ -291,6 +293,65 @@ in
     enable = true;
     platformTheme.name = "gtk";
     style.name = "WhiteSur";
+  };
+
+  wayland.windowManager.river = {
+    enable = true;
+    xwayland.enable = true;
+    systemd.enable = true;
+    settings = {
+      border-width = 1;
+      declare-mode = [
+        "locked"
+        "normal"
+        "passthrough"
+      ];
+      input = {
+        pointer = {
+          accel-profile = "flat";
+          events = true;
+          pointer-accel = 0;
+          tap = false;
+        };
+      };
+      map = {
+        normal = {
+          "Mod1 F" = "toggle-fullscreen";
+          "Mod1 V" = "toggle-float";
+          "Mod1 Space" = "wofi --show drun --define=drun-print_desktop_file=true";
+
+          "Mod1+Shift Q" = "close";
+          "Mod1 1" = "set-focused-tags 1";
+          "Mod1 2" = "set-focused-tags 2";
+          "Mod1 3" = "set-focused-tags 3";
+          "Mod1 4" = "set-focused-tags 4";
+          "Mod1 5" = "set-focused-tags 5";
+          "Mod1 6" = "set-focused-tags 6";
+          "Mod1 7" = "set-focused-tags 7";
+          "Mod1 8" = "set-focused-tags 8";
+          "Mod1 9" = "set-focused-tags 9";
+
+          "Mod1+Shift 1" = "set-view-tags 1";
+          "Mod1+Shift 2" = "set-view-tags 2";
+          "Mod1+Shift 3" = "set-view-tags 3";
+          "Mod1+Shift 4" = "set-view-tags 4";
+          "Mod1+Shift 5" = "set-view-tags 5";
+          "Mod1+Shift 6" = "set-view-tags 6";
+          "Mod1+Shift 7" = "set-view-tags 7";
+          "Mod1+Shift 8" = "set-view-tags 8";
+          "Mod1+Shift 9" = "set-view-tags 9";
+
+          "Mod1 0" = "set-focused-tags 0";
+          "Mod1+Shift 0" = "set-view-tags 0";
+        };
+      };
+      set-repeat = "50 300";
+      spawn = [
+        "thorium-browser"
+        "ghostty"
+      ];
+      xcursor-theme = "WhiteSur 32";
+    };
   };
 
   wayland.windowManager.hyprland = {
@@ -487,10 +548,7 @@ in
       # https://wiki.hyprland.org/Configuring/Variables/#input
       input {
           kb_layout = us,ru
-          kb_variant =
-          kb_model = kinesis
           kb_options = grp:win_space_toggle
-          kb_rules =
 
           follow_mouse = 1
 
@@ -541,6 +599,7 @@ in
       windowrulev2 = immediate,class:^(cs2)$
       windowrulev2 = immediate,class:^steam_app\d+$
       windowrulev2 = immediate,class:^(csgo_linux64)
+      windowrulev2 = immediate,class:^(Golf With Your Friends\.x86_64)$
 
       windowrulev2 = float,class:^(org.telegram.desktop|telegramdesktop)$,title:^(Media viewer)$
 
@@ -2082,7 +2141,7 @@ in
           "tray"
         ];
 
-        "hyprland/workspaces" = {
+        "river/tags" = {
           "format" = "{icon}";
           "format-icons" = {
             "active" = "";
