@@ -205,6 +205,10 @@
     portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
   };
 
+  programs.river = {
+    enable = true;
+  };
+
   environment.pathsToLink = [ "/share/zsh" ];
   environment.persistence = {
     "/persist" = {
@@ -226,7 +230,7 @@
 
   xdg.portal = {
     enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-gnome ];
+    extraPortals = [ pkgs.xdg-desktop-portal-gnome pkgs.xdg-desktop-portal-wlr ];
   };
 
   nix.settings.experimental-features = [

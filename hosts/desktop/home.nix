@@ -1212,24 +1212,10 @@ in
     plugins = {
       harpoon = {
         enable = true;
-        package = pkgs.vimPlugins.harpoon2;
-        saveOnToggle = true;
-        saveOnChange = true;
-        # These keymaps are for harpoon1, not harpoon2
-        # Keymaps for harpoon2 are in nixvim.keymaps
-        #
-        # keymaps = {
-        #   addFile = "<leader>a";
-        #   toggleQuickMenu = "<C-e>";
-        #   navFile = {
-        #     "1" = "<C-j>";
-        #     "2" = "<C-k>";
-        #     "3" = "<C-l>";
-        #     "4" = "<C-;>";
-        #   };
-        #   navNext = "<C-S-n>";
-        #   navPrev = "<C-S-p>";
-        # };
+        settings = {
+          save_on_toggle = true;
+          sync_on_ui_close = true;
+        };
       };
 
       oil = {
