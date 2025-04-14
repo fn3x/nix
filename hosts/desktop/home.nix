@@ -77,6 +77,8 @@ in
     winetricks
     kdePackages.xwaylandvideobridge
     vesktop
+    thunderbird
+    r2modman
   ];
 
   stylix = {
