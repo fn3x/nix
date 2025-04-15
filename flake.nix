@@ -25,6 +25,7 @@
     stylix.url = "github:danth/stylix";
     apple-fonts.url = "github:fn3x/apple-fonts.nix";
     clipboard-sync.url = "github:fn3x/clipboard-sync";
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
   };
 
   outputs =
@@ -35,6 +36,7 @@
       nixvim,
       impermanence,
       clipboard-sync,
+      nixos-hardware,
       ...
     }@inputs:
     let
@@ -68,6 +70,33 @@
             inputs.stylix.nixosModules.stylix
           ];
         };
+        laptop = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          system = "x86_64-linux";
+          modules = [
+            {
+              nixpkgs.config = {
+                permittedInsecurePackages = [
+                  "electron-32.3.3"
+                ];
+              };
+            }
+            nixos-hardware.nixosModules.lenovo-thinkpad-e15-intel
+            ./hosts/laptop/configuration.nix
+            impermanence.nixosModules.impermanence
+            clipboard-sync.nixosModules.default
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.extraSpecialArgs = { inherit inputs outputs; };
+              home-manager.sharedModules = [ nixvim.homeManagerModules.nixvim ];
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.backupFileExtension = "backup";
+              home-manager.users.fn3x = import ./hosts/laptop/home.nix;
+            }
+            inputs.stylix.nixosModules.stylix
+          ];
+        };
       };
 
       homeConfigurations = {
@@ -75,6 +104,11 @@
           pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
           extraSpecialArgs = { inherit inputs outputs; };
           modules = [ ./hosts/desktop/home.nix ];
+        };
+        "fn3x@laptop" = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
+          extraSpecialArgs = { inherit inputs outputs; };
+          modules = [ ./hosts/laptop/home.nix ];
         };
       };
     };
