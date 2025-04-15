@@ -81,7 +81,7 @@
                 ];
               };
             }
-            nixos-hardware.nixosModules.lenovo-thinkpad-e15-intel
+            nixos-hardware.nixosModules.lenovo-thinkpad-x1-11th-gen
             ./hosts/laptop/configuration.nix
             impermanence.nixosModules.impermanence
             clipboard-sync.nixosModules.default

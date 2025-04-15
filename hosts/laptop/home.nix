@@ -419,7 +419,7 @@ in
       ################
 
       # See https://wiki.hyprland.org/Configuring/Monitors/
-      monitor = ,2560x1440@120.00Hz, 0x0, 1
+      monitor = ,2560x1440@143.86Hz, 0x0, 1
 
       xwayland {
         force_zero_scaling = true
@@ -600,6 +600,7 @@ in
       windowrulev2 = immediate,class:^steam_app\d+$
       windowrulev2 = immediate,class:^(csgo_linux64)
       windowrulev2 = immediate,class:^(Golf With Your Friends\.x86_64)$
+      windowrulev2 = immediate,class:^(valheim\.x86_64)$
 
       windowrulev2 = float,class:^(org.telegram.desktop|telegramdesktop)$,title:^(Media viewer)$
 

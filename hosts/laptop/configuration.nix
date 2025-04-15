@@ -75,6 +75,8 @@
     #media-session.enable = true;
   };
 
+  services.fwupd.enable = true;
+
   programs.ssh = {
     startAgent = true;
   };
@@ -230,4 +232,17 @@
     trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
   };
   nix.optimise.automatic = true;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
+  hardware.intelgpu.driver = "xe";
+  services.tlp.settings = {
+    INTEL_GPU_MIN_FREQ_ON_AC = 500;
+  };
+
+  swapDevices = [
+    {
+      device = "/var/lib/swapfile";
+      size = 16 * 1024;
+    }
+  ];
 }
