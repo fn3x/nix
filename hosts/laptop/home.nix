@@ -75,7 +75,6 @@ in
     river
     wine
     winetricks
-    kdePackages.xwaylandvideobridge
     vesktop
     thunderbird
     r2modman
@@ -239,10 +238,10 @@ in
   };
 
   home.shellAliases = {
-    nix-s = "nh os switch ~/nixos#laptop";
-    nix-t = "nh os test ~/nixos#laptop";
+    nix-s = "nh os switch -H laptop";
+    nix-t = "nh os test  -H laptop";
     nix-c = "nh clean all";
-    nix-u = "nh os test -u";
+    nix-u = "nh os switch -u -H laptop";
     vim = "nvim";
     vi = "nvim";
     nix-work = "nix develop ~/nixos/shells#work";
