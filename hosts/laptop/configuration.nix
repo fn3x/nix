@@ -126,13 +126,8 @@
     zsh
     vim
     wget
-    (pkgs.waybar.overrideAttrs (oldAttrs: {
-      mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
-    }))
     gtk3
     gtk4
-    swaynotificationcenter
-    hyprpicker
     bluez
     libnotify
     git
@@ -234,7 +229,6 @@
   nix.optimise.automatic = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  hardware.intelgpu.driver = "xe";
   services.tlp.settings = {
     INTEL_GPU_MIN_FREQ_ON_AC = 500;
   };
@@ -242,7 +236,7 @@
   swapDevices = [
     {
       device = "/var/lib/swapfile";
-      size = 16 * 1024;
+      size = 8 * 1024;
     }
   ];
 }

@@ -26,6 +26,7 @@
     apple-fonts.url = "github:fn3x/apple-fonts.nix";
     clipboard-sync.url = "github:fn3x/clipboard-sync";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
   };
 
   outputs =
@@ -55,6 +56,9 @@
                 ];
               };
             }
+            {
+              nixpkgs.overlays = [ inputs.hyprpanel.overlay ];
+            }
             ./hosts/desktop/configuration.nix
             impermanence.nixosModules.impermanence
             clipboard-sync.nixosModules.default
@@ -81,6 +85,11 @@
                 ];
               };
             }
+            {
+              nixpkgs.overlays = [
+                inputs.hyprpanel.overlay
+              ];
+            }
             nixos-hardware.nixosModules.lenovo-thinkpad-x1-11th-gen
             ./hosts/laptop/configuration.nix
             impermanence.nixosModules.impermanence
@@ -106,7 +115,11 @@
           modules = [ ./hosts/desktop/home.nix ];
         };
         "fn3x@laptop" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
+          pkgs = import nixpkgs {
+            overlays = [
+              inputs.hyprpanel.overlay
+            ];
+          };
           extraSpecialArgs = { inherit inputs outputs; };
           modules = [ ./hosts/laptop/home.nix ];
         };
