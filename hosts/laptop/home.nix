@@ -78,6 +78,7 @@ in
     vesktop
     thunderbird
     r2modman
+    whitesur-kde
   ];
 
   stylix = {
@@ -240,16 +241,16 @@ in
   home.sessionVariables = {
     EDITOR = "nvim";
     TERMINAL = "ghostty";
+    TERM = "ghostty";
     LD_LIBRARY_PATH = "~/local/lib:$LD_LIBRARY_PATH";
     MANPATH = "~/local/share/man:$MANPATH";
     COLORTERM = "truecolor";
     NVM_DIR = "~/.nvm";
     STEAM_EXTRA_COMPAT_TOOLS_PATHS = "\\\${HOME}/.steam/root/compatibilitytools.d";
-    XCURSOR_THEME = "WhiteSur Cursors";
     XCURSOR_SIZE = 34;
-    GTK_THEME = "WhiteSur";
     SDL_VIDEODRIVER = "wayland";
     QT_QPA_PLATFORM = "wayland;xcb";
+    QT_QPA_PLATFORMTHEME = "kde";
     QT_WAYLAND_DISABLE_WINDOWDECORATION = 1;
     _JAVA_AWT_WM_NONREPARENTING = 1;
     GDK_BACKEND = "wayland,x11,*";
@@ -260,11 +261,22 @@ in
   };
 
   programs.kitty.enable = true; # required for the default Hyprland config
+
+
+  # Fix for KDE settings for Plasma 6: https://github.com/nix-community/home-manager/issues/5098#issuecomment-2352172073
+  xdg.configFile."menus/applications.menu".source = "${pkgs.kdePackages.plasma-workspace}/etc/xdg/menus/plasma-applications.menu";
   qt = {
     enable = true;
-    platformTheme.name = "gtk";
-    style.name = "WhiteSur";
+    platformTheme.package = with pkgs.kdePackages; [
+      plasma-integration
+      systemsettings
+    ];
+    style = {
+      package = pkgs.kdePackages.breeze;
+      name = "Breeze";
+    };
   };
+  systemd.user.sessionVariables = { QT_QPA_PLATFORMTHEME = "kde"; };
 
   wayland.windowManager.river = {
     enable = true;
@@ -321,7 +333,6 @@ in
         "thorium-browser"
         "ghostty"
       ];
-      xcursor-theme = "WhiteSur 32";
     };
   };
 
@@ -361,7 +372,7 @@ in
           "$mod, E, exec, $fileManager"
           "$mod, V, togglefloating"
           "$mod, P, pseudo, # dwindle"
-          "$mod, J, togglesplit, # dwindle"
+          "$mod SHIFT, J, layoutmsg, togglesplit, # dwindle"
           "$mod, SPACE, exec, $menu"
           "$mod SHIFT, S, exec, XDG_CURRENT_DESKTOP=sway flameshot gui"
           "$mod,F,fullscreen"
@@ -402,8 +413,6 @@ in
       ### AUTOSTART ###
       #################
 
-      exec-once = dconf write /org/gnome/desktop/interface/gtk-theme "'WhiteSur'"
-      exec-once = dconf write /org/gnome/desktop/interface/icon-theme "'WhiteSur'"
       exec-once = dconf write /org/gnome/desktop/interface/document-font-name "'Noto Sans Medium 11'"
       exec-once = dconf write /org/gnome/desktop/interface/font-name "'Noto Sans Medium 11'"
       exec-once = dconf write /org/gnome/desktop/interface/monospace-font-name "'Noto Sans Mono Medium 11'"
@@ -573,14 +582,6 @@ in
       windowrulev2 = immediate,class:^(valheim\.x86_64)$
 
       windowrulev2 = float,class:^(org.telegram.desktop|telegramdesktop)$,title:^(Media viewer)$
-
-      ############
-      ###WAYBAR###
-      ############
-
-      layerrule = blur, waybar
-      layerrule = ignorezero, waybar
-      layerrule = ignorealpha 0.5, waybar
 
       ############
       ####WOFI####
@@ -1823,105 +1824,6 @@ in
     };
   };
 
-  services.dunst = {
-    enable = false; # trying out wofi for now
-    settings = {
-      global = {
-        monitor = 0;
-        follow = "none";
-        width = "(300, 500)";
-        height = "(0, 300)";
-        origin = "top-right";
-        offset = "(5, 15)";
-        scale = 0;
-        notification_limit = 10;
-        progress_bar = true;
-        progress_bar_height = 14;
-        progress_bar_frame_width = 0;
-        progress_bar_min_width = 100;
-        progress_bar_max_width = 300;
-        progress_bar_corner_radius = 50;
-        progress_bar_corners = "bottom-left, top-right";
-        icon_corner_radius = 0;
-        icon_corners = "all";
-        indicate_hidden = "yes";
-        transparency = 0;
-        separator_height = 6;
-        padding = 10;
-        horizontal_padding = 8;
-        text_icon_padding = 12;
-        frame_width = 1;
-        frame_color = "#a0a0a0";
-        gap_size = 6;
-        separator_color = "frame";
-        sort = "yes";
-        font = "Fira Mono 12";
-        line_height = 0;
-        markup = "full";
-        format = "<b>%s</b>\n%b";
-        alignment = "left";
-        vertical_alignment = "center";
-        show_age_threshold = -1;
-        ellipsize = "middle";
-        ignore_newline = "no";
-        stack_duplicates = true;
-        hide_duplicate_count = false;
-        show_indicators = "yes";
-        icon_theme = "WhiteSur";
-        icon_position = "right";
-        min_icon_size = 32;
-        max_icon_size = 128;
-        icon_path = "/usr/share/icons/gnome/16x16/status/:/usr/share/icons/gnome/16x16/devices/";
-        sticky_history = "yes";
-        history_length = 30;
-        dmenu = "/usr/bin/dmenu -l 10 -p dunst:";
-        browser = "/usr/bin/xdg-open";
-        always_run_script = true;
-        title = "Dunst";
-        class = "Dunst";
-        corner_radius = 10;
-        corners = "bottom, top-left";
-        ignore_dbusclose = false;
-        force_xwayland = false;
-        force_xinerama = false;
-        mouse_left_click = "close_current";
-        mouse_middle_click = "do_action, close_current";
-        mouse_right_click = "close_all";
-      };
-
-      experimental = {
-        per_monitor_dpi = false;
-      };
-
-      urgency_low = {
-        background = "#222222";
-        foreground = "#ffffff";
-        highlight = "#722ae6, #e4b5cb";
-        timeout = 10;
-      };
-
-      urgency_normal = {
-        background = "#222222";
-        foreground = "#ffffff";
-        frame_color = "#5e5086";
-        highlight = "#722ae6, #e4b5cb";
-        timeout = 15;
-        override_pause_level = 30;
-        default_icon = "dialog-information";
-      };
-
-      urgency_critical = {
-        background = "#222222";
-        foreground = "#ffffff";
-        frame_color = "#d54e53";
-        highlight = "#d54e53, #f0f0f0";
-        timeout = 0;
-        override_pause_level = 60;
-        default_icon = "dialog-warning";
-      };
-    };
-  };
-
   home.pointerCursor = {
     hyprcursor = {
       enable = true;
@@ -2098,22 +2000,42 @@ in
           };
         };
       };
+
       bar.launcher.autoDetectIcon = true;
       bar.workspaces.showApplicationIcons = true;
       bar.workspaces.showWsIcons = true;
       bar.workspaces.workspaces = 9;
       bar.systray.ignore = [ "Xwayland Video Bridge_pipewireToXProxy" "blueman" ];
+      bar.clock.format = "%d %b %H:%M:%S";
+
       menus.clock.weather.enabled = false;
       menus.dashboard.shortcuts.enabled = false;
+      menus.clock.time.military = true;
+
       notifications.ignore = [ "spotify" ];
       tear = true;
+
       theme.name = "gruvbox";
       theme.osd.location = "left";
       theme.font.name = "SFProDisplay Nerd Font";
       theme.font.size = "1.3rem";
       theme.bar.transparent = true;
+
       wallpaper.enable = true;
       wallpaper.image = "~/wallpapers/bg.jpg";
+
+      menus.dashboard.directories.left.directory1.command = "dolphin Downloads";
+      menus.dashboard.directories.left.directory1.label = "󰉍 Downloads";
+      menus.dashboard.directories.left.directory2.command = "dolphin Videos";
+      menus.dashboard.directories.left.directory2.label = "󰉏 Videos";
+      menus.dashboard.directories.left.directory3.command = "dolphin personal";
+      menus.dashboard.directories.left.directory3.label = "󰚝 Personal";
+      menus.dashboard.directories.right.directory1.command = "dolphin Documents";
+      menus.dashboard.directories.right.directory1.label = "󱧶 Documents";
+      menus.dashboard.directories.right.directory2.command = "dolphin Pictures";
+      menus.dashboard.directories.right.directory2.label = "󰉏 Pictures";
+      menus.dashboard.directories.right.directory3.command = "dolphin ./";
+      menus.dashboard.directories.right.directory3.label = "󱂵 Home";
     };
   };
 

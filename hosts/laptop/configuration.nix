@@ -140,6 +140,14 @@
     gcc
     clang
     cl
+    kdePackages.kirigami
+    kdePackages.kirigami-addons
+  ];
+
+  environment.plasma6.excludePackages = with pkgs.kdePackages; [
+    plasma-browser-integration
+    konsole
+    oxygen
   ];
 
   services.resolved.enable = true;
@@ -213,7 +221,7 @@
 
   xdg.portal = {
     enable = true;
-    extraPortals = [ pkgs.kdePackages.xdg-desktop-portal-kde inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland ];
+    extraPortals = [ inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland ];
   };
 
   nix.settings.experimental-features = [
