@@ -79,6 +79,7 @@ in
     thunderbird
     r2modman
     whitesur-kde
+    caligula
   ];
 
   stylix = {
