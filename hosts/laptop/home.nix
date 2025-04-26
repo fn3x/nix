@@ -759,7 +759,7 @@ in
 
   programs.nixvim = {
     enable = true;
-    # package = inputs.neovim-nightly-overlay.packages.x86_64-linux.neovim;
+    package = inputs.neovim-nightly-overlay.packages.x86_64-linux.neovim;
 
     clipboard.providers.wl-copy.enable = true;
 
@@ -1784,13 +1784,6 @@ in
       })
       vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
         silent = true,
-      })
-
-      vim.diagnostic.config({
-        virtual_lines = {
-          -- Only show virtual line diagnostics for the current cursor line
-          current_line = true,
-        },
       })
 
       vim.o.winborder = "rounded"
