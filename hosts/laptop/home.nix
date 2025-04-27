@@ -80,6 +80,7 @@ in
     r2modman
     whitesur-kde
     caligula
+    postman
   ];
 
   stylix = {
