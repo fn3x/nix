@@ -102,17 +102,31 @@
     '';
   };
 
-  users.users.fn3x = {
-    isNormalUser = true;
-    description = "Art";
-    extraGroups = [
-      "docker"
-      "networkmanager"
-      "wheel"
-      "audio"
-      "video"
-    ];
-    shell = pkgs.zsh;
+  users.users = {
+    whoispiria = {
+      isNormalUser = true;
+      description = "Mari";
+      extraGroups = [
+        "networkmanager"
+        "wheel"
+        "audio"
+        "video"
+      ];
+      shell = pkgs.zsh;
+      password = "1";
+    };
+    fn3x = {
+      isNormalUser = true;
+      description = "Art";
+      extraGroups = [
+        "docker"
+        "networkmanager"
+        "wheel"
+        "audio"
+        "video"
+      ];
+      shell = pkgs.zsh;
+    };
   };
 
   hardware.bluetooth.enable = true;

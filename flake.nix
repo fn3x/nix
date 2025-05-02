@@ -102,6 +102,7 @@
               home-manager.useUserPackages = true;
               home-manager.backupFileExtension = "backup";
               home-manager.users.fn3x = import ./hosts/laptop/home.nix;
+              home-manager.users.whoispiria = import ./hosts/laptop/home-piria.nix;
             }
             inputs.stylix.nixosModules.stylix
           ];
@@ -122,6 +123,10 @@
           };
           extraSpecialArgs = { inherit inputs outputs; };
           modules = [ ./hosts/laptop/home.nix ];
+        };
+        "whoispiria@laptop" = home-manager.lib.homeManagerConfiguration {
+          extraSpecialArgs = { inherit inputs outputs; };
+          modules = [ ./hosts/laptop/home-piria.nix ];
         };
       };
     };
