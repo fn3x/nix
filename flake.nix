@@ -68,7 +68,7 @@
               home-manager.sharedModules = [ nixvim.homeManagerModules.nixvim ];
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.backupFileExtension = "backup";
+              home-manager.backupFileExtension = ".bak";
               home-manager.users.fn3x = import ./hosts/desktop/home.nix;
             }
             inputs.stylix.nixosModules.stylix
@@ -100,7 +100,7 @@
               home-manager.sharedModules = [ nixvim.homeManagerModules.nixvim ];
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.backupFileExtension = "backup";
+              home-manager.backupFileExtension = ".bak";
               home-manager.users.fn3x = import ./hosts/laptop/home.nix;
               home-manager.users.whoispiria = import ./hosts/laptop/home-piria.nix;
             }
@@ -116,11 +116,11 @@
           modules = [ ./hosts/desktop/home.nix ];
         };
         "fn3x@laptop" = home-manager.lib.homeManagerConfiguration {
-          pkgs = import nixpkgs {
+          pkgs = (import nixpkgs {
             overlays = [
               inputs.hyprpanel.overlay
             ];
-          };
+          }).legacyPackages.x86_64-linux;
           extraSpecialArgs = { inherit inputs outputs; };
           modules = [ ./hosts/laptop/home.nix ];
         };

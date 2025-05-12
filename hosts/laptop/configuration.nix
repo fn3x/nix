@@ -229,7 +229,7 @@
   };
 
   programs.virt-manager.enable = true;
-  users.groups.libvirtd.members = [ "fn3x" ];
+  users.groups.libvirtd.members = [ "fn3x" "whoispiria" ];
   virtualisation.libvirtd.enable = true;
   virtualisation.spiceUSBRedirection.enable = true;
 

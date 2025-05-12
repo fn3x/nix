@@ -24,6 +24,8 @@
             sqlc
             dbmate
             docker
+            mariadb
+            zsh
           ];
 
           inherit NPM_CONFIG_PREFIX;
