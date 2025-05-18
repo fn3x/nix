@@ -25,7 +25,6 @@
     stylix.url = "github:danth/stylix";
     apple-fonts.url = "github:fn3x/apple-fonts.nix";
     clipboard-sync.url = "github:fn3x/clipboard-sync";
-    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
   };
 
@@ -37,7 +36,6 @@
       nixvim,
       impermanence,
       clipboard-sync,
-      nixos-hardware,
       ...
     }@inputs:
     let
@@ -90,7 +88,6 @@
                 inputs.hyprpanel.overlay
               ];
             }
-            nixos-hardware.nixosModules.lenovo-thinkpad-x1-11th-gen
             ./hosts/laptop/configuration.nix
             impermanence.nixosModules.impermanence
             clipboard-sync.nixosModules.default

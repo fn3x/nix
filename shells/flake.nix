@@ -32,6 +32,9 @@
 
           buildInputs = [ pkgs.docker ];
           shellHook = ''
+          if [ ! -d ~/${NPM_CONFIG_PREFIX} ]; then
+            mkdir -p ~/${NPM_CONFIG_PREFIX};
+          fi
           export PATH="${NPM_CONFIG_PREFIX}/bin:$PATH"
           export DOCKER_HOST="unix://$XDG_RUNTIME_DIR/docker.sock"
           alias vim="nvim"

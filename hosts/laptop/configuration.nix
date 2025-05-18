@@ -235,6 +235,7 @@
 
   xdg.portal = {
     enable = true;
+    wlr.enable = true;
     extraPortals = [ inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland ];
   };
 
@@ -251,15 +252,63 @@
   nix.optimise.automatic = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  services.tlp.settings = {
-    INTEL_GPU_MIN_FREQ_ON_AC = 500;
-    INTEL_GPU_MIN_FREQ_ON_BAT = 500;
-  };
-
   swapDevices = [
     {
       device = "/var/lib/swapfile";
       size = 8 * 1024;
     }
   ];
+
+  hardware.trackpoint.enable = true;
+  hardware.trackpoint.emulateWheel = true;
+
+  services.thermald.enable = true;
+  services.power-profiles-daemon.enable = false;
+
+  powerManagement.enable = true;
+  services.tlp = {
+    enable = true;
+    settings = {
+      CPU_SCALING_GOVERNOR_ON_AC = "performance";
+      CPU_SCALING_GOVERNOR_ON_BAT = "performance";
+      CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
+      CPU_ENERGY_PERF_POLICY_ON_BAT = "performance";
+      
+      # Intel P-state performance settings
+      INTEL_GPU_MIN_FREQ_ON_AC = 500;
+      INTEL_GPU_MIN_FREQ_ON_BAT = 500;
+      INTEL_GPU_MAX_FREQ_ON_AC = 1100;
+      INTEL_GPU_MAX_FREQ_ON_BAT = 800;
+      INTEL_GPU_BOOST_FREQ_ON_AC = 1100;
+      INTEL_GPU_BOOST_FREQ_ON_BAT = 800;
+    };
+  };
+
+  services.fstrim.enable = true;
+  services.fprintd.enable = true;
+  services.illum.enable = true;
+
+  hardware.cpu.intel.updateMicrocode = true;
+
+  boot.initrd.kernelModules = [ "xe" ];
+  boot.kernelParams = [ "i915.force_probe=a7a1" ];
+
+  hardware.graphics = {
+    enable = true;
+    extraPackages = with pkgs; [
+      intel-vaapi-driver
+      intel-ocl
+      intel-media-driver
+      intel-compute-runtime
+      vpl-gpu-rt
+      libvdpau-va-gl
+    ];
+    extraPackages32 = with pkgs; [
+      driversi686Linux.intel-vaapi-driver
+      driversi686Linux.intel-media-driver
+    ];
+  };
+
+  services.libinput.enable = true;
+  services.xserver.videoDrivers = [ "intel" ];
 }
