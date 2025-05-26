@@ -2333,17 +2333,17 @@ in
           "0" = {
             left = [ "dashboard" "network" "bluetooth" "volume" "media" ];
             middle = [ "workspaces" ];
-            right = [ "clock" "kbinput" "systray" "notifications" ];
+            right = [ "clock" "kbinput" "battery" "systray" "notifications" ];
           };
           "1" = {
             left = [ "dashboard" "network" "bluetooth" "volume" "media" ];
             middle = [ "workspaces" ];
-            right = [ "clock" "kbinput" "systray" "notifications" ];
+            right = [ "clock" "kbinput" "battery" "systray" "notifications" ];
           };
           "2" = {
             left = [ "dashboard" "network" "bluetooth" "volume" "media" ];
             middle = [ "workspaces" ];
-            right = [ "clock" "kbinput" "systray" "notifications" ];
+            right = [ "clock" "kbinput" "battery" "systray" "notifications" ];
           };
         };
       };
