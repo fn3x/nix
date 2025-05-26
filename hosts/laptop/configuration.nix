@@ -125,7 +125,7 @@
         "audio"
         "video"
       ];
-      shell = pkgs.zsh;
+      shell = pkgs.nushell;
     };
   };
 
@@ -156,6 +156,7 @@
     cl
     kdePackages.kirigami
     kdePackages.kirigami-addons
+    fastfetch
   ];
 
   environment.plasma6.excludePackages = with pkgs.kdePackages; [
@@ -270,9 +271,9 @@
     enable = true;
     settings = {
       CPU_SCALING_GOVERNOR_ON_AC = "performance";
-      CPU_SCALING_GOVERNOR_ON_BAT = "performance";
+      CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
       CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
-      CPU_ENERGY_PERF_POLICY_ON_BAT = "performance";
+      CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
       
       # Intel P-state performance settings
       INTEL_GPU_MIN_FREQ_ON_AC = 500;
