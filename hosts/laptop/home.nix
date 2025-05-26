@@ -630,22 +630,22 @@ in
           bezier = almostLinear,0.5,0.5,0.75,1.0
           bezier = quick,0.15,0,0.1,1
 
-          animation = global, 1, 10, default
-          animation = border, 1, 2.5, easeOutQuint
-          animation = windows, 1, 2.5, easeOutQuint
-          animation = windowsIn, 1, 2.0, easeOutQuint, popin 87%
-          animation = windowsOut, 1, 1.25, linear, popin 87%
-          animation = fadeIn, 1, 1.5, almostLinear
-          animation = fadeOut, 1, 1.2, almostLinear
-          animation = fade, 1, 2.0, quick
-          animation = layers, 1, 2.0, easeOutQuint
-          animation = layersIn, 1, 2.0, easeOutQuint, fade
-          animation = layersOut, 1, 1.25, linear, fade
-          animation = fadeLayersIn, 1, 1.4, almostLinear
-          animation = fadeLayersOut, 1, 1.2, almostLinear
-          animation = workspaces, 1, 1.5, almostLinear, fade
-          animation = workspacesIn, 1, 1.1, almostLinear, fade
-          animation = workspacesOut, 1, 1.5, almostLinear, fade
+          animation = global, 1, 2, default
+          animation = border, 1, 1, easeOutQuint
+          animation = windows, 1, 1, easeOutQuint
+          animation = windowsIn, 1, 1, easeOutQuint, popin 87%
+          animation = windowsOut, 1, 0.5, linear, popin 87%
+          animation = fadeIn, 1, 1, almostLinear
+          animation = fadeOut, 1, 0.6, almostLinear
+          animation = fade, 1, 1.0, quick
+          animation = layers, 1, 1.0, easeOutQuint
+          animation = layersIn, 1, 1.0, easeOutQuint, fade
+          animation = layersOut, 1, 0.75, linear, fade
+          animation = fadeLayersIn, 1, 0.7, almostLinear
+          animation = fadeLayersOut, 1, 0.6, almostLinear
+          animation = workspaces, 1, 0.75, almostLinear, fade
+          animation = workspacesIn, 1, 0.55, almostLinear, fade
+          animation = workspacesOut, 1, 0.75, almostLinear, fade
       }
 
       # See https://wiki.hyprland.org/Configuring/Dwindle-Layout/ for more
