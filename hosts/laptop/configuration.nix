@@ -85,23 +85,6 @@
   programs.steam.gamescopeSession.enable = true;
   programs.gamemode.enable = true;
 
-  programs.zsh = {
-    enable = true;
-    enableCompletion = true;
-    histSize = 10000;
-    shellInit = ''
-      # Start ssh-agent if not already running
-      if ! pgrep -u "$USER" ssh-agent > /dev/null 2>&1; then
-        eval "$(ssh-agent -s)"
-      fi
-
-      # Add keys to the agent if not already added
-      if ! ssh-add -l &>/dev/null; then
-        ssh-add ~/.ssh/id_github ~/.ssh/id_bitbucket 2>/dev/null || true
-      fi
-    '';
-  };
-
   users.users = {
     whoispiria = {
       isNormalUser = true;
@@ -112,7 +95,7 @@
         "audio"
         "video"
       ];
-      shell = pkgs.zsh;
+      shell = pkgs.nushell;
       password = "1";
     };
     fn3x = {

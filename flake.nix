@@ -108,7 +108,11 @@
 
       homeConfigurations = {
         "fn3x@desktop" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
+          pkgs = (import nixpkgs {
+            overlays = [
+              inputs.hyprpanel.overlay
+            ];
+          }).legacyPackages.x86_64-linux;
           extraSpecialArgs = { inherit inputs outputs; };
           modules = [ ./hosts/desktop/home.nix ];
         };

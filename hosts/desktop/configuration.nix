@@ -80,23 +80,6 @@
   programs.steam.gamescopeSession.enable = true;
   programs.gamemode.enable = true;
 
-  programs.zsh = {
-    enable = true;
-    enableCompletion = true;
-    histSize = 10000;
-    shellInit = ''
-      # Start ssh-agent if not already running
-      if ! pgrep -u "$USER" ssh-agent > /dev/null 2>&1; then
-        eval "$(ssh-agent -s)"
-      fi
-
-      # Add keys to the agent if not already added
-      if ! ssh-add -l &>/dev/null; then
-        ssh-add ~/.ssh/id_github ~/.ssh/id_bitbucket 2>/dev/null || true
-      fi
-    '';
-  };
-
   users.users.fn3x = {
     isNormalUser = true;
     description = "Art";
@@ -107,7 +90,7 @@
       "audio"
       "video"
     ];
-    shell = pkgs.zsh;
+    shell = pkgs.nushell;
   };
 
   hardware.bluetooth.enable = true;
@@ -118,16 +101,10 @@
 
   environment.systemPackages = with pkgs; [
     kitty
-    zsh
     vim
     wget
-    (pkgs.waybar.overrideAttrs (oldAttrs: {
-      mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
-    }))
     gtk3
     gtk4
-    swaynotificationcenter
-    hyprpicker
     bluez
     libnotify
     git
@@ -137,6 +114,18 @@
     pavucontrol
     wireguard-tools 
     mangohud
+    gcc
+    clang
+    cl
+    kdePackages.kirigami
+    kdePackages.kirigami-addons
+    fastfetch
+  ];
+
+  environment.plasma6.excludePackages = with pkgs.kdePackages; [
+    plasma-browser-integration
+    konsole
+    oxygen
   ];
 
   services.resolved.enable = true;
@@ -230,7 +219,7 @@
 
   xdg.portal = {
     enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-gnome pkgs.xdg-desktop-portal-wlr ];
+    extraPortals = [ inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland pkgs.xdg-desktop-portal-wlr ];
   };
 
   nix.settings.experimental-features = [

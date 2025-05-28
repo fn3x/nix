@@ -10,9 +10,12 @@ let
   username = "fn3x";
   homeDirectory = "/home/${username}";
   thorium-browser = import ../../modules/nixos/thorium.nix { inherit pkgs lib; };
+  nushell-theme = "${homeDirectory}/nushell/gruvbox-dark.nu";
 in
 
 {
+  imports = [ inputs.hyprpanel.homeManagerModules.hyprpanel ];
+
   programs.home-manager = {
     enable = true;
   };
@@ -61,8 +64,6 @@ in
     libglvnd
     wofi
     nerd-fonts.code-new-roman
-    pywal16
-    swww
     inkscape
     libreoffice-still
     logmein-hamachi
@@ -75,10 +76,13 @@ in
     river
     wine
     winetricks
-    kdePackages.xwaylandvideobridge
     vesktop
     thunderbird
     r2modman
+    whitesur-kde
+    caligula
+    postman
+    redisinsight
   ];
 
   stylix = {
@@ -109,8 +113,7 @@ in
         window-save-state=always
         window-decoration=false
         auto-update=check
-        shell-integration=zsh
-        shell-integration-features=true
+        shell-integration=none
 
         keybind=ctrl+b>u=scroll_page_fractional:-0.5
         keybind=ctrl+b>d=scroll_page_fractional:0.5
@@ -153,45 +156,18 @@ in
       '';
       executable = false;
     };
-    "${homeDirectory}/.config/wal/templates/colors-hyprland" = {
-      text = ''
-        {background}
-
-        $foreground = rgb({foreground.strip})
-        $background = rgb({background.strip})
-        $wallpaper = rgb({wallpaper.strip})
-
-        $color0 = rgb({color0.strip})
-        $color1 = rgb({color1.strip})
-        $color2 = rgb({color2.strip})
-        $color3 = rgb({color3.strip})
-        $color4 = rgb({color4.strip})
-        $color5 = rgb({color5.strip})
-        $color6 = rgb({color6.strip})
-        $color7 = rgb({color7.strip})
-        $color8 = rgb({color8.strip})
-        $color9 = rgb({color9.strip})
-        $color10 = rgb({color10.strip})
-        $color11 = rgb({color11.strip})
-        $color12 = rgb({color12.strip})
-        $color13 = rgb({color13.strip})
-        $color14 = rgb({color14.strip})
-        $color15 = rgb({color15.strip})
-      '';
-      executable = false;
-    };
     "${homeDirectory}/.config/uwsm/env-hyprland" = {
       text = ''
         export HYPRLAND_NO_SD_VARS=1
       '';
       executable = false;
     };
-    # "${homeDirectory}/.config/chromium-flags.conf" = {
-    #   text = ''
-    #     --enable-features=UseOzonePlatform --ozone-platform=wayland
-    #   '';
-    #   executable = false;
-    # };
+    "${homeDirectory}/.config/chromium-flags.conf" = {
+      text = ''
+        --enable-features=UseOzonePlatform --ozone-platform=wayland
+      '';
+      executable = false;
+    };
     "${homeDirectory}/.config/hypr/xdph.conf" = {
       text = ''
         screencopy {
@@ -199,6 +175,144 @@ in
         }
       '';
       executable = false;
+    };
+    "${nushell-theme}" = {
+      text = ''
+        # Retrieve the theme settings
+        export def main [] {
+            return {
+                binary: '#b16286'
+                block: '#458588'
+                cell-path: '#a89984'
+                closure: '#689d6a'
+                custom: '#ebdbb2'
+                duration: '#d79921'
+                float: '#fb4934'
+                glob: '#ebdbb2'
+                int: '#b16286'
+                list: '#689d6a'
+                nothing: '#cc241d'
+                range: '#d79921'
+                record: '#689d6a'
+                string: '#98971a'
+
+                bool: {|| if $in { '#8ec07c' } else { '#d79921' } }
+
+                datetime: {|| (date now) - $in |
+                    if $in < 1hr {
+                        { fg: '#cc241d' attr: 'b' }
+                    } else if $in < 6hr {
+                        '#cc241d'
+                    } else if $in < 1day {
+                        '#d79921'
+                    } else if $in < 3day {
+                        '#98971a'
+                    } else if $in < 1wk {
+                        { fg: '#98971a' attr: 'b' }
+                    } else if $in < 6wk {
+                        '#689d6a'
+                    } else if $in < 52wk {
+                        '#458588'
+                    } else { 'dark_gray' }
+                }
+
+                filesize: {|e|
+                    if $e == 0b {
+                        '#a89984'
+                    } else if $e < 1mb {
+                        '#689d6a'
+                    } else {{ fg: '#458588' }}
+                }
+
+                shape_and: { fg: '#b16286' attr: 'b' }
+                shape_binary: { fg: '#b16286' attr: 'b' }
+                shape_block: { fg: '#458588' attr: 'b' }
+                shape_bool: '#8ec07c'
+                shape_closure: { fg: '#689d6a' attr: 'b' }
+                shape_custom: '#98971a'
+                shape_datetime: { fg: '#689d6a' attr: 'b' }
+                shape_directory: '#689d6a'
+                shape_external: '#689d6a'
+                shape_external_resolved: '#8ec07c'
+                shape_externalarg: { fg: '#98971a' attr: 'b' }
+                shape_filepath: '#689d6a'
+                shape_flag: { fg: '#458588' attr: 'b' }
+                shape_float: { fg: '#fb4934' attr: 'b' }
+                shape_garbage: { fg: '#FFFFFF' bg: '#FF0000' attr: 'b' }
+                shape_glob_interpolation: { fg: '#689d6a' attr: 'b' }
+                shape_globpattern: { fg: '#689d6a' attr: 'b' }
+                shape_int: { fg: '#b16286' attr: 'b' }
+                shape_internalcall: { fg: '#689d6a' attr: 'b' }
+                shape_keyword: { fg: '#b16286' attr: 'b' }
+                shape_list: { fg: '#689d6a' attr: 'b' }
+                shape_literal: '#458588'
+                shape_match_pattern: '#98971a'
+                shape_matching_brackets: { attr: 'u' }
+                shape_nothing: '#cc241d'
+                shape_operator: '#d79921'
+                shape_or: { fg: '#b16286' attr: 'b' }
+                shape_pipe: { fg: '#b16286' attr: 'b' }
+                shape_range: { fg: '#d79921' attr: 'b' }
+                shape_raw_string: { fg: '#ebdbb2' attr: 'b' }
+                shape_record: { fg: '#689d6a' attr: 'b' }
+                shape_redirection: { fg: '#b16286' attr: 'b' }
+                shape_signature: { fg: '#98971a' attr: 'b' }
+                shape_string: '#98971a'
+                shape_string_interpolation: { fg: '#689d6a' attr: 'b' }
+                shape_table: { fg: '#458588' attr: 'b' }
+                shape_vardecl: { fg: '#458588' attr: 'u' }
+                shape_variable: '#b16286'
+
+                foreground: '#ebdbb2'
+                background: '#282828'
+                cursor: '#ebdbb2'
+
+                empty: '#458588'
+                header: { fg: '#98971a' attr: 'b' }
+                hints: '#928374'
+                leading_trailing_space_bg: { attr: 'n' }
+                row_index: { fg: '#98971a' attr: 'b' }
+                search_result: { fg: '#cc241d' bg: '#a89984' }
+                separator: '#a89984'
+            }
+        }
+
+        # Update the Nushell configuration
+        export def --env "set color_config" [] {
+            $env.config.color_config = (main)
+        }
+
+        # Update terminal colors
+        export def "update terminal" [] {
+            let theme = (main)
+
+            # Set terminal colors
+            let osc_screen_foreground_color = '10;'
+            let osc_screen_background_color = '11;'
+            let osc_cursor_color = '12;'
+                
+            $"
+            (ansi -o $osc_screen_foreground_color)($theme.foreground)(char bel)
+            (ansi -o $osc_screen_background_color)($theme.background)(char bel)
+            (ansi -o $osc_cursor_color)($theme.cursor)(char bel)
+            "
+            # Line breaks above are just for source readability
+            # but create extra whitespace when activating. Collapse
+            # to one line and print with no-newline
+            | str replace --all "\n" '''
+            | print -n $"($in)\r"
+        }
+
+        export module activate {
+            export-env {
+                set color_config
+                update terminal
+            }
+        }
+
+        # Activate the theme when sourced
+        use activate
+      '';
     };
   };
 
@@ -239,14 +353,15 @@ in
   };
 
   home.shellAliases = {
-    nix-s = "nh os switch ~/nixos/";
-    nix-t = "nh os test ~/nixos/";
+    nix-s = "nh os switch -H desktop ~/nixos";
+    nix-t = "nh os test  -H desktop ~/nixos";
     nix-c = "nh clean all";
-    nix-u = "nh os test -u";
+    nix-u = "nh os switch -u -H desktop ~/nixos";
     vim = "nvim";
     vi = "nvim";
     nix-work = "nix develop ~/nixos/shells#work";
     nix-zig = "nix develop ~/nixos/shells#zig";
+    nixdev= "nix develop --command nu -l";
   };
 
   home.sessionPath = [
@@ -291,11 +406,21 @@ in
   };
 
   programs.kitty.enable = true; # required for the default Hyprland config
+
+  # Fix for KDE settings for Plasma 6: https://github.com/nix-community/home-manager/issues/5098#issuecomment-2352172073
+  xdg.configFile."menus/applications.menu".source = "${pkgs.kdePackages.plasma-workspace}/etc/xdg/menus/plasma-applications.menu";
   qt = {
     enable = true;
-    platformTheme.name = "gtk";
-    style.name = "WhiteSur";
+    platformTheme.package = with pkgs.kdePackages; [
+      plasma-integration
+      systemsettings
+    ];
+    style = {
+      package = pkgs.kdePackages.breeze;
+      name = "Breeze";
+    };
   };
+  systemd.user.sessionVariables = { QT_QPA_PLATFORMTHEME = "kde"; };
 
   wayland.windowManager.river = {
     enable = true;
@@ -438,12 +563,9 @@ in
       exec-once = dconf write /org/gnome/desktop/interface/font-name "'Noto Sans Medium 11'"
       exec-once = dconf write /org/gnome/desktop/interface/monospace-font-name "'Noto Sans Mono Medium 11'"
 
-      exec-once = uwsm app -- wal -i "./wallpapers/WhiteSur-morning.jpg" -not-set --cols16
-      exec-once = uwsm app -- waybar
-      exec-once = uwsm app -- swww-daemon
-      exec-once = uwsm app -- swww img "./wallpapers/WhiteSur-morning.jpg"
       exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
-      exec-once = uwsm app -- swaync
+
+      exec-once = uwsm app -- hyprpanel
 
       exec-once = [workspace 1 silent] $terminal
       exec-once = [workspace 2 silent] uwsm app -- thorium-browser --high-dpi-support=1 --force-device-scale-factor=1.25
@@ -513,22 +635,22 @@ in
           bezier = almostLinear,0.5,0.5,0.75,1.0
           bezier = quick,0.15,0,0.1,1
 
-          animation = global, 1, 10, default
-          animation = border, 1, 2.5, easeOutQuint
-          animation = windows, 1, 2.5, easeOutQuint
-          animation = windowsIn, 1, 2.0, easeOutQuint, popin 87%
-          animation = windowsOut, 1, 1.25, linear, popin 87%
-          animation = fadeIn, 1, 1.5, almostLinear
-          animation = fadeOut, 1, 1.2, almostLinear
-          animation = fade, 1, 2.0, quick
-          animation = layers, 1, 2.0, easeOutQuint
-          animation = layersIn, 1, 2.0, easeOutQuint, fade
-          animation = layersOut, 1, 1.25, linear, fade
-          animation = fadeLayersIn, 1, 1.4, almostLinear
-          animation = fadeLayersOut, 1, 1.2, almostLinear
-          animation = workspaces, 1, 1.5, almostLinear, fade
-          animation = workspacesIn, 1, 1.1, almostLinear, fade
-          animation = workspacesOut, 1, 1.5, almostLinear, fade
+          animation = global, 1, 2, default
+          animation = border, 1, 1, easeOutQuint
+          animation = windows, 1, 1, easeOutQuint
+          animation = windowsIn, 1, 1, easeOutQuint, popin 87%
+          animation = windowsOut, 1, 0.5, linear, popin 87%
+          animation = fadeIn, 1, 1, almostLinear
+          animation = fadeOut, 1, 0.6, almostLinear
+          animation = fade, 1, 1.0, quick
+          animation = layers, 1, 1.0, easeOutQuint
+          animation = layersIn, 1, 1.0, easeOutQuint, fade
+          animation = layersOut, 1, 0.75, linear, fade
+          animation = fadeLayersIn, 1, 0.7, almostLinear
+          animation = fadeLayersOut, 1, 0.6, almostLinear
+          animation = workspaces, 1, 0.75, almostLinear, fade
+          animation = workspacesIn, 1, 0.55, almostLinear, fade
+          animation = workspacesOut, 1, 0.75, almostLinear, fade
       }
 
       # See https://wiki.hyprland.org/Configuring/Dwindle-Layout/ for more
@@ -606,33 +728,12 @@ in
       windowrulev2 = float,class:^(org.telegram.desktop|telegramdesktop)$,title:^(Media viewer)$
 
       ############
-      ###WAYBAR###
-      ############
-
-      layerrule = blur, waybar
-      layerrule = ignorezero, waybar
-      layerrule = ignorealpha 0.5, waybar
-
-      ############
       ####WOFI####
       ############
 
       layerrule = blur, wofi
       layerrule = ignorezero, wofi
       layerrule = ignorealpha 0.5, wofi
-
-      ############################
-      #### SWAY NOTIFICATIONS ####
-      ############################
-
-      windowrule = nofocus,class:^(Swaync)$
-      windowrule = noinitialfocus,class:^(Swaync)$
-      layerrule = blur, swaync-control-center
-      layerrule = blur, swaync-notification-window
-      layerrule = ignorezero, swaync-control-center
-      layerrule = ignorezero, swaync-notification-window
-      layerrule = ignorealpha 0.5, swaync-control-center
-      layerrule = ignorealpha 0.5, swaync-notification-window
 
       exec-once = uwsm finalize
 
@@ -767,8 +868,244 @@ in
     enableZshIntegration = true;
   };
 
-  programs.zsh = {
+  programs.starship = {
     enable = true;
+    enableNushellIntegration = true;
+    settings = {
+      "$schema" = "https://starship.rs/config-schema.json";
+      format = lib.concatStrings [
+        "[](color_orange)"
+        "$username"
+        "[](bg:color_yellow fg:color_orange)"
+        "$directory"
+        "[](bg:color_yellow fg:color_orange)"
+        "$git_branch"
+        "$git_status"
+        "[](fg:color_aqua bg:color_blue)"
+        "$c"
+        "$cpp"
+        "$rust"
+        "$golang"
+        "$nodejs"
+        "$php"
+        "$java"
+        "$kotlin"
+        "$python"
+        "[](fg:color_blue bg:color_bg3)"
+        "$docker_context"
+        "$conda"
+        "$pixi"
+        "[](fg:color_bg3 bg:color_bg1)"
+        "$time"
+        "[ ](fg:color_bg1)"
+        "$line_break$character"
+      ];
+      palette = "gruvbox_dark";
+      palettes.gruvbox_dark = {
+        color_fg0 = "#fbf1c7";
+        color_bg1 = "#3c3836";
+        color_bg3 = "#665c54";
+        color_blue = "#458588";
+        color_aqua = "#689d6a";
+        color_green = "#98971a";
+        color_orange = "#d65d0e";
+        color_purple = "#b16286";
+        color_red = "#cc241d";
+        color_yellow = "#d79921";
+      };
+      os = {
+        disabled = false;
+        style = "bg:color_orange fg:color_fg0";
+        symbols = {
+          Windows = "󰍲";
+          Ubuntu = "󰕈";
+          SUSE = "";
+          Raspbian = "󰐿";
+          Mint = "󰣭";
+          Macos = "󰀵";
+          Manjaro = "";
+          Linux = "󰌽";
+          Gentoo = "󰣨";
+          Fedora = "󰣛";
+          Alpine = "";
+          Amazon = "";
+          Android = "";
+          Arch = "󰣇";
+          Artix = "󰣇";
+          EndeavourOS = "";
+          CentOS = "";
+          Debian = "󰣚";
+          Redhat = "󱄛";
+          RedHatEnterprise = "󱄛";
+          Pop = "";
+          NixOS = " ";
+        };
+      };
+      username = {
+        show_always = true;
+        style_user = "bg:color_orange fg:color_fg0";
+        style_root = "bg:color_orange fg:color_fg0";
+        format = "[ $user ]($style)";
+      };
+      directory = {
+        style = "fg:color_fg0 bg:color_yellow";
+        format = "[ $path ]($style)";
+        truncation_length = 3;
+        truncation_symbol = "…/";
+        substitutions = {
+          "Documents" = "󰈙 ";
+          "Downloads" = " ";
+          "Music"     = "󰝚 ";
+          "Pictures"  = " ";
+          "Developer" = "󰲋 ";
+        };
+      };
+      git_branch = {
+        symbol = "";
+        style = "bg:color_aqua";
+        format = ''[[ $symbol $branch ](fg:color_fg0 bg:color_aqua)]($style)'';
+      };
+      git_status = {
+        style = "bg:color_aqua";
+        format = ''[[($all_status$ahead_behind )](fg:color_fg0 bg:color_aqua)]($style)'';
+      };
+      nodejs = {
+        symbol = "";
+        style = "bg:color_blue";
+        format = ''[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'';
+      };
+      c = {
+        symbol = " ";
+        style = "bg:color_blue";
+        format = ''[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'';
+      };
+      cpp = {
+        symbol = " ";
+        style = "bg:color_blue";
+        format = ''[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'';
+      };
+      rust = {
+        symbol = "";
+        style = "bg:color_blue";
+        format = ''[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'';
+      };
+      golang = {
+        symbol = "";
+        style = "bg:color_blue";
+        format = ''[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'';
+      };
+      php = {
+        symbol = "";
+        style = "bg:color_blue";
+        format = ''[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'';
+      };
+      java = {
+        symbol = "";
+        style = "bg:color_blue";
+        format = ''[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'';
+      };
+      kotlin = {
+        symbol = "";
+        style = "bg:color_blue";
+        format = ''[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'';
+      };
+      haskell = {
+        symbol = "";
+        style = "bg:color_blue";
+        format = ''[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'';
+      };
+      python = {
+        symbol = "";
+        style = "bg:color_blue";
+        format = ''[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'';
+      };
+      docker_context = {
+        symbol = "";
+        style = "bg:color_bg3";
+        format = ''[[ $symbol( $context) ](fg:#83a598 bg:color_bg3)]($style)'';
+      };
+      conda = {
+        style = "bg:color_bg3";
+        format = ''[[ $symbol( $environment) ](fg:#83a598 bg:color_bg3)]($style)'';
+      };
+      pixi = {
+        style = "bg:color_bg3";
+        format = ''[[ $symbol( $version)( $environment) ](fg:color_fg0 bg:color_bg3)]($style)'';
+      };
+      time = {
+        disabled = false;
+        style = "bg:color_bg1";
+        format = ''[[  $time ](fg:color_fg0 bg:color_bg1)]($style)'';
+      };
+      line_break = {
+        disabled = false;
+      };
+      character = {
+        disabled = false;
+        success_symbol = "[](bold fg:color_green)";
+        error_symbol = "[](bold fg:color_red)";
+        vimcmd_symbol = "[](bold fg:color_green)";
+        vimcmd_replace_one_symbol = "[](bold fg:color_purple)";
+        vimcmd_replace_symbol = "[](bold fg:color_purple)";
+        vimcmd_visual_symbol = "[](bold fg:color_yellow)";
+      };
+    };
+  };
+
+  programs.nushell = {
+    enable = true;
+    settings = {
+      buffer_editor = "nvim";
+      show_banner = false;
+    };
+    envFile.text = ''
+      do --env {
+        let ssh_agent_file = (
+            $nu.temp-path | path join $"ssh-agent-fn3x.nuon"
+        )
+
+        if ($ssh_agent_file | path exists) {
+            let ssh_agent_env = open ($ssh_agent_file)
+            if ($"/proc/($ssh_agent_env.SSH_AGENT_PID)" | path exists) {
+                load-env $ssh_agent_env
+                return
+            } else {
+                rm $ssh_agent_file
+            }
+        }
+
+        let ssh_agent_env = ^ssh-agent -c
+            | lines
+            | first 2
+            | parse "setenv {name} {value};"
+            | transpose --header-row
+            | into record
+        load-env $ssh_agent_env
+        $ssh_agent_env | save --force $ssh_agent_file
+        ^ssh-add ~/.ssh/id_bitbucket ~/.ssh/id_github
+      }
+    '';
+    configFile.text = ''
+      source ${nushell-theme}
+      $env.config = {
+        hooks: {
+          pre_prompt: [{ ||
+            if (which direnv | is-empty) {
+              return
+            }
+
+            direnv export json | from json | default {} | load-env
+            if 'ENV_CONVERSIONS' in $env and 'PATH' in $env.ENV_CONVERSIONS {
+              $env.PATH = do $env.ENV_CONVERSIONS.PATH.from_string $env.PATH
+            }
+          }]
+        }
+      }
+    '';
+  };
+
+  programs.zsh = {
+    enable = false;
     enableCompletion = true;
     enableVteIntegration = true;
     autosuggestion.enable = true;
@@ -779,10 +1116,16 @@ in
     };
     historySubstringSearch.enable = true;
     syntaxHighlighting.enable = true;
+    envExtra = "eval \"$(direnv hook zsh)\"\n";
+  };
+
+  programs.direnv = {
+    enable = true;
+    enableNushellIntegration = true;
   };
 
   programs.oh-my-posh = {
-    enable = true;
+    enable = false;
     enableZshIntegration = true;
     useTheme = "robbyrussell";
   };
@@ -797,7 +1140,7 @@ in
 
   programs.nixvim = {
     enable = true;
-    # package = inputs.neovim-nightly-overlay.packages.x86_64-linux.neovim;
+    package = inputs.neovim-nightly-overlay.packages.x86_64-linux.neovim;
 
     clipboard.providers.wl-copy.enable = true;
 
@@ -1839,12 +2182,12 @@ in
     "x-scheme-handler/https" = [ "thorium-browser.desktop" ];
   };
 
-  xdg.desktopEntries."org.gnome.Settings" = {
-    name = "Settings";
-    comment = "Gnome Control Center";
-    icon = "org.gnome.Settings";
-    exec = "env XDG_CURRENT_DESKTOP=gnome ${pkgs.gnome-control-center}/bin/gnome-control-center";
-    categories = [ "X-Preferences" ];
+  xdg.desktopEntries."org.kde.systemsettings" = {
+    name = "System Settings";
+    comment = "KDE Control Center";
+    icon = "systemsettings";
+    exec = "${pkgs.kdePackages.systemsettings} %i";
+    categories = [ "Qt" "KDE" "Settings" "DesktopSettings" ];
     terminal = false;
   };
 
@@ -1866,105 +2209,6 @@ in
     iconTheme = {
       package = pkgs.whitesur-icon-theme;
       name = "WhiteSur";
-    };
-  };
-
-  services.dunst = {
-    enable = false; # trying out wofi for now
-    settings = {
-      global = {
-        monitor = 0;
-        follow = "none";
-        width = "(300, 500)";
-        height = "(0, 300)";
-        origin = "top-right";
-        offset = "(5, 15)";
-        scale = 0;
-        notification_limit = 10;
-        progress_bar = true;
-        progress_bar_height = 14;
-        progress_bar_frame_width = 0;
-        progress_bar_min_width = 100;
-        progress_bar_max_width = 300;
-        progress_bar_corner_radius = 50;
-        progress_bar_corners = "bottom-left, top-right";
-        icon_corner_radius = 0;
-        icon_corners = "all";
-        indicate_hidden = "yes";
-        transparency = 0;
-        separator_height = 6;
-        padding = 10;
-        horizontal_padding = 8;
-        text_icon_padding = 12;
-        frame_width = 1;
-        frame_color = "#a0a0a0";
-        gap_size = 6;
-        separator_color = "frame";
-        sort = "yes";
-        font = "Fira Mono 12";
-        line_height = 0;
-        markup = "full";
-        format = "<b>%s</b>\n%b";
-        alignment = "left";
-        vertical_alignment = "center";
-        show_age_threshold = -1;
-        ellipsize = "middle";
-        ignore_newline = "no";
-        stack_duplicates = true;
-        hide_duplicate_count = false;
-        show_indicators = "yes";
-        icon_theme = "WhiteSur";
-        icon_position = "right";
-        min_icon_size = 32;
-        max_icon_size = 128;
-        icon_path = "/usr/share/icons/gnome/16x16/status/:/usr/share/icons/gnome/16x16/devices/";
-        sticky_history = "yes";
-        history_length = 30;
-        dmenu = "/usr/bin/dmenu -l 10 -p dunst:";
-        browser = "/usr/bin/xdg-open";
-        always_run_script = true;
-        title = "Dunst";
-        class = "Dunst";
-        corner_radius = 10;
-        corners = "bottom, top-left";
-        ignore_dbusclose = false;
-        force_xwayland = false;
-        force_xinerama = false;
-        mouse_left_click = "close_current";
-        mouse_middle_click = "do_action, close_current";
-        mouse_right_click = "close_all";
-      };
-
-      experimental = {
-        per_monitor_dpi = false;
-      };
-
-      urgency_low = {
-        background = "#222222";
-        foreground = "#ffffff";
-        highlight = "#722ae6, #e4b5cb";
-        timeout = 10;
-      };
-
-      urgency_normal = {
-        background = "#222222";
-        foreground = "#ffffff";
-        frame_color = "#5e5086";
-        highlight = "#722ae6, #e4b5cb";
-        timeout = 15;
-        override_pause_level = 30;
-        default_icon = "dialog-information";
-      };
-
-      urgency_critical = {
-        background = "#222222";
-        foreground = "#ffffff";
-        frame_color = "#d54e53";
-        highlight = "#d54e53, #f0f0f0";
-        timeout = 0;
-        override_pause_level = 60;
-        default_icon = "dialog-warning";
-      };
     };
   };
 
@@ -2108,739 +2352,84 @@ in
     '';
   };
 
-  programs.waybar = {
+  programs.hyprpanel = {
+    # Enable the module.
+    # Default: false
     enable = true;
+    overlay.enable = true;
+
+    # Add '/nix/store/.../hyprpanel' to your
+    # Hyprland config 'exec-once'.
+    # Default: false
+    hyprland.enable = true;
+
+    # Fix the overwrite issue with HyprPanel.
+    # See below for more information.
+    # Default: false
+    overwrite.enable = true;
+
     settings = {
-      mainBar = {
-        layer = "top";
-        position = "top";
-        layer-shell = true;
-        reload_style_on_change = true;
-        modules-left = [
-          "bluetooth"
-          "network"
-          "pulseaudio"
-          "custom/keyboard-layout"
-          "group/resources"
-        ];
-        modules-center = [ "hyprland/workspaces" ];
-        modules-right = [
-          "group/expand"
-          "custom/notification"
-          "clock"
-          "tray"
-        ];
-
-        "river/tags" = {
-          "format" = "{icon}";
-          "format-icons" = {
-            "active" = "";
-            "default" = "";
-            "empty" = "";
+      layout = {
+        "bar.layouts" = {
+          "0" = {
+            left = [ "dashboard" "network" "bluetooth" "volume" "media" ];
+            middle = [ "workspaces" ];
+            right = [ "clock" "kbinput" "systray" "notifications" ];
           };
-        };
-        "custom/notification" = {
-          tooltip = false;
-          format = "";
-          on-click = "swaync-client -t -sw";
-          escape = true;
-        };
-        clock = {
-          format = "{:%d.%m.%Y %H:%M:%S}";
-          interval = 1;
-          tooltip-format = "<tt>{calendar}</tt>";
-          calendar = {
-            format = {
-              months = "<span color='#000000'><b>{}</b></span>";
-              weekdays = "<span color='#000000'><b>{}</b></span>";
-              today = "<span color='#000000'><b>{}</b></span>";
-            };
+          "1" = {
+            left = [ "dashboard" "network" "bluetooth" "volume" "media" ];
+            middle = [ "workspaces" ];
+            right = [ "clock" "kbinput" "systray" "notifications" ];
           };
-          actions = {
-            on-click-right = "shift_down";
-            on-click = "shift_up";
+          "2" = {
+            left = [ "dashboard" "network" "bluetooth" "volume" "media" ];
+            middle = [ "workspaces" ];
+            right = [ "clock" "kbinput" "systray" "notifications" ];
           };
-        };
-        network = {
-          "format-ethernet" = "";
-          "format-disconnected" = "";
-          "tooltip-format-disconnected" = "Error";
-          "tooltip-format-ethernet" = "{ifname} 🖧 ";
-          "on-click" = "$TERMINAL nmtui";
-        };
-        bluetooth = {
-          format-on = "󰂯";
-          format-off = "BT-off";
-          format-disabled = "󰂲";
-          format-connected-battery = "{device_battery_percentage}% 󰂯";
-          format-alt = "{device_alias} 󰂯";
-          tooltip-format = "{controller_alias}\t{controller_address}\n\n{num_connections} connected";
-          tooltip-format-connected = "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}";
-          tooltip-format-enumerate-connected = "{device_alias}\n{device_address}";
-          tooltip-format-enumerate-connected-battery = "{device_alias}\n{device_address}\n{device_battery_percentage}%";
-          on-click-right = "blueman-manager";
-        };
-
-        "group/resources" = {
-          orientation = "inherit";
-          drawer = {
-            "transition-duration" = 500;
-            "children-class" = "resources-drawer";
-            "transition-left-to-right" = true;
-            "click-to-reveal" = true;
-          };
-          modules = [ "cpu" "temperature" "disk" ];
-        };
-
-        cpu = {
-          interval = 5;
-          format = " {usage}%";
-          states = {
-            warning = 70;
-            critical = 90;
-          };
-        };
-
-        temperature = {
-          "critical-threshold" = 80;
-          "format-critical" = " {temperatureC}°C";
-          format = " {temperatureC}°C";
-          "tooltip-format" = "  󰍽: s-tui\n {temperatureC}° Celsius\n{temperatureF}° Fahrenheit\n{temperatureK}° Kelvin";
-        };
-
-        disk = {
-          interval = 600;
-          format = "󰋊 {percentage_used}%";
-          path = "/";
-          "tooltip-format" = "    󰍽: dua\nTotal: {total}\n Used: {used} ({percentage_used}%)\n Free: {free} ({percentage_free}%)";
-        };
-
-        memory = {
-          interval = 5;
-          format = " {}%";
-          states = {
-            warning = 70;
-            critical = 90;
-          };
-          "tooltip-format" = "        󰍽: btm\n   Memory: {total} GiB\n   In use: {used} GiB ({percentage}%)\nAvailable: {avail} GiB\n     Swap: {swapTotal} GiB\n   In use: {swapUsed} GiB ({swapPercentage}%)\nAvailable: {swapAvail} GiB";
-        };
-
-        wireplumber = {
-          format = "{icon} {volume}%";
-          "format-muted" = "󰝟 muted";
-          "on-click" = "pavucontrol";
-          "on-click-right" = "pamixer --toggle-mute";
-          "format-icons" = [ "󰕿" "󰖀" "󰕾" ];
-          "tooltip-format" = "L󰍽: pavucontrol\nR󰍽: Toggle mute\nNode: {node_name}";
-        };
-          
-        "custom/keyboard-layout" = {
-          "exec" = "${pkgs.hyprland}/bin/hyprctl -j devices | ${pkgs.jq}/bin/jq -r '.keyboards[0].active_keymap'";
-          "format" = "";
-          "tooltip-format" = "󰍽: cheatsheet\nLayout: {0}";
-          "interval" = 30; #set only as a fallback; use signal to update the module more immediately
-          "signal" = 1;
-          "on-click" = "hyprctl switchxkblayout all next";
-        };
-
-        tray = {
-          icon-size = 14;
-          spacing = 10;
         };
       };
-    };
-    style = ''
-      @import url('${config.xdg.cacheHome}/wal/colors-waybar.css');
 
-      * {
-          font-size:15px;
-          font-family: "CodeNewRoman Nerd Font Propo";
-      }
-      window#waybar {
-          all:unset;
-      }
-      .modules-left {
-          padding:7px;
-          margin:5px;
-          border-radius:10px;
-          background: alpha(@background,.5);
-          box-shadow: 0px 0px 2px rgba(0, 0, 0, .5);
-      }
-      .modules-center {
-          padding:7px;
-          margin:5px;
-          border-radius:10px;
-          background: alpha(@background,.5);
-          box-shadow: 0px 0px 2px rgba(0, 0, 0, .5);
-      }
-      .modules-right {
-          padding:7px;
-          margin:5px;
-          border-radius:10px;
-          background: alpha(@background,.5);
-          box-shadow: 0px 0px 2px rgba(0, 0, 0, .5);
-      }
-      tooltip {
-          background:rgb(50,50,50)
-      }
-      #clock:hover, #custom-pacman:hover, #custom-notification:hover,#bluetooth:hover,#network:hover,#battery:hover, #cpu:hover,#memory:hover,#temperature:hover {
-          transition: all .3s ease;
-          color:@color0;
-      }
-      #custom-notification {
-          padding: 0px 5px;
-          transition: all .3s ease;
-          color:@color7;
-      }
-      #clock {
-          padding: 0px 5px;
-          color:@color7;
-          transition: all .3s ease;
-      }
-      #custom-pacman {
-          padding: 0px 5px;
-          transition: all .3s ease;
-          color:@color7;
-      }
-      #workspaces {
-          padding: 0px 5px;
-      }
-      #workspaces button {
-          all:unset;
-          padding: 0px 5px;
-          color: rgba(0,0,0,0);
-          transition: all .5s ease;
-          text-shadow: 0px 0px 1px rgba(0, 0, 0, .5);
-      }
-      #workspaces button:hover {
-          transition: all .5s ease;
-          color:rgba(0,0,0,0);
-          text-shadow: 0px 0px 1px rgba(0, 0, 0, .6);
-      }
-      #workspaces button.active {
-          color: @color9;
-          border: none;
-          transition: all .5s ease;
-      }
-      #workspaces button.empty {
-          color: rgba(0,0,0,0);
-          border: none;
-          text-shadow: 0px 0px 1.5px rgba(0, 0, 0, .2);
-      }
-      #workspaces button.empty:hover {
-          color: rgba(0,0,0,0);
-          border: none;
-          text-shadow: 0px 0px 1.5px rgba(0, 0, 0, .5);
-      }
-      #workspaces button.empty.active {
-          color: @color9;
-          border: none;
-          transition: all .5s ease;
-      }
-      #bluetooth {
-          padding: 0px 5px;
-          transition: all .3s ease;
-          color:@color7;
-      }
-      #network {
-          padding: 0px 5px;
-          transition: all .3s ease;
-          color:@color7;
-      }
-      #group-expand {
-          padding: 0px 5px;
-          transition: all .3s ease; 
-      }
-      #custom-expand {
-          padding: 0px 5px;
-          color:alpha(@foreground,.2);
-          text-shadow: 0px 0px 2px rgba(0, 0, 0, .7);
-          transition: all .3s ease;
-      }
-      #custom-expand:hover {
-          color:rgba(255,255,255,.2);
-          text-shadow: 0px 0px 2px rgba(255, 255, 255, .5);
-      }
-      #custom-colorpicker {
-          padding: 0px 5px;
-      }
-      #cpu,#memory,#temperature {
-          padding: 0px 5px;
-          transition: all .3s ease;
-          color:@color7;
-      }
-      #custom-endpoint {
-          color:transparent;
-          text-shadow: 0px 0px 1.5px rgba(0, 0, 0, 1);
-      }
-      #tray {
-          padding: 0px 5px;
-          transition: all .3s ease;
-      }
-      #tray menu * {
-          padding: 0px 5px;
-          transition: all .3s ease;
-      }
-      #tray menu separator {
-          padding: 0px 5px;
-          transition: all .3s ease;
-      }
-    '';
+      bar.launcher.autoDetectIcon = true;
+      bar.workspaces.showApplicationIcons = true;
+      bar.workspaces.showWsIcons = true;
+      bar.workspaces.workspaces = 9;
+      bar.systray.ignore = [ "Xwayland Video Bridge_pipewireToXProxy" "blueman" ];
+      bar.clock.format = "%d %b %H:%M:%S";
+
+      menus.clock.weather.enabled = false;
+      menus.dashboard.shortcuts.enabled = false;
+      menus.clock.time.military = true;
+
+      notifications.ignore = [ "spotify" ];
+      tear = true;
+
+      theme.name = "gruvbox";
+      theme.osd.location = "left";
+      theme.font.name = "SFProDisplay Nerd Font";
+      theme.font.size = "1.3rem";
+      theme.bar.transparent = true;
+
+      wallpaper.enable = true;
+      wallpaper.image = "~/wallpapers/bg.jpg";
+
+      menus.dashboard.directories.left.directory1.command = "dolphin Downloads";
+      menus.dashboard.directories.left.directory1.label = "󰉍 Downloads";
+      menus.dashboard.directories.left.directory2.command = "dolphin Videos";
+      menus.dashboard.directories.left.directory2.label = "󰉏 Videos";
+      menus.dashboard.directories.left.directory3.command = "dolphin personal";
+      menus.dashboard.directories.left.directory3.label = "󰚝 Personal";
+      menus.dashboard.directories.right.directory1.command = "dolphin Documents";
+      menus.dashboard.directories.right.directory1.label = "󱧶 Documents";
+      menus.dashboard.directories.right.directory2.command = "dolphin Pictures";
+      menus.dashboard.directories.right.directory2.label = "󰉏 Pictures";
+      menus.dashboard.directories.right.directory3.command = "dolphin ./";
+      menus.dashboard.directories.right.directory3.label = "󱂵 Home";
+    };
   };
 
   programs.obs-studio = {
     enable = true;
     plugins = [ pkgs.obs-studio-plugins.wlrobs pkgs.obs-studio-plugins.obs-backgroundremoval pkgs.obs-studio-plugins.obs-pipewire-audio-capture ];
-  };
-
-  services.swaync = {
-    enable = true;
-    settings = {
-      "$schema" = "${pkgs.swaynotificationcenter}/configSchema.json";
-      positionX = "right";
-      positionY = "top";
-      layer = "overlay";
-      control-center-layer = "top";
-      layer-shell = true;
-      cssPriority = "application";
-      control-center-width = 350;
-      control-center-margin-top = 10;
-      control-center-margin-bottom = 10;
-      control-center-margin-right = 0;
-      control-center-margin-left = 0;
-      notification-2fa-action = true;
-      notification-inline-replies = true;
-      notification-window-width = 350;
-      notification-icon-size = 60;
-      notification-body-image-height = 180;
-      notification-body-image-width = 180;
-      timeout = 12;
-      timeout-low = 6;
-      timeout-critical = 1;
-      fit-to-screen = true;
-      keyboard-shortcuts = true;
-      image-visibility = "when available";
-      transition-time = 200;
-      hide-on-clear = false;
-      hide-on-action = true;
-      script-fail-notify = true;
-      widgets = [
-        "mpris"
-        "title"
-        "notifications"
-        "volume"
-        "backlight"
-        "buttons-grid"
-      ];
-      widget-config = {
-        title = {
-          text = "Notification Center";
-          clear-all-button = true;
-          button-text = "󰆴";
-        };
-        label = {
-          max-lines = 1;
-          text = "Notification Center!";
-        };
-        mpris = {
-          image-size = 80;
-          image-radius = 0;
-        };
-        volume = {
-          label = "󰕾 ";
-        };
-        backlight = {
-          label = "󰃟 ";
-        };
-        buttons-grid = {
-          "actions" = [
-            {
-              label = "󰝟";
-              command = "pactl set-sink-mute @DEFAULT_SINK@ toggle";
-              type = "toggle";
-            }
-            {
-              label = "󰍭";
-              command = "pactl set-source-mute @DEFAULT_SOURCE@ toggle";
-              type = "toggle";
-            }
-            {
-              label = "";
-              command = "$TERMINAL nmtui";
-            }
-            {
-              label = "";
-              command = "blueman-manager";
-            }
-            {
-              label = "󰤄";
-              command = "swaync-client -d";
-              type = "toggle";
-            }
-            {
-              label = "󰀟";
-              command = "gnome-network-displays";
-            }
-            {
-              label = "󰈙";
-              command = "$TERMINAL bash -i -c 'Docs'";
-            }
-            {
-              label = "";
-              command = "$TERMINAL bash -i -c 'Settings'";
-
-            }
-            {
-              label = "";
-              command = "$TERMINAL bash -i -c 'tasks'";
-
-            }
-            {
-              label = "";
-              command = "hyprlock";
-            }
-            {
-              label = "";
-              command = "reboot";
-            }
-            {
-              label = "";
-              command = "systemctl poweroff";
-            }
-          ];
-        };
-      };
-    };
-    style = ''
-      @import url('${config.xdg.cacheHome}/wal/colors-waybar.css');
-
-      @define-color mpris-album-art-overlay rgba(0, 0, 0, 0.55);
-      @define-color mpris-button-hover rgba(0, 0, 0, 0.50);
-      @define-color text @color7;
-      @define-color bg alpha(@background,.5);
-      @define-color bg-hover rgba(50,50,50,.8);
-      @define-color mycolor @color9;
-      @define-color border-color alpha(@mycolor, 0.15);
-
-      @keyframes fadeIn{
-        0% {
-            padding-left:20;
-            margin-left:50;
-            margin-right:50;
-        }
-        100% {
-            padding:0;
-            margin:0;
-        }
-      }
-      * {
-          outline:none;
-      }
-      .control-center .notification-row {
-          background-color: unset;
-      }
-      .control-center .notification-row .notification-background .notification,
-      .control-center .notification-row .notification-background .notification .notification-content,
-      .floating-notifications .notification-row .notification-background .notification,
-      .floating-notifications.background .notification-background .notification .notification-content {
-      }
-      .notification {
-          background: alpha(@mycolor,.5);
-      }
-
-      .control-center .notification-row .notification-background .notification {
-          margin-top: 0.150rem;
-          box-shadow: 1px 1px 5px rgba(0, 0, 0, .3);
-          background: alpha(@mycolor,.3);
-
-      }
-      .floating-notifications .notification {
-          animation: fadeIn .5s ease-in-out;
-      }
-
-      .control-center .notification-row .notification-background .notification box,
-      .control-center .notification-row .notification-background .notification widget,
-      .control-center .notification-row .notification-background .notification .notification-content,
-      .floating-notifications .notification-row .notification-background .notification box,
-      .floating-notifications .notification-row .notification-background .notification widget,
-      .floating-notifications.background .notification-background .notification .notification-content {
-          border-radius: 0.818rem;
-      }
-      .notification widget:hover {
-          background:alpha(@mycolor,.2);
-      }
-      .floating-notifications.background .notification-background .notification .notification-content,
-      .control-center .notification-background .notification .notification-content {
-          padding-top: 0.818rem;
-          padding-right: unset;
-          margin-right: unset;
-      }
-
-      .control-center .notification-row .notification-background .notification.low .notification-content label,
-      .control-center .notification-row .notification-background .notification.normal .notification-content label,
-      .floating-notifications.background .notification-background .notification.low .notification-content label,
-      .floating-notifications.background .notification-background .notification.normal .notification-content label {
-          padding-top:10px;
-          padding-left:10px;
-          padding-right:10px;
-      }
-
-      .control-center .notification-row .notification-background .notification..notification-content image,
-      .control-center .notification-row .notification-background .notification.normal .notification-content image,
-      .floating-notifications.background .notification-background .notification.low .notification-content image,
-      .floating-notifications.background .notification-background .notification.normal .notification-content image {
-          background-color: unset;
-      }
-
-      .control-center .notification-row .notification-background .notification.low .notification-content .body,
-      .control-center .notification-row .notification-background .notification.normal .notification-content .body,
-      .floating-notifications.background .notification-background .notification.low .notification-content .body,
-      .floating-notifications.background .notification-background .notification.normal .notification-content .body {
-          color: @text;
-      }
-
-      .control-center .notification-row .notification-background .notification.critical .notification-content,
-      .floating-notifications.background .notification-background .notification.critical .notification-content {
-          background-color: #ffb4a9;
-      }
-
-      .control-center .notification-row .notification-background .notification.critical .notification-content image,
-      .floating-notifications.background .notification-background .notification.critical .notification-content image{
-          background-color: unset;
-          color: #ffb4a9;
-      }
-
-      .control-center .notification-row .notification-background .notification.critical .notification-content label,
-      .floating-notifications.background .notification-background .notification.critical .notification-content label {
-          color: #680003;
-      }
-      .notification-content{
-          padding:5;
-      }
-      .control-center .notification-row .notification-background .notification .notification-content .summary,
-      .floating-notifications.background .notification-background .notification .notification-content .summary {
-          font-family: 'CodeNewRoman Nerd Font Propo';
-          font-size: 0.9909rem;
-          font-weight: 500;
-      }
-      .control-center .notification-row .notification-background .notification .notification-content .time,
-      .floating-notifications.background .notification-background .notification .notification-content .time {
-          font-size: 0.8291rem;
-          font-weight: 500;
-          margin-right: 1rem;
-          padding-right: unset;
-      }
-      .control-center .notification-row .notification-background .notification .notification-content .body,
-      .floating-notifications.background .notification-background .notification .notification-content .body {
-          font-family: 'CodeNewRoman Nerd Font Propo';
-          font-size: 0.8891rem;
-          font-weight: 400;
-          margin-top: 0.310rem;
-          padding-right: unset;
-          margin-right: unset;
-      }
-      .control-center .notification-row .close-button,
-      .floating-notifications.background .close-button {
-          all:unset;
-          background-color: unset;
-          border-radius: 0%;
-          border: none;
-          box-shadow: none;
-          margin-right: 0px;
-          margin-top: 3px;
-          margin-bottom: unset;
-          padding-bottom: unset;
-          min-height: 20px;
-          min-width: 20px;
-          text-shadow: none;
-          color:@text;
-      }
-      .control-center .notification-row .close-button:hover,
-      .floating-notifications.background .close-button:hover {
-          all:unset;
-          background-color: @bg;
-          border-radius: 100%;
-          border: none;
-          box-shadow: none;
-          margin-right: 0px;
-          margin-top: 3px;
-          margin-bottom: unset;
-          padding-bottom: unset;
-          min-height: 20px;
-          min-width: 20px;
-          text-shadow: none;
-          color:@text;
-      }
-      .control-center {
-          background: @bg;
-          color: @text;
-          border-radius: 0px 10px 10px 0px;
-          border:none;
-          box-shadow: 1px 1px 5px rgba(0, 0, 0, .65);
-      }
-      .widget-title {
-          padding:unset;
-          margin:unset;
-          color: @text;
-          padding-left:20px;
-          padding-top:20px;
-      }
-      .widget-title > button {
-          padding:unset;
-          margin:unset;
-          font-size: initial;
-          color: @text;
-          text-shadow: none;
-          background: rgba(255,85,85,.3);
-          border: none;
-          box-shadow: none;
-          border-radius: 12px;
-          padding:0px 10px;
-          margin-right:20px;
-          margin-top:3px;
-          transition: all .7s ease;
-      }
-      .widget-title > button:hover {
-          border: none;
-          background: @bg-hover;
-          transition: all .7s ease;
-          box-shadow: 0px 0px 5px rgba(0, 0, 0, .65);
-      }
-      .widget-label {
-          margin: 8px;
-      }
-      .widget-label > label {
-          font-size: 1.1rem;
-      }
-      .widget-mpris {
-      }
-      .widget-mpris .widget-mpris-player {
-          padding: 16px;
-          margin: 16px 20px;
-          background-color: @mpris-album-art-overlay;
-          border-radius: 12px;
-          box-shadow: 1px 1px 5px rgba(0, 0, 0, .65);
-      }
-      .widget-mpris .widget-mpris-player button:hover {
-          all: unset;
-          background: @bg-hover;
-          text-shadow: none;
-          border-radius: 15px;
-          border: none; 
-          padding: 5px; 
-          margin: 5px;
-          transition: all 0.5s ease; 
-      }
-      .widget-mpris .widget-mpris-player button {
-          color:@text;
-          text-shadow: none;
-          border-radius: 15px;
-          border: none;
-          padding: 5px;
-          margin: 5px;
-          transition: all 0.5s ease;
-      }
-      .widget-mpris .widget-mpris-player button:not(.selected) {
-          background: transparent;
-          border: 2px solid transparent;
-      }
-      .widget-mpris .widget-mpris-player button:hover {
-          border: 2px solid transparent;
-      }
-
-      .widget-mpris .widget-mpris-player .widget-mpris-album-art {
-          border-radius: 20px;
-          box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.75);
-      }
-      .widget-mpris .widget-mpris-player .widget-mpris-title {
-          font-weight: bold;
-          font-size: 1.25rem;
-      }
-      .widget-mpris .widget-mpris-player .widget-mpris-subtitle {
-          font-size: 1.1rem;
-      }
-      .widget-mpris .widget-mpris-player > box > button:hover {
-          background-color: @mpris-button-hover;
-      }
-      .widget-buttons-grid {
-          font-family:"CodeNewRoman Nerd Font Propo";
-          padding-left: 8px;
-          padding-right: 8px;
-          padding-bottom: 8px;
-          margin: 10px;
-          border-radius: 12px;
-          background:transparent;
-      }
-      .widget-buttons-grid>flowbox>flowboxchild>button label {
-          font-size: 20px;
-          color: @text;
-          transition: all .7s ease;
-      }
-      .widget-buttons-grid>flowbox>flowboxchild>button:hover label {
-          font-size: 20px;
-          color: @background;
-          transition: all .7s ease;
-      }
-      .widget-buttons-grid > flowbox > flowboxchild > button {
-          background: transparent;
-          border-radius: 12px;
-          text-shadow:none;
-          box-shadow: 0px 0px 8px rgba(255,255,255, .02);
-          transition: all .5s ease;
-      }
-      .widget-buttons-grid > flowbox > flowboxchild > button:hover {
-          background: @color5;
-          box-shadow: 0px 0px 2px rgba(0, 0, 0, .2);
-          transition: all .5s ease;
-      }
-      .widget-buttons-grid > flowbox > flowboxchild > button.toggle:checked {
-          background: alpha(@mycolor,.5);
-      }
-      .widget-menubar > box > .menu-button-bar > button {
-          border: none;
-          background: transparent;
-      }
-      .topbar-buttons > button {
-          border: none;
-          background: transparent;
-      }
-      trough {
-          border-radius: 20px;
-          background: transparent;
-      }
-      trough highlight {
-          padding: 5px;
-          background: alpha(@mycolor,.5);
-          border-radius: 20px;
-          box-shadow: 0px 0px 5px rgba(0, 0, 0, .5);
-          transition: all .7s ease;
-      }
-      trough highlight:hover {
-          padding: 5px;
-          background: alpha(@mycolor,.5);
-          border-radius: 20px;
-          box-shadow: 0px 0px 5px rgba(0, 0, 0, 1);
-          transition: all .7s ease;
-      }
-      trough slider {
-          background: transparent;
-      }
-      trough slider:hover {
-          background: transparent;
-      }
-      .widget-volume {
-          background-color: transparent;
-          padding: 8px;
-          margin: 8px;
-          border-radius: 12px;
-      }
-      .widget-backlight {
-          background-color: transparent;
-          padding: 8px;
-          margin: 8px;
-          border-radius: 12px;
-      }
-    '';
   };
 
   dconf.settings = {
