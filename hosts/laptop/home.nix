@@ -378,6 +378,7 @@ in
     "~/local/lib"
     "OME/local/share/man"
     "~/perl5/bin"
+    "~/go"
   ];
 
   home.sessionVariables = {
@@ -388,6 +389,7 @@ in
     MANPATH = "~/local/share/man:$MANPATH";
     COLORTERM = "truecolor";
     NVM_DIR = "~/.nvm";
+    GOPATH=homeDirectory;
     STEAM_EXTRA_COMPAT_TOOLS_PATHS = "\\\${HOME}/.steam/root/compatibilitytools.d";
     XCURSOR_SIZE = 34;
     SDL_VIDEODRIVER = "wayland";
@@ -559,8 +561,6 @@ in
       exec-once = dconf write /org/gnome/desktop/interface/monospace-font-name "'Noto Sans Mono Medium 11'"
 
       exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
-
-      exec-once = uwsm app -- hyprpanel
 
       exec-once = [workspace 1 silent] $terminal
       exec-once = [workspace 2 silent] uwsm app -- thorium-browser --high-dpi-support=1 --force-device-scale-factor=1.25
@@ -1121,6 +1121,7 @@ in
 
   programs.direnv = {
     enable = true;
+    nix-direnv.enable = true;
     enableNushellIntegration = true;
   };
 
