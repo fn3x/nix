@@ -83,6 +83,8 @@ in
     caligula
     postman
     redisinsight
+    pcsx2
+    prismlauncher
   ];
 
   stylix = {
