@@ -85,6 +85,7 @@ in
     redisinsight
     pcsx2
     prismlauncher
+    rustdesk-flutter
   ];
 
   stylix = {
