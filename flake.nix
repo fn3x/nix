@@ -48,13 +48,6 @@
           system = "x86_64-linux";
           modules = [
             {
-              nixpkgs.config = {
-                permittedInsecurePackages = [
-                  "electron-32.3.3"
-                ];
-              };
-            }
-            {
               nixpkgs.overlays = [ inputs.hyprpanel.overlay ];
             }
             ./hosts/desktop/configuration.nix
@@ -76,13 +69,6 @@
           specialArgs = { inherit inputs outputs; };
           system = "x86_64-linux";
           modules = [
-            {
-              nixpkgs.config = {
-                permittedInsecurePackages = [
-                  "electron-32.3.3"
-                ];
-              };
-            }
             {
               nixpkgs.overlays = [
                 inputs.hyprpanel.overlay

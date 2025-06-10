@@ -8,22 +8,62 @@
     [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-amd" ];
+  boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/63e2f6e5-cfa1-4d2c-9df0-c1c1a6d0c2c6";
+    { device = "/dev/disk/by-uuid/4d458b0e-c64a-4139-b2cf-3401454c8e78";
       fsType = "ext4";
     };
 
-  boot.initrd.luks.devices."luks-af5f8f61-62f5-4090-84bd-b15ca53bed42".device = "/dev/disk/by-uuid/af5f8f61-62f5-4090-84bd-b15ca53bed42";
+  fileSystems."/var/lib/nixos" =
+    { device = "/persist/var/lib/nixos";
+      fsType = "none";
+      options = [ "bind" ];
+    };
+
+  fileSystems."/var/log" =
+    { device = "/persist/var/log";
+      fsType = "none";
+      options = [ "bind" ];
+    };
+
+  fileSystems."/etc/NetworkManager/system-connections" =
+    { device = "/persist/etc/NetworkManager/system-connections";
+      fsType = "none";
+      options = [ "bind" ];
+    };
+
+  fileSystems."/etc/nixos" =
+    { device = "/persist/etc/nixos";
+      fsType = "none";
+      options = [ "bind" ];
+    };
+
+  fileSystems."/srv" =
+    { device = "/persist/srv";
+      fsType = "none";
+      options = [ "bind" ];
+    };
+
+  fileSystems."/var/lib/systemd" =
+    { device = "/persist/var/lib/systemd";
+      fsType = "none";
+      options = [ "bind" ];
+    };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/B346-6DE6";
+    { device = "/dev/disk/by-uuid/F821-54DE";
       fsType = "vfat";
       options = [ "fmask=0077" "dmask=0077" ];
+    };
+
+  fileSystems."/mnt/hdd" =
+    { device = "/dev/disk/by-uuid/1810a297-7f16-4989-bc08-ee99603feae0";
+      fsType = "ext4";
+      options = [ "user" "rw" "exec" ];
     };
 
   swapDevices = [ ];
@@ -34,6 +74,7 @@
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
   networking.useDHCP = lib.mkDefault true;
   # networking.interfaces.eno1.useDHCP = lib.mkDefault true;
+  # networking.interfaces.ham0.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;

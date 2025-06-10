@@ -44,8 +44,8 @@
   services.xserver.enable = true;
 
   # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
+  services.displayManager.sddm.enable = true;
+  services.desktopManager.plasma6.enable = true;
 
   services.logmein-hamachi.enable = true;
 
@@ -76,8 +76,13 @@
     startAgent = true;
   };
 
-  programs.steam.enable = true;
-  programs.steam.gamescopeSession.enable = true;
+  programs.steam = {
+    enable = true;
+    gamescopeSession.enable = true;
+    extraCompatPackages = with pkgs; [
+      proton-ge-bin
+    ];
+  };
   programs.gamemode.enable = true;
 
   users.users.fn3x = {
@@ -89,6 +94,7 @@
       "wheel"
       "audio"
       "video"
+      "disk"
     ];
     shell = pkgs.nushell;
   };
@@ -120,6 +126,7 @@
     kdePackages.kirigami
     kdePackages.kirigami-addons
     fastfetch
+    kdePackages.partitionmanager
   ];
 
   environment.plasma6.excludePackages = with pkgs.kdePackages; [
@@ -180,10 +187,6 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "24.11"; # Did you read the comment?
-
-  # Enable the gnome-keyring secrets vault.
-  # Will be exposed through DBus to programs willing to store secrets.
-  services.gnome.gnome-keyring.enable = true;
 
   programs.hyprland = {
     enable = true;

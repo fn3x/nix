@@ -83,6 +83,11 @@ in
     caligula
     postman
     redisinsight
+    prismlauncher
+    wl-clipboard
+    satty
+    grim
+    slurp
   ];
 
   stylix = {
@@ -100,7 +105,7 @@ in
   home.file = {
     ".config/ghostty/config" = {
       text = ''
-        font-family="TX-02"
+        font-family="Berkeley Mono"
         font-size=20
         theme="Apple System Colors"
         cursor-style=block
@@ -163,6 +168,12 @@ in
       executable = false;
     };
     "${homeDirectory}/.config/chromium-flags.conf" = {
+      text = ''
+        --enable-features=UseOzonePlatform --ozone-platform=wayland
+      '';
+      executable = false;
+    };
+    "${homeDirectory}/.config/electron-flags.conf" = {
       text = ''
         --enable-features=UseOzonePlatform --ozone-platform=wayland
       '';
@@ -403,6 +414,7 @@ in
     WLR_NO_HARDWARE_CURSORS = 1;
     WLR_XWAYLAND_FORCE_VSYNC = 0;
     LIBVA_DRIVER_NAME = "nvidia";
+    NIXOS_OZONE_WL = 1;
   };
 
   programs.kitty.enable = true; # required for the default Hyprland config
@@ -522,7 +534,7 @@ in
           "$mod SHIFT, S, exec, XDG_CURRENT_DESKTOP=sway flameshot gui"
           "$mod,F,fullscreen"
           "$mod,M, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
-          "SUPER, Space, exec, ${pkgs.hyprland}/bin/hyprctl switchxkblayout next && ${pkgs.procps}/bin/pkill -RTMIN+1 waybar"
+          "SUPER, Space, exec, ${pkgs.hyprland}/bin/hyprctl switchxkblayout next"
         ]
         ++ (
           # workspaces
@@ -565,10 +577,8 @@ in
 
       exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 
-      exec-once = uwsm app -- hyprpanel
-
       exec-once = [workspace 1 silent] $terminal
-      exec-once = [workspace 2 silent] uwsm app -- thorium-browser --high-dpi-support=1 --force-device-scale-factor=1.25
+      exec-once = [workspace 2 silent] uwsm app -- thorium-browser --high-dpi-support=1
       exec-once = [workspace 3 silent] uwsm app -- telegram-desktop
       exec-once = [workspace 4 silent] uwsm app -- mattermost-desktop
       exec-once = [workspace 5 silent] uwsm app -- spotify
@@ -1102,6 +1112,31 @@ in
         }
       }
     '';
+    environmentVariables = {
+      EDITOR = "nvim";
+      TERMINAL = "ghostty";
+      LD_LIBRARY_PATH = "~/local/lib:$LD_LIBRARY_PATH";
+      MANPATH = "~/local/share/man:$MANPATH";
+      COLORTERM = "truecolor";
+      NVM_DIR = "~/.nvm";
+      STEAM_EXTRA_COMPAT_TOOLS_PATHS = "\\\${HOME}/.steam/root/compatibilitytools.d";
+      XCURSOR_THEME = "WhiteSur Cursors";
+      XCURSOR_SIZE = 34;
+      GTK_THEME = "WhiteSur";
+      SDL_VIDEODRIVER = "wayland";
+      QT_QPA_PLATFORM = "wayland;xcb";
+      QT_WAYLAND_DISABLE_WINDOWDECORATION = 1;
+      _JAVA_AWT_WM_NONREPARENTING = 1;
+      GBM_BACKEND = "nvidia-drm";
+      __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+      GDK_BACKEND = "wayland,x11,*";
+      __GL_VRR_ALLOWED = 0;
+      CLUTTER_BACKEND = "wayland";
+      WLR_NO_HARDWARE_CURSORS = 1;
+      WLR_XWAYLAND_FORCE_VSYNC = 0;
+      LIBVA_DRIVER_NAME = "nvidia";
+      NIXOS_OZONE_WL = 1;
+    };
   };
 
   programs.zsh = {
@@ -1652,6 +1687,9 @@ in
                 wrap = true;
               };
             };
+          };
+          lazygit = {
+            configure = true;
           };
         };
       };
@@ -2431,7 +2469,7 @@ in
     enable = true;
     plugins = [ pkgs.obs-studio-plugins.wlrobs pkgs.obs-studio-plugins.obs-backgroundremoval pkgs.obs-studio-plugins.obs-pipewire-audio-capture ];
   };
-
+  
   dconf.settings = {
     "org/virt-manager/virt-manager/connections" = {
       autoconnect = ["qemu:///system"];
