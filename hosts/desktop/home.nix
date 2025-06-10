@@ -415,6 +415,9 @@ in
     WLR_XWAYLAND_FORCE_VSYNC = 0;
     LIBVA_DRIVER_NAME = "nvidia";
     NIXOS_OZONE_WL = 1;
+    XDG_SESSION_TYPE = "wayland";
+    MOZ_ENABLE_WAYLAND = "1";
+    ELECTRON_OZONE_PLATFORM_HINT = "wayland";
   };
 
   programs.kitty.enable = true; # required for the default Hyprland config
@@ -759,10 +762,10 @@ in
   programs.git = {
     enable = true;
     userName = "Art P.";
-    userEmail = "fn3x@yandex.com";
+    userEmail = "fn3x@yandex.ru";
     signing = {
       signByDefault = true;
-      key = null;
+      key = "A3C7020C8CD69EFA";
     };
     extraConfig = {
       init.defaultBranch = "main";
@@ -1070,10 +1073,8 @@ in
     };
     envFile.text = ''
       do --env {
-        let ssh_agent_file = (
-            $nu.temp-path | path join $"ssh-agent-fn3x.nuon"
-        )
-
+        let ssh_agent_file = ($nu.temp-path | path join $"ssh-agent-${username}.nuon")
+        
         if ($ssh_agent_file | path exists) {
             let ssh_agent_env = open ($ssh_agent_file)
             if ($"/proc/($ssh_agent_env.SSH_AGENT_PID)" | path exists) {
@@ -1083,16 +1084,17 @@ in
                 rm $ssh_agent_file
             }
         }
-
-        let ssh_agent_env = ^ssh-agent -c
-            | lines
-            | first 2
-            | parse "setenv {name} {value};"
-            | transpose --header-row
+        
+        # Start new agent
+        let ssh_agent_env = ^ssh-agent -c 
+            | lines 
+            | first 2 
+            | parse "setenv {name} {value};" 
+            | transpose --header-row 
             | into record
+        
         load-env $ssh_agent_env
         $ssh_agent_env | save --force $ssh_agent_file
-        ^ssh-add ~/.ssh/id_bitbucket ~/.ssh/id_github
       }
     '';
     configFile.text = ''
@@ -1136,6 +1138,9 @@ in
       WLR_XWAYLAND_FORCE_VSYNC = 0;
       LIBVA_DRIVER_NAME = "nvidia";
       NIXOS_OZONE_WL = 1;
+      XDG_SESSION_TYPE = "wayland";
+      MOZ_ENABLE_WAYLAND = "1";
+      ELECTRON_OZONE_PLATFORM_HINT = "wayland";
     };
   };
 
