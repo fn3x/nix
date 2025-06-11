@@ -9,7 +9,6 @@
 let
   username = "fn3x";
   homeDirectory = "/home/${username}";
-  thorium-browser = import ../../modules/nixos/thorium.nix { inherit pkgs lib; };
   nushell-theme = "${homeDirectory}/nushell/gruvbox-dark.nu";
 in
 
@@ -68,7 +67,6 @@ in
     libreoffice-still
     logmein-hamachi
     lutris
-    thorium-browser
     teamspeak6-client
     qbittorrent
     playerctl
@@ -88,6 +86,7 @@ in
     satty
     grim
     slurp
+    thorium
   ];
 
   stylix = {
@@ -581,7 +580,7 @@ in
       exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 
       exec-once = [workspace 1 silent] $terminal
-      exec-once = [workspace 2 silent] uwsm app -- thorium-browser --high-dpi-support=1
+      exec-once = [workspace 2 silent] uwsm app -- thorium --high-dpi-support=1
       exec-once = [workspace 3 silent] uwsm app -- telegram-desktop
       exec-once = [workspace 4 silent] uwsm app -- mattermost-desktop
       exec-once = [workspace 5 silent] uwsm app -- spotify
@@ -2205,13 +2204,6 @@ in
       })
       vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
         silent = true,
-      })
-
-      vim.diagnostic.config({
-        virtual_lines = {
-          -- Only show virtual line diagnostics for the current cursor line
-          current_line = true,
-        },
       })
 
       vim.o.winborder = "rounded"

@@ -1259,6 +1259,22 @@
         "type": "github"
       }
     },
+    "nixpkgs_11": {
+      "locked": {
+        "lastModified": 1749285348,
+        "narHash": "sha256-frdhQvPbmDYaScPFiCnfdh3B/Vh81Uuoo0w5TkWmmjU=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "3e3afe5174c561dee0df6f2c2b2236990146329f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs_2": {
       "locked": {
         "lastModified": 1717196966,
@@ -1505,7 +1521,8 @@
         "neovim-nightly-overlay": "neovim-nightly-overlay",
         "nixpkgs": "nixpkgs_9",
         "nixvim": "nixvim",
-        "stylix": "stylix"
+        "stylix": "stylix",
+        "thorium": "thorium"
       }
     },
     "sf-arabic": {
@@ -1744,6 +1761,24 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
+        "type": "github"
+      }
+    },
+    "thorium": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_11"
+      },
+      "locked": {
+        "lastModified": 1749579858,
+        "narHash": "sha256-sAYs6heYJzSFZSbCrVolA+HACJ8Z2Smg7gWp2f8VURU=",
+        "owner": "fn3x",
+        "repo": "thorium.nix",
+        "rev": "e6ab427c5dce209f893b506f8154698bf7f12568",
+        "type": "github"
+      },
+      "original": {
+        "owner": "fn3x",
+        "repo": "thorium.nix",
         "type": "github"
       }
     },
