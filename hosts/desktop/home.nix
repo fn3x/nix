@@ -10,6 +10,7 @@ let
   username = "fn3x";
   homeDirectory = "/home/${username}";
   nushell-theme = "${homeDirectory}/nushell/gruvbox-dark.nu";
+  thorium = import ../../modules/nixos/thorium.nix { inherit pkgs lib; };
 in
 
 {

@@ -77,21 +77,21 @@ pkgs.stdenv.mkDerivation rec {
     pkgs.xorg.libXxf86vm
   ];
 
-  desktopItems = [
-    (pkgs.makeDesktopItem {
-      name = "Thorium";
-      genericName = "WebBrowser";
-      exec = "thorium-browser --high-dpi-support=1 --force-device-scale-factor=1.25";
-      icon = "thorium";
-      desktopName = pname;
-      comment = "Compiler-optimized Chromium fork";
-      mimeTypes = [ "text/html" "text/xml" ];
-      categories = [
-        "Network"
-        "WebBrowser"
-      ];
-    })
-  ];
+  # desktopItems = [
+  #   (pkgs.makeDesktopItem {
+  #     name = "Thorium";
+  #     genericName = "WebBrowser";
+  #     exec = "thorium-browser --enable-features=WaylandWindowDecorations,WaylandPerSurfaceScale,WaylandUiScale --ozone-platform-hint=wayland --gtk-version=4 --high-dpi-support=1 --force-device-scale-factor=1.25";
+  #     icon = "thorium";
+  #     desktopName = pname;
+  #     comment = "Compiler-optimized Chromium fork";
+  #     mimeTypes = [ "text/html" "text/xml" ];
+  #     categories = [
+  #       "Network"
+  #       "WebBrowser"
+  #     ];
+  #   })
+  # ];
 
   # Needed to make the process get past zygote_linux fork()'ing
   runtimeDependencies = [
@@ -119,8 +119,6 @@ pkgs.stdenv.mkDerivation rec {
     addAutoPatchelfSearchPath $out/chromium.org/thorium/lib
     substituteInPlace $out/opt/chromium.org/thorium/thorium-browser \
       --replace 'export LD_LIBRARY_PATH' "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:${lib.makeLibraryPath buildInputs}:$out/chromium.org/thorium:$out/chromium.org/thorium/lib"
-    makeWrapper "$out/opt/chromium.org/thorium/thorium-browser" "$out/bin/thorium-browser" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=wayland --enable-features=WaylandWindowDecorations}}"
     runHook postInstall
   '';
 

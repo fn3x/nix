@@ -26,7 +26,6 @@
     apple-fonts.url = "github:fn3x/apple-fonts.nix";
     clipboard-sync.url = "github:fn3x/clipboard-sync";
     hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
-    thorium.url = "github:fn3x/thorium.nix";
   };
 
   outputs =
@@ -49,7 +48,7 @@
           system = "x86_64-linux";
           modules = [
             {
-              nixpkgs.overlays = [ inputs.hyprpanel.overlay inputs.thorium.overlays.default ];
+              nixpkgs.overlays = [ inputs.hyprpanel.overlay ];
             }
             ./hosts/desktop/configuration.nix
             impermanence.nixosModules.impermanence
