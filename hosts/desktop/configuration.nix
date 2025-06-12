@@ -127,6 +127,7 @@
     kdePackages.kirigami-addons
     fastfetch
     kdePackages.partitionmanager
+    firefox
   ];
 
   environment.plasma6.excludePackages = with pkgs.kdePackages; [

@@ -581,7 +581,7 @@ in
       exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 
       exec-once = [workspace 1 silent] $terminal
-      exec-once = [workspace 2 silent] uwsm app -- thorium --high-dpi-support=1
+      exec-once = [workspace 2 silent] uwsm app -- thorium-browser
       exec-once = [workspace 3 silent] uwsm app -- telegram-desktop
       exec-once = [workspace 4 silent] uwsm app -- mattermost-desktop
       exec-once = [workspace 5 silent] uwsm app -- spotify
@@ -1076,25 +1076,26 @@ in
         let ssh_agent_file = ($nu.temp-path | path join $"ssh-agent-${username}.nuon")
         
         if ($ssh_agent_file | path exists) {
-            let ssh_agent_env = open ($ssh_agent_file)
-            if ($"/proc/($ssh_agent_env.SSH_AGENT_PID)" | path exists) {
-                load-env $ssh_agent_env
-                return
-            } else {
-                rm $ssh_agent_file
-            }
+          let ssh_agent_env = open ($ssh_agent_file)
+          if ($"/proc/($ssh_agent_env.SSH_AGENT_PID)" | path exists) and ($ssh_agent_env.SSH_AUTH_SOCK | path exists) {
+            load-env $ssh_agent_env
+            return
+          } else {
+            rm $ssh_agent_file
+          }
         }
         
         # Start new agent
         let ssh_agent_env = ^ssh-agent -c 
-            | lines 
-            | first 2 
-            | parse "setenv {name} {value};" 
-            | transpose --header-row 
-            | into record
+          | lines 
+          | first 2 
+          | parse "setenv {name} {value};" 
+          | transpose --header-row 
+          | into record
         
         load-env $ssh_agent_env
         $ssh_agent_env | save --force $ssh_agent_file
+        ^ssh-add ~/.ssh/id_github ~/.ssh/id_bitbucket
       }
     '';
     configFile.text = ''
