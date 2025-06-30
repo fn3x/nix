@@ -41,7 +41,8 @@ in
     oh-my-posh
     telegram-desktop
     mattermost-desktop
-    spotify
+    spotify-qt
+    librespot
     cantarell-fonts
     noto-fonts
     noto-fonts-emoji
@@ -324,6 +325,11 @@ in
         # Activate the theme when sourced
         use activate
       '';
+    };
+    "${homeDirectory}/.cache/nvim/lazygit-theme" = {
+      text = ''
+      '';
+      executable = false;
     };
   };
 
@@ -765,7 +771,7 @@ in
     userEmail = "fn3x@yandex.ru";
     signing = {
       signByDefault = true;
-      key = "A3C7020C8CD69EFA";
+      key = "D6A5181EC8F742E0";
     };
     extraConfig = {
       init.defaultBranch = "main";
