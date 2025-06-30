@@ -8,14 +8,20 @@
     [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
+  boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/4d458b0e-c64a-4139-b2cf-3401454c8e78";
+    { device = "/dev/disk/by-uuid/40b40114-3171-49b6-a3d8-dadf2739cc12";
       fsType = "ext4";
+    };
+
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-uuid/2D97-A9C7";
+      fsType = "vfat";
+      options = [ "fmask=0077" "dmask=0077" ];
     };
 
   fileSystems."/var/lib/nixos" =
@@ -34,36 +40,6 @@
     { device = "/persist/etc/NetworkManager/system-connections";
       fsType = "none";
       options = [ "bind" ];
-    };
-
-  fileSystems."/etc/nixos" =
-    { device = "/persist/etc/nixos";
-      fsType = "none";
-      options = [ "bind" ];
-    };
-
-  fileSystems."/srv" =
-    { device = "/persist/srv";
-      fsType = "none";
-      options = [ "bind" ];
-    };
-
-  fileSystems."/var/lib/systemd" =
-    { device = "/persist/var/lib/systemd";
-      fsType = "none";
-      options = [ "bind" ];
-    };
-
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/F821-54DE";
-      fsType = "vfat";
-      options = [ "fmask=0077" "dmask=0077" ];
-    };
-
-  fileSystems."/mnt/hdd" =
-    { device = "/dev/disk/by-uuid/1810a297-7f16-4989-bc08-ee99603feae0";
-      fsType = "ext4";
-      options = [ "user" "rw" "exec" ];
     };
 
   swapDevices = [ ];
