@@ -41,8 +41,6 @@ in
     oh-my-posh
     telegram-desktop
     mattermost-desktop
-    spotify-qt
-    librespot
     cantarell-fonts
     noto-fonts
     noto-fonts-emoji
@@ -2473,6 +2471,39 @@ in
   programs.obs-studio = {
     enable = true;
     plugins = [ pkgs.obs-studio-plugins.wlrobs pkgs.obs-studio-plugins.obs-backgroundremoval pkgs.obs-studio-plugins.obs-pipewire-audio-capture ];
+  };
+
+  programs.ncspot = {
+    enable = true;
+    package = (pkgs.ncspot.override {
+      withPulseAudio = true;
+      withCover = true;
+      withNotify = false;
+    });
+    settings = {
+      initial_screen = "library";
+      use_nerdfont = true;
+      backend = "pulseaudio";
+      theme = {
+        background = "default";
+        primary = "foreground";
+        secondary = "light black";
+        title = "primary";
+        playing = "primary";
+        playing_selected = "primary";
+        playing_bg = "primary";
+        highlight = "#FFFFFF";
+        highlight_bg = "#484848";
+        error = "#FF0000";
+        error_bg = "red";
+        statusbar = "primary";
+        statusbar_progress = "primary";
+        statusbar_bg = "primary";
+        cmdline = "default";
+        cmdline_bg = "primary";
+        search_match = "light red";
+      };
+    };
   };
   
   dconf.settings = {
