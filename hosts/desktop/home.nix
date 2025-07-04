@@ -11,6 +11,7 @@ let
   homeDirectory = "/home/${username}";
   nushell-theme = "${homeDirectory}/nushell/gruvbox-dark.nu";
   thorium = import ../../modules/nixos/thorium.nix { inherit pkgs lib; };
+  shadps4-7 = import ../../modules/nixos/shadps4.nix { inherit pkgs lib; };
 in
 
 {
@@ -72,7 +73,7 @@ in
     playerctl
     anydesk
     river
-    wine
+    wineWowPackages.stable
     winetricks
     vesktop
     thunderbird
@@ -87,6 +88,9 @@ in
     grim
     slurp
     thorium
+    helvum
+    poop
+    shadps4-7
   ];
 
   stylix = {
@@ -781,6 +785,9 @@ in
     enable = true;
     settings = {
       floating_window_scaling_factor = 0.9;
+      git = {
+        overrideGpg = true;
+      };
     };
   };
 
@@ -2502,6 +2509,15 @@ in
         cmdline = "default";
         cmdline_bg = "primary";
         search_match = "light red";
+      };
+      keybindings = {
+        "Space" = "playpause";
+        "Ctrl+s" = "focus search";
+        "Ctrl+l" = "focus library";
+        "Ctrl+f" = "focus cover";
+        "Ctrl+u" = "move pageup 1";
+        "Ctrl+d" = "move pagedown 1";
+        "y" = "share selected";
       };
     };
   };
