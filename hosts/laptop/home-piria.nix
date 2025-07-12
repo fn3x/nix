@@ -54,18 +54,6 @@ in
     whitesur-kde
   ];
 
-  stylix = {
-    fonts = {
-      serif = {
-        package = inputs.apple-fonts.packages.${pkgs.system}.sf-pro-nerd;
-        name = "SFProDisplay Nerd Font";
-      };
-    };
-    targets = {
-      ghostty.enable = false;
-    };
-  };
-
   home.file = {
     "${homeDirectory}/.config/chromium-flags.conf" = {
       text = ''
