@@ -22,10 +22,16 @@
     mcmojave-hyprcursor.url = "github:libadoxon/mcmojave-hyprcursor";
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     impermanence.url = "github:nix-community/impermanence";
-    stylix.url = "github:danth/stylix";
+    stylix = {
+      url = "github:danth/stylix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     apple-fonts.url = "github:fn3x/apple-fonts.nix";
     clipboard-sync.url = "github:fn3x/clipboard-sync";
-    hyprpanel.url = "github:Jas-SinghFSU/HyprPanel";
+    hyprpanel = {
+      url = "github:Jas-SinghFSU/HyprPanel";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -36,6 +42,7 @@
       nixvim,
       impermanence,
       clipboard-sync,
+      stylix,
       ...
     }@inputs:
     let
@@ -47,9 +54,7 @@
           specialArgs = { inherit inputs outputs; };
           system = "x86_64-linux";
           modules = [
-            {
-              nixpkgs.overlays = [ inputs.hyprpanel.overlay ];
-            }
+            stylix.nixosModules.stylix
             ./hosts/desktop/configuration.nix
             impermanence.nixosModules.impermanence
             clipboard-sync.nixosModules.default
@@ -62,18 +67,12 @@
               home-manager.backupFileExtension = ".bak";
               home-manager.users.fn3x = import ./hosts/desktop/home.nix;
             }
-            inputs.stylix.nixosModules.stylix
           ];
         };
         laptop = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           system = "x86_64-linux";
           modules = [
-            {
-              nixpkgs.overlays = [
-                inputs.hyprpanel.overlay
-              ];
-            }
             ./hosts/laptop/configuration.nix
             impermanence.nixosModules.impermanence
             clipboard-sync.nixosModules.default
@@ -94,20 +93,10 @@
 
       homeConfigurations = {
         "fn3x@desktop" = home-manager.lib.homeManagerConfiguration {
-          pkgs = (import nixpkgs {
-            overlays = [
-              inputs.hyprpanel.overlay
-            ];
-          }).legacyPackages.x86_64-linux;
           extraSpecialArgs = { inherit inputs outputs; };
           modules = [ ./hosts/desktop/home.nix ];
         };
         "fn3x@laptop" = home-manager.lib.homeManagerConfiguration {
-          pkgs = (import nixpkgs {
-            overlays = [
-              inputs.hyprpanel.overlay
-            ];
-          }).legacyPackages.x86_64-linux;
           extraSpecialArgs = { inherit inputs outputs; };
           modules = [ ./hosts/laptop/home.nix ];
         };

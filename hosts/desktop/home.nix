@@ -15,8 +15,6 @@ let
 in
 
 {
-  imports = [ inputs.hyprpanel.homeManagerModules.hyprpanel ];
-
   programs.home-manager = {
     enable = true;
   };
@@ -93,17 +91,17 @@ in
     shadps4-7
   ];
 
-  stylix = {
-    fonts = {
-      serif = {
-        package = inputs.apple-fonts.packages.${pkgs.system}.sf-pro-nerd;
-        name = "SFProDisplay Nerd Font";
-      };
-    };
-    targets = {
-      ghostty.enable = false;
-    };
-  };
+  # stylix = {
+  #   fonts = {
+  #     serif = {
+  #       package = inputs.apple-fonts.packages.${pkgs.system}.sf-pro-nerd;
+  #       name = "SFProDisplay Nerd Font";
+  #     };
+  #   };
+  #   targets = {
+  #     ghostty.enable = false;
+  #   };
+  # };
 
   home.file = {
     ".config/ghostty/config" = {
@@ -588,11 +586,12 @@ in
 
       exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 
-      exec-once = [workspace 1 silent] $terminal
+      exec-once = [workspace 1 silent] ghostty
       exec-once = [workspace 2 silent] uwsm app -- thorium-browser
-      exec-once = [workspace 3 silent] uwsm app -- telegram-desktop
+      exec-once = [workspace 3 silent] uwsm app -- Telegram
       exec-once = [workspace 4 silent] uwsm app -- mattermost-desktop
-      exec-once = [workspace 5 silent] uwsm app -- spotify
+      exec-once = [workspace 5 silent] ghostty
+      exec-once = ${inputs.hyprpanel.packages.${pkgs.system}.default}/hyprpanel
 
       #####################
       ### LOOK AND FEEL ###
@@ -2401,20 +2400,8 @@ in
   };
 
   programs.hyprpanel = {
-    # Enable the module.
-    # Default: false
     enable = true;
-    overlay.enable = true;
-
-    # Add '/nix/store/.../hyprpanel' to your
-    # Hyprland config 'exec-once'.
-    # Default: false
-    hyprland.enable = true;
-
-    # Fix the overwrite issue with HyprPanel.
-    # See below for more information.
-    # Default: false
-    overwrite.enable = true;
+    package = inputs.hyprpanel.packages.${pkgs.system}.default;
 
     settings = {
       layout = {
@@ -2436,7 +2423,6 @@ in
           };
         };
       };
-
       bar.launcher.autoDetectIcon = true;
       bar.workspaces.showApplicationIcons = true;
       bar.workspaces.showWsIcons = true;
