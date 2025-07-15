@@ -33,7 +33,7 @@ in
 
   home.packages = with pkgs; [
     inputs.apple-fonts.packages.${pkgs.system}.sf-pro-nerd
-    inputs.ghostty.packages.x86_64-linux.default
+    ghostty
     telegram-desktop
     spotify
     cantarell-fonts

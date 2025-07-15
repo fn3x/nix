@@ -35,8 +35,8 @@ in
 
   home.packages = with pkgs; [
     inputs.hyprland-qtutils.packages.x86_64-linux.default
-    inputs.ghostty.packages.x86_64-linux.default
     inputs.apple-fonts.packages.${pkgs.system}.sf-pro-nerd
+    ghostty
     oh-my-posh
     telegram-desktop
     mattermost-desktop
@@ -89,19 +89,8 @@ in
     helvum
     poop
     shadps4-7
+    rustdesk-flutter
   ];
-
-  # stylix = {
-  #   fonts = {
-  #     serif = {
-  #       package = inputs.apple-fonts.packages.${pkgs.system}.sf-pro-nerd;
-  #       name = "SFProDisplay Nerd Font";
-  #     };
-  #   };
-  #   targets = {
-  #     ghostty.enable = false;
-  #   };
-  # };
 
   home.file = {
     ".config/ghostty/config" = {
@@ -586,11 +575,11 @@ in
 
       exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 
-      exec-once = [workspace 1 silent] ghostty
+      exec-once = [workspace 1 silent] $terminal
       exec-once = [workspace 2 silent] uwsm app -- thorium-browser
       exec-once = [workspace 3 silent] uwsm app -- Telegram
       exec-once = [workspace 4 silent] uwsm app -- mattermost-desktop
-      exec-once = [workspace 5 silent] ghostty
+      exec-once = [workspace 5 silent] $terminal
       exec-once = ${inputs.hyprpanel.packages.${pkgs.system}.default}/hyprpanel
 
       #####################

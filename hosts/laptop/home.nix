@@ -34,8 +34,8 @@ in
 
   home.packages = with pkgs; [
     inputs.hyprland-qtutils.packages.x86_64-linux.default
-    inputs.ghostty.packages.x86_64-linux.default
     inputs.apple-fonts.packages.${pkgs.system}.sf-pro-nerd
+    ghostty
     oh-my-posh
     telegram-desktop
     mattermost-desktop
