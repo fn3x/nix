@@ -348,8 +348,6 @@ in
     nix-u = "nh os switch -u -H laptop ~/nixos";
     vim = "nvim";
     vi = "nvim";
-    nix-work = "nix develop ~/nixos/shells#work";
-    nix-zig = "nix develop ~/nixos/shells#zig";
     nixdev= "nix develop --command nu -l";
   };
 
