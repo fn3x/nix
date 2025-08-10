@@ -79,7 +79,6 @@ in
     whitesur-kde
     caligula
     postman
-    redisinsight
     prismlauncher
     wl-clipboard
     satty
@@ -90,6 +89,8 @@ in
     poop
     shadps4-7
     rustdesk-flutter
+    gajim
+    filezilla
   ];
 
   home.file = {
@@ -1985,6 +1986,10 @@ in
         ];
       };
 
+      cmp = {
+        enable = true;
+      };
+
       lspkind = {
         enable = true;
       };
@@ -2553,14 +2558,11 @@ in
   programs.ncspot = {
     enable = true;
     package = (pkgs.ncspot.override {
-      withPulseAudio = true;
-      withCover = true;
       withNotify = false;
     });
     settings = {
       initial_screen = "library";
       use_nerdfont = true;
-      backend = "pulseaudio";
       theme = {
         background = "default";
         primary = "foreground";
