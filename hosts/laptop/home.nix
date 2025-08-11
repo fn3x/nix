@@ -80,8 +80,15 @@ in
     whitesur-kde
     caligula
     postman
-    redisinsight
-    pcsx2
+    wl-clipboard
+    satty
+    grim
+    slurp
+    thorium
+    helvum
+    poop
+    gajim
+    filezilla
     prismlauncher
     rustdesk-flutter
   ];
@@ -307,19 +314,9 @@ in
 
   services.flameshot = {
     enable = true;
-    package = pkgs.flameshot.overrideAttrs (oldAttrs: {
-      src = pkgs.fetchFromGitHub {
-        owner = "flameshot-org";
-        repo = "flameshot";
-        rev = "3d21e4967b68e9ce80fb2238857aa1bf12c7b905";
-        sha256 = "sha256-OLRtF/yjHDN+sIbgilBZ6sBZ3FO6K533kFC1L2peugc=";
-      };
-      cmakeFlags = [
-        "-DUSE_WAYLAND_CLIPBOARD=1"
-        "-DUSE_WAYLAND_GRIM=1"
-      ];
-      buildInputs = oldAttrs.buildInputs ++ [ pkgs.libsForQt5.kguiaddons ];
-    });
+    package = pkgs.flameshot.override {
+      enableWlrSupport = true;
+    };
     settings.General = {
       showStartupLaunchMessage = false;
       saveLastRegion = true;
@@ -1938,6 +1935,10 @@ in
         ];
       };
 
+      cmp = {
+        enable = true;
+      };
+
       lspkind = {
         enable = true;
       };
@@ -2332,64 +2333,160 @@ in
 
   programs.hyprpanel = {
     enable = true;
-    package = inputs.hyprpanel.packages.${pkgs.system}.default;
 
     settings = {
-      layout = {
-        "bar.layouts" = {
-          "0" = {
-            left = [ "dashboard" "network" "bluetooth" "volume" "media" ];
-            middle = [ "workspaces" ];
-            right = [ "clock" "kbinput" "battery" "systray" "notifications" ];
+      scalingPriority = "hyprland";
+      terminal = "ghostty";
+
+      "bar.layouts" = {
+        "0" = {
+          left = [
+            "dashboard"
+            "network"
+            "bluetooth"
+            "volume"
+            "media"
+          ];
+          middle = [
+            "workspaces"
+          ];
+          right = [
+            "clock"
+            "kbinput"
+            "systray"
+            "notifications"
+          ];
+        };
+        "1" = {
+          left = [
+            "dashboard"
+            "network"
+            "bluetooth"
+            "volume"
+            "media"
+          ];
+          middle = [
+            "workspaces"
+          ];
+          right = [
+            "clock"
+            "kbinput"
+            "systray"
+            "notifications"
+          ];
+        };
+        "2" = {
+          left = [
+            "dashboard"
+            "network"
+            "bluetooth"
+            "volume"
+            "media"
+          ];
+          middle = [
+            "workspaces"
+          ];
+          right = [
+            "clock"
+            "kbinput"
+            "systray"
+            "notifications"
+          ];
+        };
+      };
+
+      bar = {
+        clock = {
+          format = "%d %b %H:%M:%S";
+        };
+        launcher = {
+          autoDetectIcon = true;
+        };
+        systray = {
+          ignore = [
+            "Xwayland Video Bridge_pipewireToXProxy"
+            "blueman"
+          ];
+        };
+        workspaces = {
+          showApplicationIcons = true;
+          showWsIcons = true;
+          workspaces = 9;
+        };
+      };
+
+      menus = {
+        clock = {
+          time = {
+            military = true;
           };
-          "1" = {
-            left = [ "dashboard" "network" "bluetooth" "volume" "media" ];
-            middle = [ "workspaces" ];
-            right = [ "clock" "kbinput" "battery" "systray" "notifications" ];
+          weather = {
+            enabled = false;
           };
-          "2" = {
-            left = [ "dashboard" "network" "bluetooth" "volume" "media" ];
-            middle = [ "workspaces" ];
-            right = [ "clock" "kbinput" "battery" "systray" "notifications" ];
+        };
+        dashboard = {
+          directories = {
+            left = {
+              directory1 = {
+                command = "dolphin Downloads";
+                label = "󰉍 Downloads";
+              };
+              directory2 = {
+                command = "dolphin Videos";
+                label = "󰉏 Videos";
+              };
+              directory3 = {
+                command = "dolphin personal";
+                label = "󰚝 Personal";
+              };
+            };
+            right = {
+              directory1 = {
+                command = "dolphin Documents";
+                label = "󱧶 Documents";
+              };
+              directory2 = {
+                command = "dolphin Pictures";
+                label = "󰉏 Pictures";
+              };
+              directory3 = {
+                command = "dolphin ./";
+                label = "󱂵 Home";
+              };
+            };
+          };
+          shortcuts = {
+            enabled = false;
           };
         };
       };
 
-      bar.launcher.autoDetectIcon = true;
-      bar.workspaces.showApplicationIcons = true;
-      bar.workspaces.showWsIcons = true;
-      bar.workspaces.workspaces = 9;
-      bar.systray.ignore = [ "Xwayland Video Bridge_pipewireToXProxy" "blueman" ];
-      bar.clock.format = "%d %b %H:%M:%S";
+      notifications = {
+        ignore = [
+          "spotify"
+        ];
+      };
 
-      menus.clock.weather.enabled = false;
-      menus.dashboard.shortcuts.enabled = false;
-      menus.clock.time.military = true;
-
-      notifications.ignore = [ "spotify" ];
       tear = true;
 
-      theme.name = "gruvbox";
-      theme.osd.location = "left";
-      theme.font.name = "SFProDisplay Nerd Font";
-      theme.font.size = "1.3rem";
-      theme.bar.transparent = true;
+      theme = {
+        bar = {
+          transparent = true;
+        };
+        font = {
+          name = "SFProDisplay Nerd Font";
+          size = "1.3rem";
+        };
+        name = "gruvbox";
+        osd = {
+          location = "left";
+        };
+      };
 
-      wallpaper.enable = true;
-      wallpaper.image = "~/wallpapers/bg.jpg";
-
-      menus.dashboard.directories.left.directory1.command = "dolphin Downloads";
-      menus.dashboard.directories.left.directory1.label = "󰉍 Downloads";
-      menus.dashboard.directories.left.directory2.command = "dolphin Videos";
-      menus.dashboard.directories.left.directory2.label = "󰉏 Videos";
-      menus.dashboard.directories.left.directory3.command = "dolphin personal";
-      menus.dashboard.directories.left.directory3.label = "󰚝 Personal";
-      menus.dashboard.directories.right.directory1.command = "dolphin Documents";
-      menus.dashboard.directories.right.directory1.label = "󱧶 Documents";
-      menus.dashboard.directories.right.directory2.command = "dolphin Pictures";
-      menus.dashboard.directories.right.directory2.label = "󰉏 Pictures";
-      menus.dashboard.directories.right.directory3.command = "dolphin ./";
-      menus.dashboard.directories.right.directory3.label = "󱂵 Home";
+      wallpaper = {
+        enable = true;
+        image = "~/wallpapers/bg.jpg";
+      };
     };
   };
 
