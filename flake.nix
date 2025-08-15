@@ -58,7 +58,7 @@
             home-manager.nixosModules.home-manager
             {
               home-manager.extraSpecialArgs = { inherit inputs outputs; };
-              home-manager.sharedModules = [ nixvim.homeManagerModules.nixvim ];
+              home-manager.sharedModules = [ nixvim.homeModules.nixvim ];
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.backupFileExtension = ".bak";
@@ -76,7 +76,7 @@
             home-manager.nixosModules.home-manager
             {
               home-manager.extraSpecialArgs = { inherit inputs outputs; };
-              home-manager.sharedModules = [ nixvim.homeManagerModules.nixvim ];
+              home-manager.sharedModules = [ nixvim.homeModules.nixvim ];
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.backupFileExtension = ".bak";

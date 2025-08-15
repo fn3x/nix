@@ -91,6 +91,8 @@ in
     rustdesk-flutter
     gajim
     filezilla
+    spotify
+    signal-desktop
   ];
 
   home.file = {
@@ -2549,8 +2551,10 @@ in
     enable = true;
     package = (pkgs.ncspot.override {
       withNotify = false;
+      withPulseAudio = true;
     });
     settings = {
+      backend = "pulseaudio";
       initial_screen = "library";
       use_nerdfont = true;
       theme = {
