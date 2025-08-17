@@ -570,7 +570,7 @@ in
       exec-once = [workspace 2 silent] uwsm app -- thorium-browser
       exec-once = [workspace 3 silent] uwsm app -- Telegram
       exec-once = [workspace 4 silent] uwsm app -- mattermost-desktop
-      exec-once = [workspace 5 silent] $terminal
+      exec-once = [workspace 5 silent] uswm app -- spotify
       exec-once = ${inputs.hyprpanel.packages.${pkgs.system}.default}/hyprpanel
 
       #####################
@@ -719,6 +719,7 @@ in
       windowrulev2 = fullscreen,class:^(cs2)$
       windowrulev2 = fullscreen,class:^(csgo_linux64)$
       windowrulev2 = workspace 9,class:^steam_app_\d+$
+      windowrulev2 = workspace 9,class:^cs2\d+$
       windowrulev2 = immediate,class:^(gamescope)$
       windowrulev2 = immediate,class:^(cs2)$
       windowrulev2 = immediate,class:^steam_app\d+$
