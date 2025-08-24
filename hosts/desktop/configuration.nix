@@ -20,7 +20,7 @@
   networking.hostName = "desktop"; # Define your hostname.
 
   # Enable networking
-  networking.networkmanager.enable = true;
+  networking.nameservers = ["1.1.1.1" "8.8.8.8"];
 
   # Set your time zone.
   time.timeZone = "Asia/Yerevan";
@@ -89,6 +89,9 @@
     isNormalUser = true;
     description = "Art";
     extraGroups = [
+      "qemu-libvirtd"
+      "kvm"
+      "libvirtd"
       "docker"
       "networkmanager"
       "wheel"
@@ -128,6 +131,8 @@
     fastfetch
     kdePackages.partitionmanager
     firefox
+    inputs.winapps.packages."${system}".winapps
+    inputs.winapps.packages."${system}".winapps-launcher
   ];
 
   environment.plasma6.excludePackages = with pkgs.kdePackages; [
@@ -186,8 +191,16 @@
   };
 
   programs.virt-manager.enable = true;
-  users.groups.libvirtd.members = [ "fn3x" ];
-  virtualisation.libvirtd.enable = true;
+  virtualisation.libvirtd = {
+    enable = true;
+    qemu = {
+      package = pkgs.qemu_kvm;
+      ovmf.enable = true;
+      ovmf.packages = [ pkgs.OVMFFull.fd ];
+    };
+  };
+  boot.kernelModules = [ "kvm-amd" ];
+  boot.extraModprobeConfig = "options kvm_amd nested=1";
   virtualisation.spiceUSBRedirection.enable = true;
 
   xdg.portal = {
