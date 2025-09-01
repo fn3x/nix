@@ -33,6 +33,7 @@
       url = "github:winapps-org/winapps";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    cachy-proton.url = "github:jackgrahn/cachy-proton-nix";
   };
 
   outputs =
