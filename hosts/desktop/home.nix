@@ -10,8 +10,6 @@ let
   username = "fn3x";
   homeDirectory = "/home/${username}";
   nushell-theme = "${homeDirectory}/nushell/gruvbox-dark.nu";
-  thorium = import ../../modules/nixos/thorium.nix { inherit pkgs lib; };
-  shadps4-7 = import ../../modules/nixos/shadps4.nix { inherit pkgs lib; };
 in
 
 {
@@ -83,10 +81,8 @@ in
     satty
     grim
     slurp
-    thorium
     helvum
     poop
-    shadps4-7
     rustdesk-flutter
     gajim
     filezilla
@@ -620,7 +616,7 @@ BOOT_TIMEOUT="120"
       };
       set-repeat = "50 300";
       spawn = [
-        "thorium-browser"
+        "brave"
         "ghostty"
       ];
       xcursor-theme = "WhiteSur 32";
@@ -712,7 +708,7 @@ BOOT_TIMEOUT="120"
       exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 
       exec-once = [workspace 1 silent] $terminal
-      exec-once = [workspace 2 silent] uwsm app -- thorium-browser
+      exec-once = [workspace 2 silent] uwsm app -- brave
       exec-once = [workspace 3 silent] uwsm app -- Telegram
       exec-once = [workspace 4 silent] uwsm app -- mattermost-desktop
       exec-once = [workspace 5 silent] uswm app -- spotify
@@ -2349,10 +2345,10 @@ BOOT_TIMEOUT="120"
   };
 
   xdg.mimeApps.defaultApplications = {
-    "text/html" = [ "thorium-browser.desktop" ];
-    "text/xml" = [ "thorium-browser.desktop" ];
-    "x-scheme-handler/http" = [ "thorium-browser.desktop" ];
-    "x-scheme-handler/https" = [ "thorium-browser.desktop" ];
+    "text/html" = [ "brave.desktop" ];
+    "text/xml" = [ "brave.desktop" ];
+    "x-scheme-handler/http" = [ "brave.desktop" ];
+    "x-scheme-handler/https" = [ "brave.desktop" ];
   };
 
   xdg.desktopEntries."org.kde.systemsettings" = {
@@ -3100,6 +3096,15 @@ BOOT_TIMEOUT="120"
         "y" = "share selected";
       };
     };
+  };
+
+  programs.brave = {
+    enable = true;
+    commandLineArgs = [
+      "--password-store=basic"
+      "--enable-features=UseOzonePlatform"
+      "--ozone-platform=wayland"
+    ];
   };
   
   dconf.settings = {
