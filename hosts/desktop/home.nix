@@ -89,6 +89,8 @@ in
     spotify
     signal-desktop
     srb2
+    rpcs3
+    pinta
   ];
 
   home.file = {
@@ -96,11 +98,11 @@ in
       text = ''
         font-family="Berkeley Mono"
         font-size=20
-        theme="Apple System Colors"
+        theme="Apple Classic"
         cursor-style=block
-        cursor-style-blink=true
         cursor-opacity=1
-        cursor-invert-fg-bg=true
+        cursor-color=cell-foreground
+        cursor-text=cell-background
         background-blur-radius=20
         background-opacity=0.95
         title=""
@@ -108,6 +110,10 @@ in
         window-decoration=false
         auto-update=check
         shell-integration=none
+        shell-integration-features=ssh-env, ssh-terminfo
+        mouse-hide-while-typing=true
+        unfocused-split-opacity=0.30
+        unfocused-split-fill=#808080
 
         keybind=ctrl+b>u=scroll_page_fractional:-0.5
         keybind=ctrl+b>d=scroll_page_fractional:0.5
@@ -147,6 +153,8 @@ in
         keybind=ctrl+b>equal=equalize_splits
 
         keybind=ctrl+b>s=toggle_tab_overview
+
+        keybind=ctrl+shift+p=toggle_command_palette
       '';
       executable = false;
     };

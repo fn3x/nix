@@ -5,6 +5,7 @@
 {
   pkgs,
   inputs,
+  config,
   ...
 }:
 {
@@ -134,6 +135,8 @@
     firefox
     inputs.winapps.packages."${system}".winapps
     inputs.winapps.packages."${system}".winapps-launcher
+    OVMF
+    looking-glass-client
   ];
 
   environment.plasma6.excludePackages = with pkgs.kdePackages; [
@@ -196,12 +199,23 @@
     enable = true;
     qemu = {
       package = pkgs.qemu_kvm;
-      ovmf.enable = true;
-      ovmf.packages = [ pkgs.OVMFFull.fd ];
+      swtpm.enable = true;
+      ovmf = {
+        enable = true;
+      };
     };
   };
-  boot.kernelModules = [ "kvm-amd" ];
-  boot.extraModprobeConfig = "options kvm_amd nested=1";
+  boot.kernelModules = [ "kvm-amd" "v4l2loopback" "snd-aloop" ];
+  boot.extraModprobeConfig = ''
+    options kvm_amd nested=1
+    options v4l2loopback exclusive_caps=1 card_label="Virtual Camera"
+  '';
+  boot.extraModulePackages = with config.boot.kernelPackages;
+    [ v4l2loopback.out ];
+  systemd.tmpfiles.rules = [
+    "d /var/log/libvirt 0755 root root -"
+    "f /dev/shm/looking-glass 0660 fn3x qemu-libvirtd -"
+  ];
   virtualisation.spiceUSBRedirection.enable = true;
 
   xdg.portal = {
