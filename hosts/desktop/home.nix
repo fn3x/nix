@@ -34,7 +34,7 @@ in
   home.packages = with pkgs; [
     inputs.hyprland-qtutils.packages.x86_64-linux.default
     inputs.apple-fonts.packages.${pkgs.system}.sf-pro-nerd
-    ghostty
+    inputs.ghostty.packages.${pkgs.system}.default
     oh-my-posh
     telegram-desktop
     mattermost-desktop
@@ -91,6 +91,7 @@ in
     srb2
     rpcs3
     pinta
+    cava
   ];
 
   home.file = {
@@ -98,7 +99,7 @@ in
       text = ''
         font-family="Berkeley Mono"
         font-size=20
-        theme="Apple Classic"
+        theme="Apple System Colors"
         cursor-style=block
         cursor-opacity=1
         cursor-color=cell-foreground
@@ -112,8 +113,6 @@ in
         shell-integration=none
         shell-integration-features=ssh-env, ssh-terminfo
         mouse-hide-while-typing=true
-        unfocused-split-opacity=0.30
-        unfocused-split-fill=#808080
 
         keybind=ctrl+b>u=scroll_page_fractional:-0.5
         keybind=ctrl+b>d=scroll_page_fractional:0.5
@@ -573,7 +572,7 @@ BOOT_TIMEOUT="120"
   systemd.user.sessionVariables = { QT_QPA_PLATFORMTHEME = "kde"; };
 
   wayland.windowManager.river = {
-    enable = false;
+    enable = true;
     xwayland.enable = true;
     systemd.enable = true;
     settings = {
@@ -607,6 +606,7 @@ BOOT_TIMEOUT="120"
           "Mod1 7" = "set-focused-tags 7";
           "Mod1 8" = "set-focused-tags 8";
           "Mod1 9" = "set-focused-tags 9";
+          "Mod1 0" = "set-focused-tags 0";
 
           "Mod1+Shift 1" = "set-view-tags 1";
           "Mod1+Shift 2" = "set-view-tags 2";
@@ -617,8 +617,6 @@ BOOT_TIMEOUT="120"
           "Mod1+Shift 7" = "set-view-tags 7";
           "Mod1+Shift 8" = "set-view-tags 8";
           "Mod1+Shift 9" = "set-view-tags 9";
-
-          "Mod1 0" = "set-focused-tags 0";
           "Mod1+Shift 0" = "set-view-tags 0";
         };
       };
@@ -627,7 +625,6 @@ BOOT_TIMEOUT="120"
         "brave"
         "ghostty"
       ];
-      xcursor-theme = "WhiteSur 32";
     };
   };
 
@@ -774,7 +771,7 @@ BOOT_TIMEOUT="120"
 
       # https://wiki.hyprland.org/Configuring/Variables/#animations
       animations {
-          enabled = yes, please :)
+          enabled = no
 
           # Default animations, see https://wiki.hyprland.org/Configuring/Animations/ for more
 
@@ -3113,6 +3110,13 @@ BOOT_TIMEOUT="120"
       "--enable-features=UseOzonePlatform"
       "--ozone-platform=wayland"
     ];
+  };
+
+  programs.cava = {
+    enable = true;
+    settings = {
+      general.framerate = 170;
+    };
   };
   
   dconf.settings = {

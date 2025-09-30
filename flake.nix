@@ -34,6 +34,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     cachy-proton.url = "github:jackgrahn/cachy-proton-nix";
+    ghostty = {
+      url = "github:ghostty-org/ghostty";
+    };
   };
 
   outputs =
