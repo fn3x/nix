@@ -176,8 +176,9 @@
     portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
   };
 
-  programs.river = {
+  programs.river-classic = {
     enable = true;
+    xwayland.enable = true;
   };
 
   environment.pathsToLink = [ "/share/zsh" ];
