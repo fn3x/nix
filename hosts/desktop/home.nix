@@ -92,6 +92,7 @@ in
     rpcs3
     pinta
     cava
+    mysql-client
   ];
 
   home.file = {
@@ -122,6 +123,7 @@ in
         keybind=ctrl+b>ctrl+h=new_split:left
         keybind=ctrl+b>ctrl+l=new_split:right
         keybind=ctrl+b>c=new_split:auto
+        keybind=ctrl+shift+w=close_surface
 
         keybind=ctrl+b>j=goto_split:down
         keybind=ctrl+b>k=goto_split:up
@@ -1230,7 +1232,7 @@ BOOT_TIMEOUT="120"
         
         load-env $ssh_agent_env
         $ssh_agent_env | save --force $ssh_agent_file
-        ^ssh-add ~/.ssh/id_github ~/.ssh/id_bitbucket
+        ^ssh-add ~/.ssh/id_github ~/.ssh/id_bitbucket ~/.ssh/id_codeberg
       }
     '';
     configFile.text = ''
