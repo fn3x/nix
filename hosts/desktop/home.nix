@@ -2094,6 +2094,8 @@ BOOT_TIMEOUT="120"
               "prettier"
             ];
             nix = [ "nixfmt-rfc-style" ];
+            cpp = [ "clang-format" ];
+            c = [ "clang-format" ];
           };
           formatters = {
             stylua = {
@@ -2236,6 +2238,10 @@ BOOT_TIMEOUT="120"
             settings = {
               gofumpt = true;
             };
+          };
+          clangd = {
+            enable = true;
+            filetypes = [ "c" "cpp" ];
           };
           ts_ls = {
             enable = true;
