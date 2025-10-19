@@ -11,7 +11,7 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ../../modules/nixos/nvidia.nix
+    ../../modules/nvidia.nix
   ];
 
   # Bootloader.
@@ -138,6 +138,8 @@
     OVMF
     looking-glass-client
     devenv
+    cudaPackages.cudatoolkit
+    nv-codec-headers
   ];
 
   environment.plasma6.excludePackages = with pkgs.kdePackages; [

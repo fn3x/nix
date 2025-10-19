@@ -10,6 +10,7 @@ let
   username = "fn3x";
   homeDirectory = "/home/${username}";
   nushell-theme = "${homeDirectory}/nushell/gruvbox-dark.nu";
+  teamspeak6_client = import ../../modules/teamspeak/teamspeak-client.nix { inherit pkgs; };
 in
 
 {
@@ -63,8 +64,8 @@ in
     inkscape
     libreoffice-still
     logmein-hamachi
-    lutris
-    teamspeak6-client
+    # lutris
+    teamspeak6_client
     qbittorrent
     playerctl
     anydesk
@@ -93,6 +94,9 @@ in
     pinta
     cava
     mysql-client
+    dav1d       # AV1 decoder
+    svt-av1     # SVT-AV1 encoder
+    libaom 
   ];
 
   home.file = {
@@ -529,7 +533,7 @@ BOOT_TIMEOUT="120"
   home.sessionVariables = {
     EDITOR = "nvim";
     TERMINAL = "ghostty";
-    LD_LIBRARY_PATH = "~/local/lib:$LD_LIBRARY_PATH";
+    LD_LIBRARY_PATH = "/run/opengl-driver/lib";
     MANPATH = "~/local/share/man:$MANPATH";
     COLORTERM = "truecolor";
     NVM_DIR = "~/.nvm";
