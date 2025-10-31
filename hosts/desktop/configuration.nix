@@ -133,13 +133,12 @@
     fastfetch
     kdePackages.partitionmanager
     firefox
-    inputs.winapps.packages."${system}".winapps
-    inputs.winapps.packages."${system}".winapps-launcher
+    inputs.winapps.packages.${system}.winapps
+    inputs.winapps.packages.${system}.winapps-launcher
     OVMF
-    looking-glass-client
     devenv
-    cudaPackages.cudatoolkit
     nv-codec-headers
+    virtiofsd
   ];
 
   environment.plasma6.excludePackages = with pkgs.kdePackages; [
@@ -199,6 +198,13 @@
   };
 
   programs.virt-manager.enable = true;
+  virtualisation.docker = {
+    enable = true;
+    rootless = {
+      enable = true;
+      setSocketVariable = true;
+    };
+  };
   virtualisation.libvirtd = {
     enable = true;
     qemu = {

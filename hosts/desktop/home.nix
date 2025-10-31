@@ -94,9 +94,8 @@ in
     pinta
     cava
     mysql-client
-    dav1d       # AV1 decoder
-    svt-av1     # SVT-AV1 encoder
-    libaom 
+    lutris
+    freerdp
   ];
 
   home.file = {
@@ -345,25 +344,25 @@ in
 # - All characters following a '#' are ignored.
 
 # [WINDOWS USERNAME]
-RDP_USER="fn3x"
+RDP_USER="art"
 
 # [WINDOWS PASSWORD]
 # NOTES:
 # - If using FreeRDP v3.9.0 or greater, you *have* to set a password
-RDP_PASS="123123"
+RDP_PASS="123"
 
 # [WINDOWS DOMAIN]
-# DEFAULT VALUE: \'\' (BLANK)
+# DEFAULT VALUE: (BLANK)
 RDP_DOMAIN=""
 
 # [WINDOWS IPV4 ADDRESS]
 # NOTES:
-# - If using \'libvirt\', 'RDP_IP' will be determined by WinApps at runtime if left unspecified.
+# - If using 'libvirt', 'RDP_IP' will be determined by WinApps at runtime if left unspecified.
 # DEFAULT VALUE:
 # - 'docker': '127.0.0.1'
 # - 'podman': '127.0.0.1'
-# - 'libvirt': \'\' (BLANK)
-RDP_IP=""
+# - 'libvirt': (BLANK)
+RDP_IP="192.168.122.173"
 
 # [VM NAME]
 # NOTES:
@@ -404,6 +403,7 @@ REMOVABLE_MEDIA="/run/media"
 # [ADDITIONAL FREERDP FLAGS & ARGUMENTS]
 # NOTES:
 # - You can try adding /network:lan to these flags in order to increase performance, however, some users have faced issues with this.
+#   If this does not work or if it does not work without the flag, you can try adding /nsc and /gfx.
 # DEFAULT VALUE: '/cert:tofu /sound /microphone +home-drive'
 # VALID VALUES: See https://github.com/awakecoding/FreeRDP-Manuals/blob/master/User/FreeRDP-User-Manual.markdown
 RDP_FLAGS="/cert:tofu /sound /microphone +home-drive"
@@ -419,8 +419,7 @@ DEBUG="true"
 
 # [AUTOMATICALLY PAUSE WINDOWS]
 # NOTES:
-# - This is currently INCOMPATIBLE with 'docker' and 'manual'.
-# - See https://github.com/dockur/windows/issues/674
+# - This is currently INCOMPATIBLE with 'manual'.
 # DEFAULT VALUE: 'off'
 # VALID VALUES:
 # - 'on'
@@ -441,7 +440,7 @@ AUTOPAUSE_TIME="300"
 # [FREERDP COMMAND]
 # NOTES:
 # - WinApps will attempt to automatically detect the correct command to use for your system.
-# DEFAULT VALUE: \'\' (BLANK)
+# DEFAULT VALUE: (BLANK)
 # VALID VALUES: The command required to run FreeRDPv3 on your system (e.g., 'xfreerdp', 'xfreerdp3', etc.).
 FREERDP_COMMAND=""
 
@@ -473,6 +472,14 @@ APP_SCAN_TIMEOUT="60"
 # - The maximum time (in seconds) to wait for the Windows VM to boot if it is not running, before attempting to launch an application.
 # DEFAULT VALUE: '120'
 BOOT_TIMEOUT="120"
+
+# FREERDP RAIL HIDEF
+# - This option controls the value of the `hidef` option passed to the /app parameter of the FreeRDP command.
+# - Setting this option to 'off' may resolve window misalignment issues related to maximized windows.
+# DEFAULT VALUE: 'on'
+HIDEF="on"
+
+VIRSH_CONNECTION="qemu:///system"
       '';
       executable = false;
     };
@@ -528,6 +535,7 @@ BOOT_TIMEOUT="120"
     "~/local/lib"
     "OME/local/share/man"
     "~/perl5/bin"
+    "/home/fn3x/.local/bin"
   ];
 
   home.sessionVariables = {
@@ -899,15 +907,15 @@ BOOT_TIMEOUT="120"
 
   programs.git = {
     enable = true;
-    userName = "Art P.";
-    userEmail = "fn3x@yandex.ru";
+    settings = {
+      user.name = "Art P.";
+      user.email = "fn3x@yandex.ru";
+      init.defaultBranch = "main";
+      push.autoSetupRemote = true;
+    };
     signing = {
       signByDefault = true;
       key = "D6A5181EC8F742E0";
-    };
-    extraConfig = {
-      init.defaultBranch = "main";
-      push.autoSetupRemote = true;
     };
   };
 
