@@ -41,7 +41,7 @@ in
     mattermost-desktop
     cantarell-fonts
     noto-fonts
-    noto-fonts-emoji
+    noto-fonts-color-emoji
     fd
     ripgrep
     tmux
@@ -64,7 +64,6 @@ in
     inkscape
     libreoffice-still
     logmein-hamachi
-    # lutris
     teamspeak6_client
     qbittorrent
     playerctl
@@ -93,9 +92,12 @@ in
     rpcs3
     pinta
     cava
-    mysql-client
+    mariadb.client
     lutris
     freerdp
+    bash
+    kdePackages.breeze-icons
+    kdePackages.breeze
   ];
 
   home.file = {
@@ -580,7 +582,7 @@ VIRSH_CONNECTION="qemu:///system"
     ];
     style = {
       package = pkgs.kdePackages.breeze;
-      name = "Breeze";
+      name = "breeze";
     };
   };
   systemd.user.sessionVariables = { QT_QPA_PLATFORMTHEME = "kde"; };
@@ -652,7 +654,7 @@ VIRSH_CONNECTION="qemu:///system"
       "$mod" = "ALT";
       "$terminal" = "uwsm app -- ghostty";
       "$fileManager" = "uwsm app -- dolphin";
-      "$menu" = "uwsm app -- $(wofi --show drun --define=drun-print_desktop_file=true)";
+      "$menu" = "vicinae toggle";
       bindl = [
         ", XF86AudioPlay, exec, playerctl play-pause"
         ", XF86AudioNext, exec, playerctl next"
@@ -720,8 +722,8 @@ VIRSH_CONNECTION="qemu:///system"
       ### AUTOSTART ###
       #################
 
-      exec-once = dconf write /org/gnome/desktop/interface/gtk-theme "'WhiteSur'"
-      exec-once = dconf write /org/gnome/desktop/interface/icon-theme "'WhiteSur'"
+      exec-once = dconf write /org/gnome/desktop/interface/gtk-theme "breeze"
+      exec-once = dconf write /org/gnome/desktop/interface/icon-theme "breeze"
       exec-once = dconf write /org/gnome/desktop/interface/document-font-name "'Noto Sans Medium 11'"
       exec-once = dconf write /org/gnome/desktop/interface/font-name "'Noto Sans Medium 11'"
       exec-once = dconf write /org/gnome/desktop/interface/monospace-font-name "'Noto Sans Mono Medium 11'"
@@ -732,7 +734,7 @@ VIRSH_CONNECTION="qemu:///system"
       exec-once = [workspace 2 silent] uwsm app -- brave
       exec-once = [workspace 3 silent] uwsm app -- Telegram
       exec-once = [workspace 4 silent] uwsm app -- mattermost-desktop
-      exec-once = [workspace 5 silent] uswm app -- spotify
+      exec-once = [workspace 5 silent] uwsm app -- spotify
       exec-once = ${inputs.hyprpanel.packages.${pkgs.system}.default}/hyprpanel
 
       #####################
@@ -893,6 +895,14 @@ VIRSH_CONNECTION="qemu:///system"
       layerrule = blur, wofi
       layerrule = ignorezero, wofi
       layerrule = ignorealpha 0.5, wofi
+
+      ##   ###    ##
+      ##  VICINAE ##
+      ##   ###    ##
+
+      layerrule = blur,vicinae
+      layerrule = ignorealpha 0, vicinae
+      layerrule = noanim, vicinae
 
       exec-once = uwsm finalize
 
@@ -1272,9 +1282,9 @@ VIRSH_CONNECTION="qemu:///system"
       COLORTERM = "truecolor";
       NVM_DIR = "~/.nvm";
       STEAM_EXTRA_COMPAT_TOOLS_PATHS = "\\\${HOME}/.steam/root/compatibilitytools.d";
-      XCURSOR_THEME = "WhiteSur Cursors";
+      XCURSOR_THEME = "breeze";
       XCURSOR_SIZE = 34;
-      GTK_THEME = "WhiteSur";
+      GTK_THEME = "breeze";
       SDL_VIDEODRIVER = "wayland";
       QT_QPA_PLATFORM = "wayland;xcb";
       QT_WAYLAND_DISABLE_WINDOWDECORATION = 1;
@@ -2391,20 +2401,13 @@ VIRSH_CONNECTION="qemu:///system"
     enable = true;
 
     theme = {
-      package = pkgs.whitesur-gtk-theme.overrideAttrs (oldAttrs: {
-        nautilusStyle = "glassy";
-      });
-      name = "WhiteSur";
-    };
-
-    cursorTheme = {
-      package = pkgs.whitesur-cursors;
-      name = "WhiteSur Cursors";
+      package = pkgs.kdePackages.breeze-gtk;
+      name = "breeze";
     };
 
     iconTheme = {
-      package = pkgs.whitesur-icon-theme;
-      name = "WhiteSur";
+      package = pkgs.kdePackages.breeze-icons;
+      name = "breeze";
     };
   };
 
@@ -3146,5 +3149,27 @@ VIRSH_CONNECTION="qemu:///system"
       autoconnect = ["qemu:///system"];
       uris = ["qemu:///system"];
     };
+  };
+
+  services.vicinae = {
+    enable = true;
+    autoStart = true;
+    package = inputs.vicinae.packages.${pkgs.system}.default;
+    settings = {
+      faviconService = "twenty"; # twenty | google | none
+      font.size = 11;
+      popToRootOnClose = false;
+      rootSearch.searchFiles = false;
+      theme.name = "vicinae-dark";
+      window = {
+        csd = true;
+        opacity = 0.95;
+        rounding = 10;
+      };
+    };
+  };
+  systemd.user.services.vicinae = {
+    Service.Environment = lib.mkForce [ "USE_LAYER_SHELL=0" ];
+    Service.EnvironmentFile = lib.mkForce [];
   };
 }

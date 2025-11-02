@@ -37,6 +37,7 @@
     ghostty = {
       url = "github:ghostty-org/ghostty";
     };
+    vicinae.url = "github:vicinaehq/vicinae";
   };
 
   outputs =
@@ -48,6 +49,7 @@
       impermanence,
       clipboard-sync,
       stylix,
+      vicinae,
       ...
     }@inputs:
     let
@@ -66,10 +68,10 @@
             home-manager.nixosModules.home-manager
             {
               home-manager.extraSpecialArgs = { inherit inputs outputs; };
-              home-manager.sharedModules = [ nixvim.homeModules.nixvim ];
+              home-manager.sharedModules = [ nixvim.homeModules.nixvim vicinae.homeManagerModules.default ];
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.backupFileExtension = ".bak";
+              home-manager.backupFileExtension = ".bak2";
               home-manager.users.fn3x = import ./hosts/desktop/home.nix;
             }
           ];
