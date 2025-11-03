@@ -133,8 +133,8 @@
     fastfetch
     kdePackages.partitionmanager
     firefox
-    inputs.winapps.packages.${system}.winapps
-    inputs.winapps.packages.${system}.winapps-launcher
+    inputs.winapps.packages.${pkgs.stdenv.hostPlatform.system}.winapps
+    inputs.winapps.packages.${pkgs.stdenv.hostPlatform.system}.winapps-launcher
     OVMF
     devenv
     nv-codec-headers

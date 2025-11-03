@@ -11,6 +11,7 @@ let
   homeDirectory = "/home/${username}";
   nushell-theme = "${homeDirectory}/nushell/gruvbox-dark.nu";
   teamspeak6_client = import ../../modules/teamspeak/teamspeak-client.nix { inherit pkgs; };
+  system = pkgs.stdenv.hostPlatform.system;
 in
 
 {
@@ -34,8 +35,8 @@ in
 
   home.packages = with pkgs; [
     inputs.hyprland-qtutils.packages.x86_64-linux.default
-    inputs.apple-fonts.packages.${pkgs.system}.sf-pro-nerd
-    inputs.ghostty.packages.${pkgs.system}.default
+    inputs.apple-fonts.packages.${system}.sf-pro-nerd
+    inputs.ghostty.packages.${system}.default
     oh-my-posh
     telegram-desktop
     mattermost-desktop
@@ -735,7 +736,7 @@ VIRSH_CONNECTION="qemu:///system"
       exec-once = [workspace 3 silent] uwsm app -- Telegram
       exec-once = [workspace 4 silent] uwsm app -- mattermost-desktop
       exec-once = [workspace 5 silent] uwsm app -- spotify
-      exec-once = ${inputs.hyprpanel.packages.${pkgs.system}.default}/hyprpanel
+      exec-once = ${inputs.hyprpanel.packages.${system}.default}/hyprpanel
 
       #####################
       ### LOOK AND FEEL ###
@@ -1905,54 +1906,56 @@ VIRSH_CONNECTION="qemu:///system"
 
       treesitter-textobjects = {
         enable = true;
-        move = {
-          enable = true;
-          setJumps = true;
-          gotoNextStart = {
-            "]m" = "@function.outer";
-            "gj" = "@function.outer";
-            "]]" = "@class.outer";
-            "]b" = "@block.outer";
-            "]a" = "@parameter.inner";
+        settings = {
+          move = {
+            enable = true;
+            set_jumps = true;
+            goto_next_start = {
+              "]m" = "@function.outer";
+              "gj" = "@function.outer";
+              "]]" = "@class.outer";
+              "]b" = "@block.outer";
+              "]a" = "@parameter.inner";
+            };
+            goto_next_end = {
+              "]M" = "@function.outer";
+              "gJ" = "@function.outer";
+              "][" = "@class.outer";
+              "]B" = "@block.outer";
+              "]A" = "@parameter.inner";
+            };
+            goto_previous_start = {
+              "[m" = "@function.outer";
+              "gk" = "@function.outer";
+              "[[" = "@class.outer";
+              "[b" = "@block.outer";
+              "[a" = "@parameter.inner";
+            };
+            goto_previous_end = {
+              "[M" = "@function.outer";
+              "gK" = "@function.outer";
+              "[]" = "@class.outer";
+              "[B" = "@block.outer";
+              "[A" = "@parameter.inner";
+            };
           };
-          gotoNextEnd = {
-            "]M" = "@function.outer";
-            "gJ" = "@function.outer";
-            "][" = "@class.outer";
-            "]B" = "@block.outer";
-            "]A" = "@parameter.inner";
-          };
-          gotoPreviousStart = {
-            "[m" = "@function.outer";
-            "gk" = "@function.outer";
-            "[[" = "@class.outer";
-            "[b" = "@block.outer";
-            "[a" = "@parameter.inner";
-          };
-          gotoPreviousEnd = {
-            "[M" = "@function.outer";
-            "gK" = "@function.outer";
-            "[]" = "@class.outer";
-            "[B" = "@block.outer";
-            "[A" = "@parameter.inner";
-          };
-        };
-        select = {
-          enable = true;
-          lookahead = true;
-          keymaps = {
-            "af" = "@function.outer";
-            "if" = "@function.inner";
-            "ac" = "@class.outer";
-            "ic" = "@class.inner";
-            "ab" = "@block.outer";
-            "ib" = "@block.inner";
-            "al" = "@loop.outer";
-            "il" = "@loop.inner";
-            "a/" = "@comment.outer";
-            "i/" = "@comment.outer";
-            "aa" = "@parameter.outer";
-            "ia" = "@parameter.inner";
+          select = {
+            enable = true;
+            lookahead = true;
+            keymaps = {
+              "af" = "@function.outer";
+              "if" = "@function.inner";
+              "ac" = "@class.outer";
+              "ic" = "@class.inner";
+              "ab" = "@block.outer";
+              "ib" = "@block.inner";
+              "al" = "@loop.outer";
+              "il" = "@loop.inner";
+              "a/" = "@comment.outer";
+              "i/" = "@comment.outer";
+              "aa" = "@parameter.outer";
+              "ia" = "@parameter.inner";
+            };
           };
         };
       };
@@ -3154,10 +3157,10 @@ VIRSH_CONNECTION="qemu:///system"
   services.vicinae = {
     enable = true;
     autoStart = true;
-    package = inputs.vicinae.packages.${pkgs.system}.default;
+    package = inputs.vicinae.packages.${system}.default;
     settings = {
       faviconService = "twenty"; # twenty | google | none
-      font.size = 11;
+      font.size = 14;
       popToRootOnClose = false;
       rootSearch.searchFiles = false;
       theme.name = "vicinae-dark";
