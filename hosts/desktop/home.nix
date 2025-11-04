@@ -653,9 +653,9 @@ VIRSH_CONNECTION="qemu:///system"
     portalPackage = null;
     settings = {
       "$mod" = "ALT";
-      "$terminal" = "uwsm app -- ghostty";
-      "$fileManager" = "uwsm app -- dolphin";
-      "$menu" = "vicinae toggle";
+      "$terminal" = "${pkgs.uwsm}/bin/uwsm app -- ${inputs.ghostty.packages.${system}.default}/bin/ghostty";
+      "$fileManager" = "${pkgs.uwsm}/bin/uwsm app -- ${pkgs.kdePackages.dolphin}/bin/dolphin";
+      "$menu" = "${inputs.vicinae.packages.${system}.default}/bin/vicinae toggle";
       bindl = [
         ", XF86AudioPlay, exec, playerctl play-pause"
         ", XF86AudioNext, exec, playerctl next"
