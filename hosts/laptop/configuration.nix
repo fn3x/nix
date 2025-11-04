@@ -5,10 +5,14 @@
 { pkgs, inputs, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  imports = [
+    ./hardware-configuration.nix
+    ../../modules/nixos/graphics/default.nix
+    ../../modules/nixos/audio/default.nix
+  ];
+
+  intel.enable = true;
+  pipewire.enable = true;
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -42,11 +46,8 @@
     LC_TIME = "en_GB.UTF-8";
   };
 
-  # Enable the X11 windowing system.
-  # You can disable this if you're only using the Wayland session.
   services.xserver.enable = true;
 
-  # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm.enable = true;
   services.desktopManager.plasma6.enable = true;
 
@@ -58,22 +59,6 @@
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
-
-  # Enable sound with pipewire.
-  security.rtkit.enable = true;
-  services.pulseaudio.enable = false;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
-  };
 
   services.fwupd.enable = true;
 
@@ -271,28 +256,4 @@
   services.fstrim.enable = true;
   services.fprintd.enable = true;
   services.illum.enable = true;
-
-  hardware.cpu.intel.updateMicrocode = true;
-
-  boot.initrd.kernelModules = [ "xe" ];
-  boot.kernelParams = [ "i915.force_probe=a7a1" ];
-
-  hardware.graphics = {
-    enable = true;
-    extraPackages = with pkgs; [
-      intel-vaapi-driver
-      intel-ocl
-      intel-media-driver
-      intel-compute-runtime
-      vpl-gpu-rt
-      libvdpau-va-gl
-    ];
-    extraPackages32 = with pkgs; [
-      driversi686Linux.intel-vaapi-driver
-      driversi686Linux.intel-media-driver
-    ];
-  };
-
-  services.libinput.enable = true;
-  services.xserver.videoDrivers = [ "intel" ];
 }
