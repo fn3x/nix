@@ -62,9 +62,9 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
-  programs.ssh = {
-    startAgent = true;
-  };
+  # programs.ssh = {
+  #   startAgent = true;
+  # };
 
   programs.steam = {
     enable = true;
@@ -128,6 +128,7 @@
     devenv
     nv-codec-headers
     virtiofsd
+    niri
   ];
 
   environment.plasma6.excludePackages = with pkgs.kdePackages; [
@@ -165,6 +166,10 @@
     package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
     # make sure to also set the portal package, so that they are in sync
     portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+  };
+
+  programs.niri = {
+    enable = true;
   };
 
   programs.river-classic = {

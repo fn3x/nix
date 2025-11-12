@@ -94,7 +94,6 @@ in
     pinta
     cava
     mariadb.client
-    lutris
     freerdp
     bash
     kdePackages.breeze-icons
@@ -483,6 +482,55 @@ BOOT_TIMEOUT="120"
 HIDEF="on"
 
 VIRSH_CONNECTION="qemu:///system"
+      '';
+      executable = false;
+    };
+    "${homeDirectory}/.config/niri/config.kdl" = {
+      text = ''
+input {
+    keyboard {
+        xkb {
+            layout "us,ru"
+            model "kinesis"
+            options "grp:win_space_toggle"
+        }
+
+        repeat-delay 300
+        repeat-rate 50
+        track-layout "global"
+        numlock
+    }
+
+    mouse {
+        accel-speed 0
+    }
+
+    // disable-power-key-handling
+    // warp-mouse-to-focus
+    focus-follows-mouse max-scroll-amount="0%"
+    // workspace-auto-back-and-forth
+
+    mod-key "Alt"
+    mod-key-nested "Super"
+}
+
+output "DP-1" {
+    mode "2560x1440@170.00"
+    scale 1.25
+    position x=0 y=0
+    focus-at-startup
+}
+binds {
+    Mod+T repeat=false { spawn-sh "${pkgs.uwsm}/bin/uwsm app -- ${inputs.ghostty.packages.${system}.default}/bin/ghostty"; }
+    Mod+Shift+Q { close-window; }
+    Mod+M { quit; }
+    Mod+E { spawn "${pkgs.kdePackages.dolphin}/bin/dolphin"; }
+    Mod+V { toggle-window-floating; }
+    Mod+SPACE { spawn-sh "${inputs.vicinae.packages.${system}.default}/bin/vicinae toggle"; }
+    Mod+SHIFT+S { spawn-sh "XDG_CURRENT_DESKTOP=sway ${pkgs.flameshot}/bin/flameshot gui"; }
+    Mod+F { fullscreen-window; }
+    Win+Space { switch-layout; }
+}
       '';
       executable = false;
     };
