@@ -2080,6 +2080,10 @@ binds {
         };
       };
 
+      treesj = {
+        enable = true;
+      };
+
       gitsigns = {
         enable = true;
         settings = {
