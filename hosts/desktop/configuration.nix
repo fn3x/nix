@@ -145,6 +145,11 @@
 
   services.clipboard-sync.enable = true;
 
+  services.mullvad-vpn = {
+    enable = true;
+    package = pkgs.mullvad-vpn;
+  };
+
   programs.gnupg.agent = {                                                      
     enable = true;
   };

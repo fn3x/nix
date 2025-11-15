@@ -98,6 +98,8 @@ in
     bash
     kdePackages.breeze-icons
     kdePackages.breeze
+    mullvad-browser
+    nwg-displays
   ];
 
   home.file = {
