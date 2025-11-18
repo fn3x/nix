@@ -37,6 +37,7 @@ in
     inputs.hyprland-qtutils.packages.x86_64-linux.default
     inputs.apple-fonts.packages.${system}.sf-pro-nerd
     inputs.ghostty.packages.${system}.default
+    inputs.hyprpwcenter.packages.${system}.default
     oh-my-posh
     telegram-desktop
     mattermost-desktop
@@ -90,7 +91,6 @@ in
     spotify
     signal-desktop
     srb2
-    rpcs3
     pinta
     cava
     mariadb.client

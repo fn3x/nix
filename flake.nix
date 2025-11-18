@@ -29,6 +29,10 @@
       url = "github:Jas-SinghFSU/HyprPanel";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hyprpwcenter = {
+      url = "github:hyprwm/hyprpwcenter";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     winapps = {
       url = "github:winapps-org/winapps";
       inputs.nixpkgs.follows = "nixpkgs";
