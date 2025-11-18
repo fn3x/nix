@@ -63,7 +63,7 @@ inputs,
         set-repeat = "50 300";
         spawn = [
           "${pkgs.brave}/bin/brave"
-          "$TERMINAL"
+          "${inputs.ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/ghostty"
         ];
       };
     };
