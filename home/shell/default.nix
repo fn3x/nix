@@ -8,6 +8,9 @@
     ./nu.nix
   ];
 
+  zsh.enable = lib.mkDefault false;
+  nu.enable = lib.mkDefault false;
+
   home.sessionVariables = {
     EDITOR = "nvim";
     TERMINAL = "ghostty";
@@ -38,6 +41,30 @@
     LIBVIRT_DEFAULT_URI="qemu:///system";
   };
 
-  zsh.enable = lib.mkDefault false;
-  nu.enable = lib.mkDefault false;
+  home.shellAliases = {
+    nix-s = "nh os switch -H desktop ~/nixos";
+    nix-t = "nh os test  -H desktop ~/nixos";
+    nix-c = "nh clean all";
+    nix-u = "nh os switch -u -H desktop ~/nixos";
+    vim = "nvim";
+    vi = "nvim";
+    nixdev= "nix develop --command nu -l";
+  };
+
+  home.sessionPath = [
+    "~/go/bin/"
+    "/usr/local/go/bin"
+    "~/.local/bin"
+    "/bin"
+    "/sbin"
+    "/usr/bin"
+    "/usr/sbin"
+    "/usr/local/bin"
+    "/local/bin"
+    "/lua-5.4.7"
+    "~/local/lib"
+    "OME/local/share/man"
+    "~/perl5/bin"
+    "/home/fn3x/.local/bin"
+  ];
 }

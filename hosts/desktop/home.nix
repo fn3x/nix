@@ -2,7 +2,6 @@
   inputs,
   config,
   pkgs,
-  lib,
   ...
 }:
 
@@ -26,6 +25,7 @@ in
     ../../home/wofi
     ../../home/vicinae
     ../../home/shell
+    ../../home/browsers
   ];
 
   home.username = username;
@@ -116,6 +116,7 @@ in
   vicinae.enable = true;
   ghostty.enable = true;
   nu.enable = true;
+  brave.enable = true;
 
   home.file = {
     "${homeDirectory}/.config/uwsm/env-hyprland" = {
@@ -370,33 +371,6 @@ binds {
     };
   };
 
-  home.shellAliases = {
-    nix-s = "nh os switch -H desktop ~/nixos";
-    nix-t = "nh os test  -H desktop ~/nixos";
-    nix-c = "nh clean all";
-    nix-u = "nh os switch -u -H desktop ~/nixos";
-    vim = "nvim";
-    vi = "nvim";
-    nixdev= "nix develop --command nu -l";
-  };
-
-  home.sessionPath = [
-    "~/go/bin/"
-    "/usr/local/go/bin"
-    "~/.local/bin"
-    "/bin"
-    "/sbin"
-    "/usr/bin"
-    "/usr/sbin"
-    "/usr/local/bin"
-    "/local/bin"
-    "/lua-5.4.7"
-    "~/local/lib"
-    "OME/local/share/man"
-    "~/perl5/bin"
-    "/home/fn3x/.local/bin"
-  ];
-
   # Fix for KDE settings for Plasma 6: https://github.com/nix-community/home-manager/issues/5098#issuecomment-2352172073
   xdg.configFile."menus/applications.menu".source = "${pkgs.kdePackages.plasma-workspace}/etc/xdg/menus/plasma-applications.menu";
   qt = {
@@ -452,13 +426,6 @@ binds {
     enable = true;
     clean.enable = true;
     flake = "${config.home.homeDirectory}/nixos";
-  };
-
-  xdg.mimeApps.defaultApplications = {
-    "text/html" = [ "brave.desktop" ];
-    "text/xml" = [ "brave.desktop" ];
-    "x-scheme-handler/http" = [ "brave.desktop" ];
-    "x-scheme-handler/https" = [ "brave.desktop" ];
   };
 
   xdg.desktopEntries."org.kde.systemsettings" = {
@@ -537,15 +504,6 @@ binds {
         "y" = "share selected";
       };
     };
-  };
-
-  programs.brave = {
-    enable = true;
-    commandLineArgs = [
-      "--password-store=basic"
-      "--enable-features=UseOzonePlatform"
-      "--ozone-platform=wayland"
-    ];
   };
 
   programs.cava = {
