@@ -11,8 +11,8 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ../../modules/nixos/graphics/default.nix
-    ../../modules/nixos/audio/default.nix
+    ../../modules/graphics/default.nix
+    ../../modules/audio/default.nix
   ];
 
   nvidia.enable = true;
