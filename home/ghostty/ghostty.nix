@@ -11,6 +11,10 @@ config,
   };
 
   config = lib.mkIf config.ghostty.enable {
+    home.sessionVariables = {
+      TERMINAL = "ghostty";
+    };
+
     programs.ghostty = {
       enable = true;
       package = inputs.ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default;

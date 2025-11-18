@@ -30,7 +30,7 @@ config,
       portalPackage = null;
       settings = {
         "$mod" = "ALT";
-        "$terminal" = "${pkgs.uwsm}/bin/uwsm app -- ${inputs.ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/ghostty";
+        "$terminal" = "${pkgs.uwsm}/bin/uwsm app -- $TERMINAL";
         "$fileManager" = "${pkgs.uwsm}/bin/uwsm app -- ${pkgs.kdePackages.dolphin}/bin/dolphin";
         "$menu" = "${inputs.vicinae.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/vicinae toggle";
         bindl = [

@@ -13,7 +13,6 @@
 
   home.sessionVariables = {
     EDITOR = "nvim";
-    TERMINAL = "ghostty";
     LD_LIBRARY_PATH = "/run/opengl-driver/lib";
     MANPATH = "~/local/share/man:$MANPATH";
     COLORTERM = "truecolor";
