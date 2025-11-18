@@ -15,7 +15,7 @@
     };
 
     hyprland.url = "github:hyprwm/Hyprland";
-    hyprland-qtutils.url = "github:hyprwm/hyprland-qtutils";
+    hyprland-guiutils.url = "github:hyprwm/hyprland-guiutils";
     mcmojave-hyprcursor.url = "github:libadoxon/mcmojave-hyprcursor";
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     impermanence.url = "github:nix-community/impermanence";

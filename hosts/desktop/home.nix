@@ -34,7 +34,7 @@ in
   fonts.fontconfig.enable = true;
 
   home.packages = with pkgs; [
-    inputs.hyprland-qtutils.packages.x86_64-linux.default
+    inputs.hyprland-guiutils.packages.x86_64-linux.default
     inputs.apple-fonts.packages.${system}.sf-pro-nerd
     inputs.ghostty.packages.${system}.default
     inputs.hyprpwcenter.packages.${system}.default
@@ -767,6 +767,7 @@ binds {
 
       xwayland {
         force_zero_scaling = true
+        create_abstract_socket = true
       }
 
       #################
@@ -910,59 +911,98 @@ binds {
       # See https://wiki.hyprland.org/Configuring/Window-Rules/ for more
       # See https://wiki.hyprland.org/Configuring/Workspace-Rules/ for workspace rules
 
-      # Ignore maximize requests from apps. You'll probably like this.
-      windowrulev2 = suppressevent maximize, class:.*
+      windowrule {
+        name = ignore-maximize
+        match:class = .*
+        suppress_event = maximize
+      }
 
-      # Fix some dragging issues with XWayland
-      windowrulev2 = nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned:0
+      windowrule {
+          # Fix some dragging issues with XWayland
+          name = fix-xwayland-drags
+          match:class = ^$
+          match:title = ^$
+          match:xwayland = true
+          match:float = true
+          match:fullscreen = false
+          match:pin = false
 
-      # Fixes for flameshot on wayland
-      windowrulev2 = float, class:^(flameshot)$
-      windowrulev2 = move 0 0, class:^(flameshot)$
-      windowrulev2 = pin, class:^(flameshot)$
-      # set this to your leftmost monitor id, otherwise you have to move your cursor to the leftmost monitor
-      # before executing flameshot
-      windowrulev2 = monitor 1, class:^(flameshot)$
+          no_focus = true
+      }
 
-      windowrulev2 = fullscreen,class:^steam_app\d+$
-      windowrulev2 = monitor 1,class:^steam_app_\d+$
-      windowrulev2 = fullscreen,class:^(cs2)$
-      windowrulev2 = fullscreen,class:^(cs2)$
-      windowrulev2 = fullscreen,class:^(csgo_linux64)$
-      windowrulev2 = workspace 9,class:^steam_app_\d+$
-      windowrulev2 = workspace 9,class:^cs2\d+$
-      windowrulev2 = immediate,class:^(gamescope)$
-      windowrulev2 = immediate,class:^(cs2)$
-      windowrulev2 = immediate,class:^steam_app\d+$
-      windowrulev2 = immediate,class:^(csgo_linux64)
-      windowrulev2 = immediate,class:^(Golf With Your Friends\.x86_64)$
+      windowrule {
+        name = flameshot
+        match:class = ^(flameshot)$
+        move = 0 0
+        pin = true
+        monitor = 1
+      }
 
-      windowrulev2 = float,class:^(org.telegram.desktop|telegramdesktop)$,title:^(Media viewer)$
+      windowrule {
+        name = steam-games
+        match:class = ^steam_app\.*$
+        fullscreen = true
+        monitor = 1
+        immediate = true
+        workspace = 9
+      }
 
-      ############
-      ####WOFI####
-      ############
+      windowrule {
+        name = gamescope
+        match:class = ^gamescope\.*$
+        fullscreen = true
+        monitor = 1
+        immediate = true
+        workspace = 9
+      }
 
-      layerrule = blur, wofi
-      layerrule = ignorezero, wofi
-      layerrule = ignorealpha 0.5, wofi
+      windowrule {
+        name = cs2
+        match:class = ^cs2\.*$
+        fullscreen = true
+        monitor = 1
+        immediate = true
+        workspace = 9
+      }
+
+      windowrule {
+        name = csgo
+        match:class = ^csgo_\.*$
+        fullscreen = true
+        monitor = 1
+        immediate = true
+        workspace = 9
+      }
+
+      windowrule {
+        name = csgo
+        match:class = ^Golf With Your Friends\.*$
+        fullscreen = true
+        monitor = 1
+        immediate = true
+        workspace = 9
+      }
+
+      windowrule {
+        name = telegram-media
+        match:class = ^(org.telegram.desktop|telegramdesktop)$
+        match:title = ^(Media viewer)$
+        float = true
+      }
 
       ##   ###    ##
       ##  VICINAE ##
       ##   ###    ##
 
-      layerrule = blur,vicinae
-      layerrule = ignorealpha 0, vicinae
-      layerrule = noanim, vicinae
+      layerrule {
+        name = vicinae-layer
+        match:namespace = vicinae
+        blur = true
+        ignore_alpha = 0
+        no_anim = true
+      }
 
       exec-once = uwsm finalize
-
-      windowrulev2 = opacity 0.0 override, class:^(xwaylandvideobridge)$
-      windowrulev2 = noanim, class:^(xwaylandvideobridge)$
-      windowrulev2 = noinitialfocus, class:^(xwaylandvideobridge)$
-      windowrulev2 = maxsize 1 1, class:^(xwaylandvideobridge)$
-      windowrulev2 = noblur, class:^(xwaylandvideobridge)$
-      windowrulev2 = nofocus, class:^(xwaylandvideobridge)$
     '';
   };
 
