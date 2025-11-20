@@ -22,6 +22,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  networking.networkmanager.enable = true;
   networking.hostName = "desktop"; # Define your hostname.
 
   # Enable networking
@@ -58,6 +59,8 @@
     layout = "us,ru";
     variant = "";
   };
+
+  services.usbmuxd.enable = true;
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
