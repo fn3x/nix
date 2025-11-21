@@ -66,6 +66,7 @@ config,
             "$mod,F,fullscreen"
             "$mod,M, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
             "SUPER, Space, exec, ${pkgs.hyprland}/bin/hyprctl switchxkblayout next"
+            "$mod SHIFT, P, exec, ${pkgs.normcap}/bin/normcap"
           ]
           ++ (
             # workspaces

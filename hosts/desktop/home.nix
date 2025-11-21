@@ -108,6 +108,7 @@ in
     kdePackages.breeze
     mullvad-browser
     nwg-displays
+    normcap
   ];
 
   neovim.enable = true;
