@@ -26,6 +26,7 @@ in
     ../../home/vicinae
     ../../home/shell
     ../../home/browsers
+    ../../home/sneemok
   ];
 
   home.username = username;
@@ -118,6 +119,7 @@ in
   ghostty.enable = true;
   nu.enable = true;
   brave.enable = true;
+  sneemok.enable = true;
 
   home.file = {
     "${homeDirectory}/.config/uwsm/env-hyprland" = {

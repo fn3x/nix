@@ -42,6 +42,7 @@
       url = "github:ghostty-org/ghostty";
     };
     vicinae.url = "github:vicinaehq/vicinae";
+    sneemok.url = "github:fn3x/sneemok";
   };
 
   outputs =
@@ -54,6 +55,7 @@
       clipboard-sync,
       stylix,
       vicinae,
+      sneemok,
       ...
     }@inputs:
     let
@@ -72,7 +74,7 @@
             home-manager.nixosModules.home-manager
             {
               home-manager.extraSpecialArgs = { inherit inputs outputs; };
-              home-manager.sharedModules = [ nixvim.homeModules.nixvim vicinae.homeManagerModules.default ];
+              home-manager.sharedModules = [ nixvim.homeModules.nixvim vicinae.homeManagerModules.default sneemok.homeManagerModules.default ];
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.backupFileExtension = ".bak2";

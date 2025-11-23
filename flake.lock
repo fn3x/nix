@@ -1482,6 +1482,22 @@
     },
     "nixpkgs_11": {
       "locked": {
+        "lastModified": 1763421233,
+        "narHash": "sha256-Stk9ZYRkGrnnpyJ4eqt9eQtdFWRRIvMxpNRf4sIegnw=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "89c2b2330e733d6cdb5eae7b899326930c2c0648",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_12": {
+      "locked": {
         "lastModified": 1762111121,
         "narHash": "sha256-4vhDuZ7OZaZmKKrnDpxLZZpGIJvAeMtK6FKLJYUtAdw=",
         "owner": "NixOS",
@@ -1740,6 +1756,7 @@
         "neovim-nightly-overlay": "neovim-nightly-overlay",
         "nixpkgs": "nixpkgs_10",
         "nixvim": "nixvim",
+        "sneemok": "sneemok",
         "stylix": "stylix",
         "vicinae": "vicinae",
         "winapps": "winapps"
@@ -1827,6 +1844,24 @@
       "original": {
         "type": "file",
         "url": "https://devimages-cdn.apple.com/design/resources/download/SF-Pro.dmg"
+      }
+    },
+    "sneemok": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_11"
+      },
+      "locked": {
+        "lastModified": 1763940339,
+        "narHash": "sha256-/Y6JCDRUTnG+HeTdkkHh/rzKJhllLSj8VF1kOk9GIgk=",
+        "owner": "fn3x",
+        "repo": "sneemok",
+        "rev": "9ae1f4d5f242676bae93dd06677654e5e554fc88",
+        "type": "github"
+      },
+      "original": {
+        "owner": "fn3x",
+        "repo": "sneemok",
+        "type": "github"
       }
     },
     "stylix": {
@@ -2127,7 +2162,7 @@
     "vicinae": {
       "inputs": {
         "flake-utils": "flake-utils_4",
-        "nixpkgs": "nixpkgs_11"
+        "nixpkgs": "nixpkgs_12"
       },
       "locked": {
         "lastModified": 1763415828,
