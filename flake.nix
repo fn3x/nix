@@ -10,21 +10,36 @@
     };
     nixvim = {
       url = "github:nix-community/nixvim";
-      # If using a stable channel you can use `url = "github:nix-community/nixvim/nixos-<version>"`
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    hyprland.url = "github:hyprwm/Hyprland";
-    hyprland-guiutils.url = "github:hyprwm/hyprland-guiutils";
-    mcmojave-hyprcursor.url = "github:libadoxon/mcmojave-hyprcursor";
-    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
-    impermanence.url = "github:nix-community/impermanence";
+    hyprland = {
+      url = "github:hyprwm/Hyprland";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    hyprland-guiutils = {
+      url = "github:hyprwm/hyprland-guiutils";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    neovim-nightly-overlay = {
+      url = "github:nix-community/neovim-nightly-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    impermanence = {
+      url = "github:nix-community/impermanence";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     stylix = {
       url = "github:danth/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    apple-fonts.url = "github:fn3x/apple-fonts.nix";
-    clipboard-sync.url = "github:fn3x/clipboard-sync";
+    apple-fonts = {
+      url = "github:fn3x/apple-fonts.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    clipboard-sync = {
+      url = "github:fn3x/clipboard-sync";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     hyprpanel = {
       url = "github:Jas-SinghFSU/HyprPanel";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -37,12 +52,22 @@
       url = "github:winapps-org/winapps";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    cachy-proton.url = "github:jackgrahn/cachy-proton-nix";
+    cachy-proton = {
+      url = "github:jackgrahn/cachy-proton-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     ghostty = {
       url = "github:ghostty-org/ghostty";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
-    vicinae.url = "github:vicinaehq/vicinae";
-    sneemok.url = "github:fn3x/sneemok";
+    vicinae = {
+      url = "github:vicinaehq/vicinae";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    sneemok = {
+      url = "github:fn3x/sneemok";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
