@@ -62,7 +62,7 @@ config,
             "$mod, P, pseudo, # dwindle"
             "$mod, J, togglesplit, # dwindle"
             "$mod, SPACE, exec, $menu"
-            "$mod SHIFT, S, exec, XDG_CURRENT_DESKTOP=sway flameshot gui"
+            "$mod SHIFT, S, exec, ${inputs.sneemok.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/sneemok --screenshot"
             "$mod,F,fullscreen"
             "$mod,M, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
             "SUPER, Space, exec, ${pkgs.hyprland}/bin/hyprctl switchxkblayout next"

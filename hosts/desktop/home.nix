@@ -44,7 +44,6 @@ in
   fonts.fontconfig.enable = true;
 
   home.packages = with pkgs; [
-    inputs.hyprland-guiutils.packages.x86_64-linux.default
     inputs.apple-fonts.packages.${system}.sf-pro-nerd
     inputs.hyprpwcenter.packages.${system}.default
     oh-my-posh

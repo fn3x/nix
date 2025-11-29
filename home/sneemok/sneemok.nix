@@ -9,6 +9,6 @@ config,
   };
 
   config = lib.mkIf config.sneemok.enable {
-    programs.sneemok.enable = true;
+    services.sneemok.enable = true;
   };
 }
