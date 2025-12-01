@@ -61,7 +61,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     sneemok = {
-      url = "github:fn3x/sneemok";
+      url = "git+https://codeberg.org/fn3x/sneemok.git";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

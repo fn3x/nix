@@ -338,25 +338,12 @@ binds {
     Mod+E { spawn "${pkgs.kdePackages.dolphin}/bin/dolphin"; }
     Mod+V { toggle-window-floating; }
     Mod+SPACE { spawn-sh "${inputs.vicinae.packages.${system}.default}/bin/vicinae toggle"; }
-    Mod+SHIFT+S { spawn-sh "XDG_CURRENT_DESKTOP=sway ${pkgs.flameshot}/bin/flameshot gui"; }
+    Mod+SHIFT+S { spawn-sh "${inputs.sneemok.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/sneemok --screenshot"; }
     Mod+F { fullscreen-window; }
     Win+Space { switch-layout; }
 }
       '';
       executable = false;
-    };
-  };
-
-  services.flameshot = {
-    enable = true;
-    package = pkgs.flameshot.override {
-      enableWlrSupport = true;
-    };
-    settings.General = {
-      showStartupLaunchMessage = false;
-      saveLastRegion = true;
-      showDesktopNotification = false;
-      jpegQuality = 100;
     };
   };
 

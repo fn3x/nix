@@ -195,14 +195,6 @@ config,
       }
 
       windowrule {
-        name = flameshot
-        match:class = ^(flameshot)$
-        move = 0 0
-        pin = true
-        monitor = 1
-      }
-
-      windowrule {
         name = steam-games
         match:class = ^steam_app\.*$
         fullscreen = true
