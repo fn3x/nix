@@ -133,6 +133,7 @@
     nv-codec-headers
     virtiofsd
     niri
+    distrobox
   ];
 
   environment.plasma6.excludePackages = with pkgs.kdePackages; [
@@ -215,6 +216,7 @@
       swtpm.enable = true;
     };
   };
+  virtualisation.podman.enable = true;
   boot.kernelModules = [ "kvm-amd" "v4l2loopback" "snd-aloop" ];
   boot.extraModprobeConfig = ''
     options kvm_amd nested=1
