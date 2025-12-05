@@ -1377,11 +1377,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1764529502,
-        "narHash": "sha256-Ttgtw5u7HEpRxlSHrvR2YcBY/5kxpXh3YgNbORbOc7s=",
+        "lastModified": 1764896768,
+        "narHash": "sha256-2oGnsBFweduZ2SKuGBtmBYeDomwB4vVk6dBIrx/uGbg=",
         "ref": "refs/heads/main",
-        "rev": "a3eb087489772ce93fda259ff6007d5743a0c2a5",
-        "revCount": 75,
+        "rev": "8b96ee9f2242806e01aef2b34209bd66c49d1745",
+        "revCount": 76,
         "type": "git",
         "url": "https://codeberg.org/fn3x/sneemok.git"
       },
