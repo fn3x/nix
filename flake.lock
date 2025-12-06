@@ -245,6 +245,49 @@
         "type": "github"
       }
     },
+    "dankMaterialShell": {
+      "inputs": {
+        "dgop": [
+          "dgop"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1765001413,
+        "narHash": "sha256-y5u9eN1qB/IWVqYhVm3qsH8FttoU40Ze3DPQLBXMRhg=",
+        "owner": "AvengeMedia",
+        "repo": "DankMaterialShell",
+        "rev": "8ce78e71343b1769b4c87cac9eae3a45510a4c03",
+        "type": "github"
+      },
+      "original": {
+        "owner": "AvengeMedia",
+        "repo": "DankMaterialShell",
+        "type": "github"
+      }
+    },
+    "dgop": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1762835999,
+        "narHash": "sha256-UykYGrGFOFTmDpKTLNxj1wvd1gbDG4TkqLNSbV0TYwk=",
+        "owner": "AvengeMedia",
+        "repo": "dgop",
+        "rev": "799301991cd5dcea9b64245f9d500dcc76615653",
+        "type": "github"
+      },
+      "original": {
+        "owner": "AvengeMedia",
+        "repo": "dgop",
+        "type": "github"
+      }
+    },
     "firefox-gnome-theme": {
       "flake": false,
       "locked": {
@@ -1339,6 +1382,8 @@
         "cachy-proton": "cachy-proton",
         "caelestia-shell": "caelestia-shell",
         "clipboard-sync": "clipboard-sync",
+        "dankMaterialShell": "dankMaterialShell",
+        "dgop": "dgop",
         "ghostty": "ghostty",
         "home-manager": "home-manager",
         "hyprland": "hyprland",

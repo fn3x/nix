@@ -246,11 +246,23 @@ config,
         float = true
       }
 
+      windowrule {
+        name = quickshell
+        match:class = ^(org.quickshell)$
+        float = true
+      }
+
       layerrule {
         name = vicinae-layer
         match:namespace = vicinae
         blur = true
         ignore_alpha = 0
+        no_anim = true
+      }
+
+      layerrule {
+        name = dms
+        match:class = ^(dms)$
         no_anim = true
       }
 

@@ -68,6 +68,16 @@
       url = "github:caelestia-dots/shell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    dgop = {
+      url = "github:AvengeMedia/dgop";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    dankMaterialShell = {
+      url = "github:AvengeMedia/DankMaterialShell";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.dgop.follows = "dgop";
+    };
   };
 
   outputs =
@@ -82,6 +92,7 @@
       vicinae,
       sneemok,
       caelestia-shell,
+      dankMaterialShell,
       ...
     }@inputs:
     let
@@ -100,7 +111,13 @@
             home-manager.nixosModules.home-manager
             {
               home-manager.extraSpecialArgs = { inherit inputs outputs; };
-              home-manager.sharedModules = [ nixvim.homeModules.nixvim vicinae.homeManagerModules.default sneemok.homeManagerModules.default caelestia-shell.homeManagerModules.default ];
+              home-manager.sharedModules = [
+                nixvim.homeModules.nixvim
+                vicinae.homeManagerModules.default
+                sneemok.homeManagerModules.default
+                caelestia-shell.homeManagerModules.default
+                dankMaterialShell.homeModules.dankMaterialShell.default
+              ];
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.backupFileExtension = ".bak2";

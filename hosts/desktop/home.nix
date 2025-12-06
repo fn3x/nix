@@ -28,6 +28,7 @@ in
     ../../home/browsers
     ../../home/sneemok
     ../../home/caelestia
+    ../../home/dankmaterial
   ];
 
   home.username = username;
@@ -107,6 +108,7 @@ in
     bash
     kdePackages.breeze-icons
     kdePackages.breeze
+    kdePackages.qt6ct
     mullvad-browser
     nwg-displays
     normcap
@@ -115,7 +117,8 @@ in
   neovim.enable = true;
   hyprland.enable = true;
   hyprpanel.enable = false;
-  caelestia.enable = true;
+  caelestia.enable = false;
+  dankmaterial.enable = true;
   vicinae.enable = true;
   ghostty.enable = true;
   nu.enable = true;
