@@ -27,6 +27,7 @@ in
     ../../home/shell
     ../../home/browsers
     ../../home/sneemok
+    ../../home/caelestia
   ];
 
   home.username = username;
@@ -113,7 +114,8 @@ in
 
   neovim.enable = true;
   hyprland.enable = true;
-  hyprpanel.enable = true;
+  hyprpanel.enable = false;
+  caelestia.enable = true;
   vicinae.enable = true;
   ghostty.enable = true;
   nu.enable = true;
@@ -373,7 +375,7 @@ binds {
       name = "breeze";
     };
   };
-  systemd.user.sessionVariables = { QT_QPA_PLATFORMTHEME = "kde"; };
+  systemd.user.sessionVariables = { QT_QPA_PLATFORMTHEME = ""; };
 
   programs.git = {
     enable = true;
@@ -492,7 +494,7 @@ binds {
       general.framerate = 170;
     };
   };
-  
+
   dconf.settings = {
     "org/virt-manager/virt-manager/connections" = {
       autoconnect = ["qemu:///system"];

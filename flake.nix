@@ -64,6 +64,10 @@
       url = "git+https://codeberg.org/fn3x/sneemok.git";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    caelestia-shell = {
+      url = "github:caelestia-dots/shell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -77,6 +81,7 @@
       stylix,
       vicinae,
       sneemok,
+      caelestia-shell,
       ...
     }@inputs:
     let
@@ -95,7 +100,7 @@
             home-manager.nixosModules.home-manager
             {
               home-manager.extraSpecialArgs = { inherit inputs outputs; };
-              home-manager.sharedModules = [ nixvim.homeModules.nixvim vicinae.homeManagerModules.default sneemok.homeManagerModules.default ];
+              home-manager.sharedModules = [ nixvim.homeModules.nixvim vicinae.homeManagerModules.default sneemok.homeManagerModules.default caelestia-shell.homeManagerModules.default ];
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.backupFileExtension = ".bak2";

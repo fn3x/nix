@@ -166,7 +166,7 @@ config,
       exec-once = [workspace 3 silent] uwsm app -- Telegram
       exec-once = [workspace 4 silent] uwsm app -- mattermost-desktop
       exec-once = [workspace 5 silent] uwsm app -- spotify
-      exec-once = ${inputs.hyprpanel.packages.${pkgs.stdenv.hostPlatform.system}.default}/hyprpanel
+      # exec-once = ${inputs.hyprpanel.packages.${pkgs.stdenv.hostPlatform.system}.default}/hyprpanel
 
       ##############################
       ### WINDOWS AND WORKSPACES ###
