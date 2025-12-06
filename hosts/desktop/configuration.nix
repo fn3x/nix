@@ -27,6 +27,7 @@
 
   # Enable networking
   networking.nameservers = ["1.1.1.1" "8.8.8.8"];
+  networking.enableIPv6 = true;
 
   # Set your time zone.
   time.timeZone = "Asia/Yerevan";
@@ -134,6 +135,7 @@
     virtiofsd
     niri
     distrobox
+    amnezia-vpn
   ];
 
   environment.plasma6.excludePackages = with pkgs.kdePackages; [
@@ -141,6 +143,8 @@
     konsole
     oxygen
   ];
+
+  programs.amnezia-vpn.enable = true;
 
   services.resolved.enable = true;
 
