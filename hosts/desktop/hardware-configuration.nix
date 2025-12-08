@@ -14,32 +14,14 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/40b40114-3171-49b6-a3d8-dadf2739cc12";
+    { device = "/dev/disk/by-uuid/47160782-e3b3-4056-b199-3365fe4d9421";
       fsType = "ext4";
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/2D97-A9C7";
+    { device = "/dev/disk/by-uuid/9D4B-81E5";
       fsType = "vfat";
       options = [ "fmask=0077" "dmask=0077" ];
-    };
-
-  fileSystems."/var/lib/nixos" =
-    { device = "/persist/var/lib/nixos";
-      fsType = "none";
-      options = [ "bind" ];
-    };
-
-  fileSystems."/var/log" =
-    { device = "/persist/var/log";
-      fsType = "none";
-      options = [ "bind" ];
-    };
-
-  fileSystems."/etc/NetworkManager/system-connections" =
-    { device = "/persist/etc/NetworkManager/system-connections";
-      fsType = "none";
-      options = [ "bind" ];
     };
 
   swapDevices = [ ];
