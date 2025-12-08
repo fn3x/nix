@@ -95,7 +95,8 @@
       "video"
       "disk"
     ];
-    shell = pkgs.nushell;
+    shell = pkgs.fish;
+    ignoreShellProgramCheck = true;
   };
 
   hardware.bluetooth.enable = true;

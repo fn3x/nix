@@ -46,7 +46,7 @@ in
   fonts.fontconfig.enable = true;
 
   home.packages = with pkgs; [
-    inputs.apple-fonts.packages.${system}.sf-pro-nerd
+    # inputs.apple-fonts.packages.${system}.sf-pro-nerd
     inputs.hyprpwcenter.packages.${system}.default
     oh-my-posh
     telegram-desktop
@@ -121,7 +121,8 @@ in
   dankmaterial.enable = true;
   vicinae.enable = true;
   ghostty.enable = true;
-  nu.enable = true;
+  nu.enable = false;
+  fish.enable = true;
   brave.enable = true;
   sneemok.enable = true;
 

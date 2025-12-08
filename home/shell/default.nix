@@ -6,10 +6,12 @@
   imports = [
     ./zsh.nix
     ./nu.nix
+    ./fish.nix
   ];
 
   zsh.enable = lib.mkDefault false;
   nu.enable = lib.mkDefault false;
+  fish.enable = lib.mkDefault false;
 
   home.sessionVariables = {
     EDITOR = "nvim";
