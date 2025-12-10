@@ -9,6 +9,7 @@ let
   username = "fn3x";
   homeDirectory = "/home/${username}";
   system = pkgs.stdenv.hostPlatform.system;
+  teamspeak = import ../../modules/programs/teamspeak/teamspeak-client.nix { inherit pkgs; };
 in
 
 {
@@ -29,6 +30,7 @@ in
     ../../home/sneemok
     ../../home/caelestia
     ../../home/dankmaterial
+    
   ];
 
   home.username = username;
@@ -76,7 +78,7 @@ in
     inkscape
     libreoffice-still
     logmein-hamachi
-    teamspeak6-client
+    teamspeak
     qbittorrent
     playerctl
     anydesk
