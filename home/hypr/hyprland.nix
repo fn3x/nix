@@ -22,6 +22,23 @@ config,
 
     programs.kitty.enable = true; # required for the default Hyprland config
 
+    home.packages = with pkgs; [
+      catppuccin-cursors.mochaDark
+    ];
+
+    home.pointerCursor = {
+      gtk.enable = true;
+      x11.enable = true;
+      name = "Catppuccin Mocha Dark";
+      size = 22;
+      package = pkgs.catppuccin-cursors.mochaDark;
+    };
+
+    home.sessionVariables = {
+      XCURSOR_THEME = "Catppuccin Mocha Dark";
+      XCURSOR_SIZE = 22;
+    };
+
     wayland.windowManager.hyprland = {
       enable = true;
       systemd.enable = false;
@@ -84,7 +101,7 @@ config,
               ) 9
             )
           );
-        monitor = "DP-1, 2560x1440@170.00Hz, 0x0, 1";
+        monitor = "DP-1, 2560x1440@170.00Hz, 0x0, 1.25";
         xwayland = {
           force_zero_scaling = true;
           create_abstract_socket = true;
@@ -266,6 +283,8 @@ config,
         no_anim = true
       }
 
+      exec-once = hyprctl setcursor "Catppuccin Mocha Dark" 22
+      exec-once = dconf write /org/gnome/desktop/interface/cursor-theme "'Catppuccin Mocha Dark'"
       exec-once = uwsm finalize
       '';
     };

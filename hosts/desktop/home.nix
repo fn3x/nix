@@ -114,6 +114,7 @@ in
     mullvad-browser
     nwg-displays
     normcap
+    lutris
   ];
 
   neovim.enable = true;
@@ -451,54 +452,6 @@ binds {
   programs.obs-studio = {
     enable = true;
     plugins = [ pkgs.obs-studio-plugins.wlrobs pkgs.obs-studio-plugins.obs-backgroundremoval pkgs.obs-studio-plugins.obs-pipewire-audio-capture ];
-  };
-
-  programs.ncspot = {
-    enable = true;
-    package = (pkgs.ncspot.override {
-      withNotify = false;
-      withPulseAudio = true;
-    });
-    settings = {
-      backend = "pulseaudio";
-      initial_screen = "library";
-      use_nerdfont = true;
-      theme = {
-        background = "default";
-        primary = "foreground";
-        secondary = "light black";
-        title = "primary";
-        playing = "primary";
-        playing_selected = "primary";
-        playing_bg = "primary";
-        highlight = "#FFFFFF";
-        highlight_bg = "#484848";
-        error = "#FF0000";
-        error_bg = "red";
-        statusbar = "primary";
-        statusbar_progress = "primary";
-        statusbar_bg = "primary";
-        cmdline = "default";
-        cmdline_bg = "primary";
-        search_match = "light red";
-      };
-      keybindings = {
-        "Space" = "playpause";
-        "Ctrl+s" = "focus search";
-        "Ctrl+l" = "focus library";
-        "Ctrl+f" = "focus cover";
-        "Ctrl+u" = "move pageup 1";
-        "Ctrl+d" = "move pagedown 1";
-        "y" = "share selected";
-      };
-    };
-  };
-
-  programs.cava = {
-    enable = true;
-    settings = {
-      general.framerate = 170;
-    };
   };
 
   dconf.settings = {

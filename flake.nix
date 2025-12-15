@@ -120,7 +120,7 @@
               ];
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.backupFileExtension = ".bak2";
+              home-manager.backupFileExtension = "bak";
               home-manager.users.fn3x = import ./hosts/desktop/home.nix;
             }
           ];
@@ -138,7 +138,7 @@
               home-manager.sharedModules = [ nixvim.homeModules.nixvim ];
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.backupFileExtension = ".bak";
+              home-manager.backupFileExtension = "bak";
               home-manager.users.fn3x = import ./hosts/laptop/home.nix;
               home-manager.users.whoispiria = import ./hosts/laptop/home-piria.nix;
             }

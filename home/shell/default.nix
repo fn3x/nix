@@ -20,8 +20,6 @@
     COLORTERM = "truecolor";
     NVM_DIR = "~/.nvm";
     STEAM_EXTRA_COMPAT_TOOLS_PATHS = "\\\${HOME}/.steam/root/compatibilitytools.d";
-    XCURSOR_THEME = "Breeze";
-    XCURSOR_SIZE = 34;
     GTK_THEME = "Breeze";
     SDL_VIDEODRIVER = "wayland";
     QT_QPA_PLATFORM = "wayland;xcb";
