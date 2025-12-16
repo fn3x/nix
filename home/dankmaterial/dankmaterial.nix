@@ -18,14 +18,10 @@ config,
       };
 
       enableSystemMonitoring = true;
-      enableClipboard = true;
       enableVPN = true;
-      enableBrightnessControl = false;
-      enableColorPicker = true;
       enableDynamicTheming = true;
       enableAudioWavelength = true;
       enableCalendarEvents = true;
-      enableSystemSound = false;
 
       default.settings = {
         currentThemeName = "dynamic";
