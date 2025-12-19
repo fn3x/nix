@@ -66,6 +66,17 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    nssmdns6 = true;
+    publish = {
+      enable = true;
+      addresses = true;
+      workstation = true;
+    };
+  };
+
   # programs.ssh = {
   #   startAgent = true;
   # };
@@ -151,7 +162,7 @@
 
   # Security
   services.fail2ban.enable = true;
-  services.openssh.enable = true;
+  # services.openssh.enable = true;
 
   services.clipboard-sync.enable = true;
 

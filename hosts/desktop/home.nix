@@ -30,7 +30,7 @@ in
     ../../home/sneemok
     ../../home/caelestia
     ../../home/dankmaterial
-    
+    ../../home/idescriptor
   ];
 
   home.username = username;
@@ -128,6 +128,7 @@ in
   fish.enable = true;
   brave.enable = true;
   sneemok.enable = true;
+  idescriptor.enable = true;
 
   home.file = {
     "${homeDirectory}/.config/uwsm/env-hyprland" = {
