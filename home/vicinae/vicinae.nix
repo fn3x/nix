@@ -13,15 +13,19 @@ pkgs,
   config = lib.mkIf config.vicinae.enable {
     services.vicinae = {
       enable = true;
-      autoStart = true;
       package = inputs.vicinae.packages.${pkgs.stdenv.hostPlatform.system}.default;
+      systemd = {
+        enable = true;
+        autoStart = true;
+      };
       settings = {
-        faviconService = "twenty"; # twenty | google | none
+        favicon_service = "twenty"; # twenty | google | none
         font.size = 14;
-        popToRootOnClose = false;
-        rootSearch.searchFiles = false;
-        theme.name = "vicinae-dark";
-        window = {
+        pop_to_root_on_close = false;
+        search_files_in_root = false;
+        theme.dark.name = "vicinae-dark";
+        theme.light.name = "vicinae-light";
+        launcher_window = {
           csd = true;
           opacity = 0.95;
           rounding = 10;
