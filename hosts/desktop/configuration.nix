@@ -171,6 +171,14 @@
     package = pkgs.mullvad-vpn;
   };
 
+  services.udev.packages = [
+    (pkgs.writeTextFile {
+      name = "wooting-udev-rules";
+      destination = "/etc/udev/rules.d/70-wooting.rules";
+      text = builtins.readFile ../../devices/wooting-60he-v2/wooting.rules;
+    })
+  ];
+
   programs.gnupg.agent = {                                                      
     enable = true;
   };
