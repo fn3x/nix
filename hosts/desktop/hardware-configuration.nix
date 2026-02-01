@@ -14,12 +14,12 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/47160782-e3b3-4056-b199-3365fe4d9421";
+    { device = "/dev/disk/by-uuid/c4229139-db06-41f6-8ac3-c468aa566194";
       fsType = "ext4";
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/9D4B-81E5";
+    { device = "/dev/disk/by-uuid/87D0-3B33";
       fsType = "vfat";
       options = [ "fmask=0077" "dmask=0077" ];
     };
@@ -30,7 +30,7 @@
   # (the default) this is the recommended approach. When using systemd-networkd it's
   # still possible to use this option, but it's recommended to use it in conjunction
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
-  networking.useDHCP = lib.mkDefault true;
+  networking.useDHCP = lib.mkDefault false;
   # networking.interfaces.eno1.useDHCP = lib.mkDefault true;
   # networking.interfaces.ham0.useDHCP = lib.mkDefault true;
 

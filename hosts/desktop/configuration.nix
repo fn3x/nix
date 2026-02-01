@@ -24,6 +24,7 @@
 
   networking.networkmanager.enable = true;
   networking.hostName = "desktop"; # Define your hostname.
+  networking.interfaces.eno1.useDHCP = true;
 
   # Enable networking
   networking.nameservers = ["1.1.1.1" "8.8.8.8"];
@@ -211,20 +212,6 @@
     xwayland.enable = true;
   };
 
-  environment.pathsToLink = [ "/share/zsh" ];
-  environment.persistence = {
-    "/persist" = {
-      directories = [
-        "/etc/nixos"
-        "/etc/NetworkManager/system-connections"
-        "/var/lib/systemd"
-        "/var/lib/nixos"
-        "/var/log"
-        "/srv"
-      ];
-    };
-  };
-
   programs.virt-manager.enable = true;
   virtualisation.docker = {
     enable = true;
@@ -285,5 +272,8 @@
     automatic = true;
     dates = "weekly";
     options = "--delete-older-than 30d";
+  };
+  nix.settings = {
+    max-jobs = 8;
   };
 }

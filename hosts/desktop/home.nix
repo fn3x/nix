@@ -395,7 +395,7 @@ binds {
     };
     signing = {
       signByDefault = true;
-      key = "26C4F8355F212D8A";
+      key = "90A7A8FC899EEB88";
     };
   };
 

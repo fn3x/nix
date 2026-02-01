@@ -9,7 +9,7 @@ config,
   };
 
   config = lib.mkIf config.dankmaterial.enable {
-    programs.dankMaterialShell = {
+    programs.dank-material-shell = {
       enable = true;
 
       systemd = {
@@ -23,7 +23,7 @@ config,
       enableAudioWavelength = true;
       enableCalendarEvents = true;
 
-      default.settings = {
+      settings = {
         currentThemeName = "dynamic";
         customThemeFile = "";
         matugenScheme = "scheme-fidelity";

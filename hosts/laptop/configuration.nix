@@ -184,18 +184,6 @@
   };
 
   environment.pathsToLink = [ "/share/zsh" ];
-  environment.persistence = {
-    "/persist" = {
-      directories = [
-        "/etc/nixos"
-        "/etc/NetworkManager/system-connections"
-        "/var/lib/systemd"
-        "/var/lib/nixos"
-        "/var/log"
-        "/srv"
-      ];
-    };
-  };
 
   programs.virt-manager.enable = true;
   users.groups.libvirtd.members = [ "fn3x" "whoispiria" ];

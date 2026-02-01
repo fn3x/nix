@@ -20,10 +20,6 @@
       url = "github:nix-community/neovim-nightly-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    impermanence = {
-      url = "github:nix-community/impermanence";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     stylix = {
       url = "github:danth/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -76,7 +72,6 @@
     dankMaterialShell = {
       url = "github:AvengeMedia/DankMaterialShell";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.dgop.follows = "dgop";
     };
   };
 
@@ -86,7 +81,6 @@
       nixpkgs,
       home-manager,
       nixvim,
-      impermanence,
       clipboard-sync,
       stylix,
       vicinae,
@@ -106,7 +100,6 @@
           modules = [
             stylix.nixosModules.stylix
             ./hosts/desktop/configuration.nix
-            impermanence.nixosModules.impermanence
             clipboard-sync.nixosModules.default
             home-manager.nixosModules.home-manager
             {
@@ -116,7 +109,7 @@
                 vicinae.homeManagerModules.default
                 sneemok.homeManagerModules.default
                 caelestia-shell.homeManagerModules.default
-                dankMaterialShell.homeModules.dankMaterialShell.default
+                dankMaterialShell.homeModules.dank-material-shell
               ];
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
@@ -130,7 +123,6 @@
           system = "x86_64-linux";
           modules = [
             ./hosts/laptop/configuration.nix
-            impermanence.nixosModules.impermanence
             clipboard-sync.nixosModules.default
             home-manager.nixosModules.home-manager
             {
