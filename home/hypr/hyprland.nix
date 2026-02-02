@@ -24,6 +24,7 @@ config,
 
     home.packages = with pkgs; [
       catppuccin-cursors.mochaDark
+      inputs.hyprpwcenter.packages.${system}.default
     ];
 
     home.pointerCursor = {
@@ -248,7 +249,7 @@ config,
       }
 
       windowrule {
-        name = csgo
+        name = golf
         match:class = ^Golf With Your Friends\.*$
         fullscreen = true
         monitor = 1

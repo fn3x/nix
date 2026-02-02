@@ -48,8 +48,7 @@ in
   fonts.fontconfig.enable = true;
 
   home.packages = with pkgs; [
-    # inputs.apple-fonts.packages.${system}.sf-pro-nerd
-    inputs.hyprpwcenter.packages.${system}.default
+    inputs.apple-fonts.packages.${system}.sf-pro-nerd
     oh-my-posh
     telegram-desktop
     mattermost-desktop
@@ -131,12 +130,6 @@ in
   idescriptor.enable = true;
 
   home.file = {
-    "${homeDirectory}/.config/uwsm/env-hyprland" = {
-      text = ''
-        export HYPRLAND_NO_SD_VARS=1
-      '';
-      executable = false;
-    };
     "${homeDirectory}/.config/chromium-flags.conf" = {
       text = ''
         --enable-features=UseOzonePlatform --ozone-platform=wayland

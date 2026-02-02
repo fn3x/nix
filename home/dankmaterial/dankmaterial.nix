@@ -25,7 +25,10 @@ config,
 
       settings = {
         currentThemeName = "dynamic";
+        currentThemeCategory = "generic";
         customThemeFile = "";
+        registryThemeVariants = {
+        };
         matugenScheme = "scheme-fidelity";
         runUserMatugenTemplates = true;
         matugenTargetMonitor = "";
@@ -34,6 +37,15 @@ config,
         widgetBackgroundColor = "sch";
         widgetColorMode = "default";
         cornerRadius = 12;
+        niriLayoutGapsOverride = -1;
+        niriLayoutRadiusOverride = -1;
+        niriLayoutBorderSize = -1;
+        hyprlandLayoutGapsOverride = -1;
+        hyprlandLayoutRadiusOverride = -1;
+        hyprlandLayoutBorderSize = -1;
+        mangoLayoutGapsOverride = -1;
+        mangoLayoutRadiusOverride = -1;
+        mangoLayoutBorderSize = -1;
         use24HourClock = true;
         showSeconds = true;
         useFahrenheit = false;
@@ -66,70 +78,112 @@ config,
         controlCenterShowNetworkIcon = true;
         controlCenterShowBluetoothIcon = true;
         controlCenterShowAudioIcon = true;
+        controlCenterShowAudioPercent = false;
         controlCenterShowVpnIcon = true;
         controlCenterShowBrightnessIcon = false;
+        controlCenterShowBrightnessPercent = false;
         controlCenterShowMicIcon = true;
+        controlCenterShowMicPercent = false;
         controlCenterShowBatteryIcon = false;
         controlCenterShowPrinterIcon = false;
+        controlCenterShowScreenSharingIcon = true;
         showPrivacyButton = true;
         privacyShowMicIcon = false;
         privacyShowCameraIcon = false;
         privacyShowScreenShareIcon = false;
         controlCenterWidgets = [
           {
+            enabled = true;
             id = "volumeSlider";
-            enabled = true;
             width = 50;
           }
           {
+            enabled = true;
             id = "wifi";
-            enabled = true;
             width = 50;
           }
           {
+            enabled = true;
             id = "brightnessSlider";
-            enabled = true;
             width = 50;
           }
           {
+            enabled = true;
             id = "audioOutput";
-            enabled = true;
             width = 50;
           }
           {
+            enabled = true;
             id = "audioInput";
-            enabled = true;
             width = 50;
           }
           {
+            enabled = true;
             id = "nightMode";
-            enabled = true;
             width = 50;
           }
           {
-            id = "darkMode";
             enabled = true;
+            id = "darkMode";
             width = 25;
           }
         ];
-        showWorkspaceIndex = true;
+        showWorkspaceIndex = false;
+        showWorkspaceName = false;
         showWorkspacePadding = true;
         workspaceScrolling = false;
-        showWorkspaceApps = false;
-        maxWorkspaceIcons = 1;
-        workspacesPerMonitor = true;
+        showWorkspaceApps = true;
+        maxWorkspaceIcons = 2;
+        groupWorkspaceApps = true;
+        workspaceFollowFocus = false;
         showOccupiedWorkspacesOnly = true;
+        reverseScrolling = false;
         dwlShowAllTags = false;
+        workspaceColorMode = "default";
+        workspaceUnfocusedColorMode = "default";
+        workspaceUrgentColorMode = "default";
+        workspaceFocusedBorderEnabled = false;
+        workspaceFocusedBorderColor = "primary";
+        workspaceFocusedBorderThickness = 2;
         workspaceNameIcons = {
         };
         waveProgressEnabled = true;
         scrollTitleEnabled = true;
+        audioVisualizerEnabled = true;
+        audioScrollMode = "volume";
         clockCompactMode = false;
         focusedWindowCompactMode = false;
         runningAppsCompactMode = true;
         keyboardLayoutNameCompactMode = false;
         runningAppsCurrentWorkspace = false;
         runningAppsGroupByApp = false;
+        appIdSubstitutions = [
+          {
+            pattern = "Spotify";
+            replacement = "spotify";
+            type = "exact";
+          }
+          {
+            pattern = "beepertexts";
+            replacement = "beeper";
+            type = "exact";
+          }
+          {
+            pattern = "home assistant desktop";
+            replacement = "homeassistant-desktop";
+            type = "exact";
+          }
+          {
+            pattern = "com.transmissionbt.transmission";
+            replacement = "transmission-gtk";
+            type = "contains";
+          }
+          {
+            pattern = "^steam_app_(\\d+)$";
+            replacement = "steam_icon_$1";
+            type = "regex";
+          }
+        ];
         centeringMode = "index";
         clockDateFormat = "d MMMM, dddd";
         lockDateFormat = "d MMMM, dddd";
@@ -140,34 +194,45 @@ config,
         appLauncherGridColumns = 4;
         spotlightCloseNiriOverview = true;
         niriOverviewOverlayEnabled = true;
-        weatherLocation = "Երևան";
-        weatherCoordinates = "40.1777112,44.5126233";
         useAutoLocation = false;
-        weatherEnabled = true;
+        weatherEnabled = false;
         networkPreference = "auto";
         vpnLastConnected = "";
         iconTheme = "distrobox";
+        cursorSettings = {
+          theme = "System Default";
+          size = 24;
+          niri = {
+            hideWhenTyping = false;
+            hideAfterInactiveMs = 0;
+          };
+          hyprland = {
+            hideOnKeyPress = false;
+            hideOnTouch = false;
+            inactiveTimeout = 0;
+          };
+          dwl = {
+            cursorHideTimeout = 0;
+          };
+        };
         launcherLogoMode = "os";
         launcherLogoCustomPath = "";
         launcherLogoColorOverride = "";
         launcherLogoColorInvertOnMode = false;
-        launcherLogoBrightness = {
-        };
+        launcherLogoBrightness = null;
         launcherLogoContrast = 1;
         launcherLogoSizeOffset = 0;
         fontFamily = "SFProDisplay Nerd Font";
         monoFontFamily = "Liberation Mono";
         fontWeight = 400;
-        fontScale = {
-        };
+        fontScale = null;
         notepadUseMonospace = true;
         notepadFontFamily = "";
         notepadFontSize = 14;
         notepadShowLineNumbers = false;
         notepadTransparencyOverride = -1;
-        notepadLastCustomTransparency = {
-        };
-        soundsEnabled = true;
+        notepadLastCustomTransparency = null;
+        soundsEnabled = false;
         useSystemSoundTheme = false;
         soundNewNotification = true;
         soundVolumeChanged = true;
@@ -182,11 +247,13 @@ config,
         batterySuspendTimeout = 0;
         batterySuspendBehavior = 0;
         batteryProfileName = "";
+        batteryChargeLimit = 100;
         lockBeforeSuspend = false;
-        preventIdleForMedia = false;
         loginctlLockIntegration = true;
         fadeToLockEnabled = false;
         fadeToLockGracePeriod = 5;
+        fadeToDpmsEnabled = true;
+        fadeToDpmsGracePeriod = 5;
         launchPrefix = "uwsm-app";
         brightnessDevicePins = {
         };
@@ -202,6 +269,27 @@ config,
         qtThemingEnabled = false;
         syncModeWithPortal = true;
         terminalsAlwaysDark = false;
+        runDmsMatugenTemplates = true;
+        matugenTemplateGtk = true;
+        matugenTemplateNiri = true;
+        matugenTemplateHyprland = true;
+        matugenTemplateMangowc = true;
+        matugenTemplateQt5ct = true;
+        matugenTemplateQt6ct = true;
+        matugenTemplateFirefox = true;
+        matugenTemplatePywalfox = true;
+        matugenTemplateZenBrowser = true;
+        matugenTemplateVesktop = true;
+        matugenTemplateEquibop = true;
+        matugenTemplateGhostty = true;
+        matugenTemplateKitty = true;
+        matugenTemplateFoot = true;
+        matugenTemplateAlacritty = true;
+        matugenTemplateNeovim = true;
+        matugenTemplateWezterm = true;
+        matugenTemplateDgop = true;
+        matugenTemplateKcolorscheme = true;
+        matugenTemplateVscode = true;
         showDock = false;
         dockAutoHide = false;
         dockGroupByApp = false;
@@ -216,18 +304,32 @@ config,
         dockBorderColor = "surfaceText";
         dockBorderOpacity = 1;
         dockBorderThickness = 1;
+        dockIsolateDisplays = false;
         notificationOverlayEnabled = false;
         modalDarkenBackground = true;
         lockScreenShowPowerActions = true;
+        lockScreenShowSystemIcons = true;
+        lockScreenShowTime = true;
+        lockScreenShowDate = true;
+        lockScreenShowProfileImage = true;
+        lockScreenShowPasswordField = true;
         enableFprint = false;
         maxFprintTries = 3;
         lockScreenActiveMonitor = "all";
         lockScreenInactiveColor = "#000000";
+        lockScreenNotificationMode = 0;
         hideBrightnessSlider = false;
         notificationTimeoutLow = 5000;
         notificationTimeoutNormal = 5000;
         notificationTimeoutCritical = 0;
+        notificationCompactMode = false;
         notificationPopupPosition = 0;
+        notificationHistoryEnabled = true;
+        notificationHistoryMaxCount = 50;
+        notificationHistoryMaxAgeDays = 1;
+        notificationHistorySaveLow = true;
+        notificationHistorySaveNormal = true;
+        notificationHistorySaveCritical = true;
         osdAlwaysShowValue = false;
         osdPosition = 6;
         osdVolumeEnabled = true;
@@ -239,8 +341,7 @@ config,
         osdPowerProfileEnabled = false;
         osdAudioOutputEnabled = true;
         powerActionConfirm = true;
-        powerActionHoldDuration = {
-        };
+        powerActionHoldDuration = null;
         powerMenuActions = [
           "reboot"
           "logout"
@@ -257,6 +358,7 @@ config,
         customPowerActionHibernate = "";
         customPowerActionReboot = "";
         customPowerActionPowerOff = "";
+        updaterHideWidget = false;
         updaterUseCustomCommand = true;
         updaterCustomCommand = "nix-u";
         updaterTerminalAdditionalParams = "";
@@ -269,56 +371,81 @@ config,
         showOnLastDisplay = {
           dock = false;
         };
+        niriOutputSettings = {
+        };
+        hyprlandOutputSettings = {
+        };
         barConfigs = [
           {
-            id = "default";
-            name = "Main Bar";
-            enabled = true;
-            position = 0;
-            screenPreferences = [
-              "all"
-            ];
-            showOnLastDisplay = true;
-            leftWidgets = [
+            autoHide = false;
+            autoHideDelay = 1143;
+            borderColor = "secondary";
+            borderEnabled = true;
+            borderOpacity = {
+            };
+            borderThickness = 1;
+            bottomGap = 0;
+            centerWidgets = [
               {
                 id = "workspaceSwitcher";
                 enabled = true;
               }
-              {
-                id = "focusedWindow";
-                enabled = true;
-                focusedWindowCompactMode = false;
-              }
             ];
-            centerWidgets = [
-              {
-                id = "music";
-                enabled = true;
-                mediaSize = 2;
-              }
+            enabled = true;
+            fontScale = {
+            };
+            gothCornerRadiusOverride = false;
+            gothCornerRadiusValue = 12;
+            gothCornersEnabled = false;
+            id = "default";
+            innerPadding = 17;
+            leftWidgets = [
               {
                 id = "clock";
                 enabled = true;
                 clockCompactMode = false;
               }
+              {
+                id = "controlCenterButton";
+                enabled = true;
+                showNetworkIcon = true;
+                showBluetoothIcon = true;
+                showAudioIcon = true;
+                showAudioPercent = false;
+                showVpnIcon = true;
+                showBrightnessIcon = false;
+                showBrightnessPercent = false;
+                showMicIcon = true;
+                showMicPercent = false;
+                showBatteryIcon = false;
+                showPrinterIcon = false;
+                showScreenSharingIcon = true;
+              }
+              {
+                id = "network_speed_monitor";
+                enabled = true;
+              }
             ];
+            maximizeDetection = true;
+            name = "Main Bar";
+            noBackground = false;
+            openOnOverview = false;
+            popupGapsAuto = true;
+            popupGapsManual = 0;
+            position = 0;
             rightWidgets = [
               {
                 id = "keyboard_layout_name";
                 enabled = true;
               }
               {
+                id = "music";
+                enabled = true;
+              }
+              {
                 id = "cpuUsage";
                 enabled = true;
                 minimumWidth = true;
-              }
-              {
-                id = "vpn";
-                enabled = true;
-              }
-              {
-                id = "controlCenterButton";
-                enabled = true;
               }
               {
                 id = "systemTray";
@@ -329,38 +456,109 @@ config,
                 enabled = true;
               }
             ];
-            spacing = 2;
-            innerPadding = 17;
-            bottomGap = 0;
+            screenPreferences = [
+              "all"
+            ];
+            showOnLastDisplay = true;
+            spacing = 0;
+            squareCorners = false;
             transparency = {
             };
-            widgetTransparency = 1;
-            squareCorners = false;
-            noBackground = false;
-            gothCornersEnabled = false;
-            gothCornerRadiusOverride = false;
-            gothCornerRadiusValue = 12;
-            borderEnabled = true;
-            borderColor = "secondary";
-            borderOpacity = {
-            };
-            borderThickness = 1;
-            widgetOutlineEnabled = false;
+            visible = true;
             widgetOutlineColor = "secondary";
+            widgetOutlineEnabled = false;
             widgetOutlineOpacity = {
             };
             widgetOutlineThickness = 1;
-            fontScale = {
-            };
-            autoHide = false;
-            autoHideDelay = 250;
-            openOnOverview = false;
-            visible = true;
-            popupGapsAuto = true;
-            popupGapsManual = 0;
-            maximizeDetection = true;
+            widgetTransparency = 1;
+            showOnWindowsOpen = false;
           }
         ];
+        desktopClockEnabled = false;
+        desktopClockStyle = "analog";
+        desktopClockTransparency = 0.8;
+        desktopClockColorMode = "primary";
+        desktopClockCustomColor = {
+          r = 1;
+          g = 1;
+          b = 1;
+          a = 1;
+          hsvHue = -1;
+          hsvSaturation = 0;
+          hsvValue = 1;
+          hslHue = -1;
+          hslSaturation = 0;
+          hslLightness = 1;
+          valid = true;
+        };
+        desktopClockShowDate = true;
+        desktopClockShowAnalogNumbers = false;
+        desktopClockShowAnalogSeconds = true;
+        desktopClockX = -1;
+        desktopClockY = -1;
+        desktopClockWidth = 280;
+        desktopClockHeight = 180;
+        desktopClockDisplayPreferences = [
+          "all"
+        ];
+        systemMonitorEnabled = false;
+        systemMonitorShowHeader = true;
+        systemMonitorTransparency = 0.8;
+        systemMonitorColorMode = "primary";
+        systemMonitorCustomColor = {
+          r = 1;
+          g = 1;
+          b = 1;
+          a = 1;
+          hsvHue = -1;
+          hsvSaturation = 0;
+          hsvValue = 1;
+          hslHue = -1;
+          hslSaturation = 0;
+          hslLightness = 1;
+          valid = true;
+        };
+        systemMonitorShowCpu = true;
+        systemMonitorShowCpuGraph = true;
+        systemMonitorShowCpuTemp = true;
+        systemMonitorShowGpuTemp = false;
+        systemMonitorGpuPciId = "";
+        systemMonitorShowMemory = true;
+        systemMonitorShowMemoryGraph = true;
+        systemMonitorShowNetwork = true;
+        systemMonitorShowNetworkGraph = true;
+        systemMonitorShowDisk = true;
+        systemMonitorShowTopProcesses = false;
+        systemMonitorTopProcessCount = 3;
+        systemMonitorTopProcessSortBy = "cpu";
+        systemMonitorGraphInterval = 60;
+        systemMonitorLayoutMode = "auto";
+        systemMonitorX = -1;
+        systemMonitorY = -1;
+        systemMonitorWidth = 320;
+        systemMonitorHeight = 480;
+        systemMonitorDisplayPreferences = [
+          "all"
+        ];
+        systemMonitorVariants = [
+
+        ];
+        desktopWidgetPositions = {
+        };
+        desktopWidgetGridSettings = {
+        };
+        desktopWidgetInstances = [
+
+        ];
+        desktopWidgetGroups = [
+
+        ];
+        builtInPluginSettings = {
+          dms_settings_search = {
+            trigger = "?";
+          };
+        };
+        configVersion = 5;
       };
     };
   };

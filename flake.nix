@@ -69,8 +69,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    dankMaterialShell = {
-      url = "github:AvengeMedia/DankMaterialShell";
+    dms = {
+      url = "github:AvengeMedia/DankMaterialShell/stable";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -86,7 +86,7 @@
       vicinae,
       sneemok,
       caelestia-shell,
-      dankMaterialShell,
+      dms,
       ...
     }@inputs:
     let
@@ -109,7 +109,7 @@
                 vicinae.homeManagerModules.default
                 sneemok.homeManagerModules.default
                 caelestia-shell.homeManagerModules.default
-                dankMaterialShell.homeModules.dank-material-shell
+                dms.homeModules.dank-material-shell
               ];
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
