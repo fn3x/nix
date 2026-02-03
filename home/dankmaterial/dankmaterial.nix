@@ -27,8 +27,7 @@ config,
         currentThemeName = "dynamic";
         currentThemeCategory = "generic";
         customThemeFile = "";
-        registryThemeVariants = {
-        };
+        registryThemeVariants = { };
         matugenScheme = "scheme-fidelity";
         runUserMatugenTemplates = true;
         matugenTargetMonitor = "";
@@ -66,9 +65,7 @@ config,
         showCpuTemp = true;
         showGpuTemp = true;
         selectedGpuIndex = 0;
-        enabledGpuPciIds = [
-
-        ];
+        enabledGpuPciIds = [ ];
         showSystemTray = true;
         showClock = true;
         showNotificationButton = true;
@@ -88,9 +85,9 @@ config,
         controlCenterShowPrinterIcon = false;
         controlCenterShowScreenSharingIcon = true;
         showPrivacyButton = true;
-        privacyShowMicIcon = false;
-        privacyShowCameraIcon = false;
-        privacyShowScreenShareIcon = false;
+        privacyShowMicIcon = true;
+        privacyShowCameraIcon = true;
+        privacyShowScreenShareIcon = true;
         controlCenterWidgets = [
           {
             enabled = true;
@@ -145,8 +142,7 @@ config,
         workspaceFocusedBorderEnabled = false;
         workspaceFocusedBorderColor = "primary";
         workspaceFocusedBorderThickness = 2;
-        workspaceNameIcons = {
-        };
+        workspaceNameIcons = { };
         waveProgressEnabled = true;
         scrollTitleEnabled = true;
         audioVisualizerEnabled = true;
@@ -179,7 +175,7 @@ config,
             type = "contains";
           }
           {
-            pattern = "^steam_app_(\\d+)$";
+            pattern = "^steam_app_(\d+)$";
             replacement = "steam_icon_$1";
             type = "regex";
           }
@@ -200,38 +196,38 @@ config,
         vpnLastConnected = "";
         iconTheme = "distrobox";
         cursorSettings = {
-          theme = "System Default";
-          size = 24;
-          niri = {
-            hideWhenTyping = false;
-            hideAfterInactiveMs = 0;
+          dwl = {
+            cursorHideTimeout = 0;
           };
           hyprland = {
             hideOnKeyPress = false;
             hideOnTouch = false;
             inactiveTimeout = 0;
           };
-          dwl = {
-            cursorHideTimeout = 0;
+          niri = {
+            hideAfterInactiveMs = 0;
+            hideWhenTyping = false;
           };
+          size = 24;
+          theme = "System Default";
         };
         launcherLogoMode = "os";
         launcherLogoCustomPath = "";
         launcherLogoColorOverride = "";
         launcherLogoColorInvertOnMode = false;
-        launcherLogoBrightness = null;
+        launcherLogoBrightness = 0;
         launcherLogoContrast = 1;
         launcherLogoSizeOffset = 0;
-        fontFamily = "SFProDisplay Nerd Font";
+        fontFamily = "SFProDisplay Nerd Font Medium";
         monoFontFamily = "Liberation Mono";
         fontWeight = 400;
-        fontScale = null;
+        fontScale = 0;
         notepadUseMonospace = true;
         notepadFontFamily = "";
         notepadFontSize = 14;
         notepadShowLineNumbers = false;
         notepadTransparencyOverride = -1;
-        notepadLastCustomTransparency = null;
+        notepadLastCustomTransparency = 0;
         soundsEnabled = false;
         useSystemSoundTheme = false;
         soundNewNotification = true;
@@ -255,16 +251,11 @@ config,
         fadeToDpmsEnabled = true;
         fadeToDpmsGracePeriod = 5;
         launchPrefix = "uwsm-app";
-        brightnessDevicePins = {
-        };
-        wifiNetworkPins = {
-        };
-        bluetoothDevicePins = {
-        };
-        audioInputDevicePins = {
-        };
-        audioOutputDevicePins = {
-        };
+        brightnessDevicePins = { };
+        wifiNetworkPins = { };
+        bluetoothDevicePins = { };
+        audioInputDevicePins = { };
+        audioOutputDevicePins = { };
         gtkThemingEnabled = false;
         qtThemingEnabled = false;
         syncModeWithPortal = true;
@@ -341,7 +332,7 @@ config,
         osdPowerProfileEnabled = false;
         osdAudioOutputEnabled = true;
         powerActionConfirm = true;
-        powerActionHoldDuration = null;
+        powerActionHoldDuration = 0;
         powerMenuActions = [
           "reboot"
           "logout"
@@ -364,36 +355,30 @@ config,
         updaterTerminalAdditionalParams = "";
         displayNameMode = "model";
         screenPreferences = {
-          dock = [
-
-          ];
+          dock = [ ];
         };
         showOnLastDisplay = {
           dock = false;
         };
-        niriOutputSettings = {
-        };
-        hyprlandOutputSettings = {
-        };
+        niriOutputSettings = { };
+        hyprlandOutputSettings = { };
         barConfigs = [
           {
             autoHide = false;
             autoHideDelay = 1143;
             borderColor = "secondary";
             borderEnabled = true;
-            borderOpacity = {
-            };
+            borderOpacity = { };
             borderThickness = 1;
             bottomGap = 0;
             centerWidgets = [
               {
-                id = "workspaceSwitcher";
                 enabled = true;
+                id = "workspaceSwitcher";
               }
             ];
             enabled = true;
-            fontScale = {
-            };
+            fontScale = { };
             gothCornerRadiusOverride = false;
             gothCornerRadiusValue = 12;
             gothCornersEnabled = false;
@@ -401,22 +386,17 @@ config,
             innerPadding = 17;
             leftWidgets = [
               {
-                id = "clock";
-                enabled = true;
-                clockCompactMode = false;
-              }
-              {
                 id = "controlCenterButton";
                 enabled = true;
                 showNetworkIcon = true;
                 showBluetoothIcon = true;
                 showAudioIcon = true;
-                showAudioPercent = false;
+                showAudioPercent = true;
                 showVpnIcon = true;
                 showBrightnessIcon = false;
                 showBrightnessPercent = false;
                 showMicIcon = true;
-                showMicPercent = false;
+                showMicPercent = true;
                 showBatteryIcon = false;
                 showPrinterIcon = false;
                 showScreenSharingIcon = true;
@@ -424,6 +404,11 @@ config,
               {
                 id = "network_speed_monitor";
                 enabled = true;
+              }
+              {
+                id = "clock";
+                enabled = true;
+                clockCompactMode = false;
               }
             ];
             maximizeDetection = true;
@@ -439,7 +424,7 @@ config,
                 enabled = true;
               }
               {
-                id = "music";
+                id = "privacyIndicator";
                 enabled = true;
               }
               {
@@ -460,18 +445,16 @@ config,
               "all"
             ];
             showOnLastDisplay = true;
+            showOnWindowsOpen = false;
             spacing = 0;
             squareCorners = false;
-            transparency = {
-            };
+            transparency = { };
             visible = true;
             widgetOutlineColor = "secondary";
             widgetOutlineEnabled = false;
-            widgetOutlineOpacity = {
-            };
+            widgetOutlineOpacity = { };
             widgetOutlineThickness = 1;
             widgetTransparency = 1;
-            showOnWindowsOpen = false;
           }
         ];
         desktopClockEnabled = false;
@@ -540,19 +523,11 @@ config,
         systemMonitorDisplayPreferences = [
           "all"
         ];
-        systemMonitorVariants = [
-
-        ];
-        desktopWidgetPositions = {
-        };
-        desktopWidgetGridSettings = {
-        };
-        desktopWidgetInstances = [
-
-        ];
-        desktopWidgetGroups = [
-
-        ];
+        systemMonitorVariants = [ ];
+        desktopWidgetPositions = { };
+        desktopWidgetGridSettings = { };
+        desktopWidgetInstances = [ ];
+        desktopWidgetGroups = [ ];
         builtInPluginSettings = {
           dms_settings_search = {
             trigger = "?";
