@@ -31,6 +31,7 @@ in
     ../../home/caelestia
     ../../home/dankmaterial
     ../../home/idescriptor
+    ../../home/games
   ];
 
   home.username = username;
@@ -68,7 +69,6 @@ in
     mysql_jdbc
     openssl
     grim
-    gamescope
     vulkan-loader
     vulkan-validation-layers
     libglvnd
@@ -81,15 +81,12 @@ in
     qbittorrent
     playerctl
     anydesk
-    wineWow64Packages.waylandFull
-    winetricks
     vesktop
     thunderbird
     r2modman
     whitesur-kde
     caligula
     postman
-    prismlauncher
     wl-clipboard
     satty
     grim
@@ -101,7 +98,6 @@ in
     filezilla
     spotify
     signal-desktop
-    srb2
     pinta
     cava
     mariadb.client
@@ -113,7 +109,6 @@ in
     mullvad-browser
     nwg-displays
     normcap
-    lutris
   ];
 
   neovim.enable = true;
@@ -128,6 +123,8 @@ in
   brave.enable = true;
   sneemok.enable = true;
   idescriptor.enable = true;
+  shadps4.enable = true;
+  prismlauncher.enable = true;
 
   home.file = {
     "${homeDirectory}/.config/chromium-flags.conf" = {
