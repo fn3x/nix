@@ -271,11 +271,10 @@ config,
       }
 
       layerrule {
-        name = vicinae-layer
-        match:namespace = vicinae
-        blur = true
-        ignore_alpha = 0
-        no_anim = true
+          name = vicinae-blur
+          blur = on
+          ignore_alpha = 0
+          match:namespace = vicinae
       }
 
       layerrule {
