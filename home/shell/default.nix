@@ -35,6 +35,7 @@
     LIBVA_DRIVER_NAME = "nvidia";
     NIXOS_OZONE_WL = 1;
     XDG_SESSION_TYPE = "wayland";
+    XDG_DATA_DIRS = "$XDG_DATA_DIRS:/usr/share:/var/lib/flatpak/exports/share:$HOME/.local/share/flatpak/exports/share";
     MOZ_ENABLE_WAYLAND = "1";
     ELECTRON_OZONE_PLATFORM_HINT = "wayland";
     LIBVIRT_DEFAULT_URI="qemu:///system";

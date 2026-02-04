@@ -123,7 +123,8 @@ in
   brave.enable = true;
   sneemok.enable = true;
   idescriptor.enable = true;
-  shadps4.enable = true;
+  shadps4.enable = false;
+  bblauncher.enable = true;
   prismlauncher.enable = true;
 
   home.file = {

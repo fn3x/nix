@@ -167,6 +167,8 @@
     })
   ];
 
+  services.flatpak.enable = true;
+
   programs.gnupg.agent = {                                                      
     enable = true;
   };
