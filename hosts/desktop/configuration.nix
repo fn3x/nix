@@ -167,6 +167,10 @@
     })
   ];
 
+  services.udev.extraRules = ''
+    SUBSYSTEM=="input", ATTRS{idVendor}=="2dc8", ATTRS{idProduct}=="310b", MODE="0660", GROUP="input"
+  '';
+
   services.flatpak.enable = true;
 
   programs.gnupg.agent = {                                                      

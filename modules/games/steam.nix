@@ -11,6 +11,9 @@ inputs,
   };
 
   config = lib.mkIf config.steam.enable {
+    environment.systemPackages = with pkgs; [
+      protonup-qt
+    ];
     programs.steam = {
       enable = true;
       gamescopeSession.enable = true;

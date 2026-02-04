@@ -109,6 +109,8 @@ in
     mullvad-browser
     nwg-displays
     normcap
+    p7zip
+    protontricks
   ];
 
   neovim.enable = true;
@@ -123,9 +125,10 @@ in
   brave.enable = true;
   sneemok.enable = true;
   idescriptor.enable = true;
-  shadps4.enable = false;
+  shadps4.enable = true;
   bblauncher.enable = true;
   prismlauncher.enable = true;
+  lutris.enable = true;
 
   home.file = {
     "${homeDirectory}/.config/chromium-flags.conf" = {

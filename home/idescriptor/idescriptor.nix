@@ -9,8 +9,6 @@
   };
 
   config = lib.mkIf config.idescriptor.enable {
-    home.packages = [ 
-      (pkgs.callPackage ./idescriptor-drv.nix {})
-    ];
+    programs.idescriptor.enable = true;
   };
 }

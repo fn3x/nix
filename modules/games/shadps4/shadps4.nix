@@ -1,20 +1,26 @@
 {
   lib,
-  pkgs,
+  stdenv,
+  fetchFromGitHub,
+  replaceVars,
 
   wrapQtAppsHook ? null,
 
   qtbase ? null,
   qttools ? null,
   qtmultimedia ? null,
+  libpulseaudio,
+  pipewire,
 
-  withGUI ? true,
+  withGUI ? false,
+  callPackage,
+  symlinkJoin,
 }:
 
 let
-  emulator = pkgs.callPackage ./emulator.nix { };
+  emulator = callPackage ./emulator.nix { };
 
-  shadps4 = pkgs.symlinkJoin {
+  shadps4 = symlinkJoin {
     name = "shadps4-wrapped";
     paths = [ emulator ];
 
@@ -29,9 +35,9 @@ let
 in
 (
   if withGUI then
-    pkgs.stdenv.mkDerivation (finalAttrs: {
+    stdenv.mkDerivation (finalAttrs: {
       pname = "shadps4-qt";
-      version = "0-unstable-2026-01-26";
+      version = "0-unstable-2026-02-01";
 
       inherit (emulator)
         postPatch
@@ -41,16 +47,16 @@ in
         runtimeDependencies
         ;
 
-      src = pkgs.fetchFromGitHub {
+      src = fetchFromGitHub {
         inherit (emulator.src) owner leaveDotGit postFetch;
         repo = "shadps4-qtlauncher";
-        rev = "f8ebecb33a773821e5bf9d3d3e273d2a7f8f4744";
-        hash = "sha256-Al32n5OTafmNKxkFp/eGE26qQ7gz8bWr6qHpWYBr30g=";
+        rev = "4ba1bfd3e24aa86135e27bfb53b4fc1298cc85f7";
+        hash = "sha256-rCsWVeNZozMbZg9l95bU+rDVH6MA7rRWweeAXimY1wA=";
         fetchSubmodules = true;
       };
 
       patches = [
-        (pkgs.replaceVars ./qt-paths.patch {
+        (replaceVars ./qt-paths.patch {
           inherit shadps4;
         })
         ./hide-version-manager.patch
@@ -64,6 +70,8 @@ in
         qtbase
         qttools
         qtmultimedia
+        libpulseaudio
+        pipewire
       ];
 
       installPhase = ''
@@ -93,8 +101,8 @@ in
       qtWrapperArgs = [
         "--prefix LD_LIBRARY_PATH : ${
           lib.makeLibraryPath [
-            pkgs.libpulseaudio
-            pkgs.pipewire
+            libpulseaudio
+            pipewire
           ]
         }"
       ];

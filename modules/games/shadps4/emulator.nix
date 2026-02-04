@@ -1,18 +1,64 @@
 {
   lib,
-  pkgs,
-  ...
+  stdenv,
+  fetchFromGitHub,
+
+  nixosTests,
+  alsa-lib,
+  boost,
+  cmake,
+  cryptopp,
+  glslang,
+  ffmpeg,
+  fmt,
+  half,
+  jack2,
+  libdecor,
+  libpulseaudio,
+  wayland,
+  wayland-protocols,
+  libunwind,
+  libusb1,
+  magic-enum,
+  libgbm,
+  libx11,
+  libxcb,
+  libxcursor,
+  libxext,
+  libxi,
+  libxrandr,
+  libxscrnsaver,
+  libxtst,
+  libxkbcommon,
+  pipewire,
+  pkg-config,
+  pugixml,
+  rapidjson,
+  renderdoc,
+  robin-map,
+  sndio,
+  stb,
+  toml11,
+  util-linux,
+  vulkan-headers,
+  vulkan-loader,
+  vulkan-memory-allocator,
+  xbyak,
+  xxHash,
+  zlib-ng,
+  zydis,
+  nix-update-script,
 }:
 
-pkgs.stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "shadps4";
-  version = "0.13.0";
+  version = "0.14.0";
 
-  src = pkgs.fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "shadps4-emu";
     repo = "shadPS4";
     tag = "v.${finalAttrs.version}";
-    hash = "sha256-zc3zhFTphty/vwioFEOfhgXttpD9MG2F7+YJYcW0H2w=";
+    hash = "sha256-YnBcogEL7GqTdZCcBhD7YSfDnjgtneceLOUOovGXy2g=";
     fetchSubmodules = true;
 
     leaveDotGit = true;
@@ -33,7 +79,7 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
       --replace-fail @BUILD_DATE@ $(cat SOURCE_DATE_EPOCH)
   '';
 
-  buildInputs = with pkgs; [
+  buildInputs = [
     alsa-lib
     boost
     cryptopp
@@ -54,6 +100,7 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
     libxrandr
     libxscrnsaver
     libxtst
+    libxkbcommon
     magic-enum
     libgbm
     pipewire
@@ -68,20 +115,21 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
     vulkan-headers
     vulkan-loader
     vulkan-memory-allocator
+    wayland
+    wayland-protocols
     xbyak
     xxHash
     zlib-ng
     zydis
   ];
 
-  nativeBuildInputs = with pkgs; [
+  nativeBuildInputs = [
     cmake
     pkg-config
   ];
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_UPDATER" false)
-    "-DQt6_DIR=${pkgs.qt6.qtbase.dev}/lib/cmake/Qt6"
   ];
 
   # Still in development, help with debugging
@@ -99,14 +147,14 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  runtimeDependencies = with pkgs; [
+  runtimeDependencies = [
     vulkan-loader
     libxi
   ];
 
   passthru = {
-    tests.openorbis-example = pkgs.nixosTests.shadps4;
-    updateScript = pkgs.nix-update-script {
+    tests.openorbis-example = nixosTests.shadps4;
+    updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
         "v\\.(.*)"

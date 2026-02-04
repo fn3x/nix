@@ -25,5 +25,7 @@ pkgs,
         }
       ];
     };
+
+    programs.man.generateCaches = false;
   };
 }

@@ -68,9 +68,12 @@
       url = "github:AvengeMedia/dgop";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
     dms = {
       url = "github:AvengeMedia/DankMaterialShell/stable";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    iDescriptor = {
+      url = "github:fn3x/iDescriptor";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -87,6 +90,7 @@
       sneemok,
       caelestia-shell,
       dms,
+      iDescriptor,
       ...
     }@inputs:
     let
@@ -110,6 +114,7 @@
                 sneemok.homeManagerModules.default
                 caelestia-shell.homeManagerModules.default
                 dms.homeModules.dank-material-shell
+                iDescriptor.homeManagerModules.default
               ];
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
