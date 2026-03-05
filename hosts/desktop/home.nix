@@ -49,7 +49,8 @@ in
   fonts.fontconfig.enable = true;
 
   home.packages = with pkgs; [
-    inputs.apple-fonts.packages.${system}.sf-pro-nerd
+    # inputs.apple-fonts.packages.${system}.sf-pro-nerd
+    inputs.me3.packages.${system}.me3
     oh-my-posh
     telegram-desktop
     mattermost-desktop
@@ -82,7 +83,6 @@ in
     playerctl
     anydesk
     vesktop
-    thunderbird
     r2modman
     whitesur-kde
     caligula

@@ -76,6 +76,10 @@
       url = "github:fn3x/iDescriptor";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    me3 = {
+      url = "github:fn3x/me3";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =

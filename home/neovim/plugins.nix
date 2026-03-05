@@ -567,9 +567,6 @@ pkgs,
               };
             };
           };
-          ols = {
-            enable = true;
-          };
           zls = {
             enable = true;
           };
