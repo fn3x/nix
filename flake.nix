@@ -80,6 +80,10 @@
       url = "github:fn3x/me3";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    niri = {
+      url = "github:sodiboo/niri-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -95,6 +99,7 @@
       caelestia-shell,
       dms,
       iDescriptor,
+      niri,
       ...
     }@inputs:
     let
@@ -119,6 +124,7 @@
                 caelestia-shell.homeManagerModules.default
                 dms.homeModules.dank-material-shell
                 iDescriptor.homeManagerModules.default
+                niri.homeModules.niri
               ];
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;

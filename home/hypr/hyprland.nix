@@ -27,17 +27,14 @@ config,
       inputs.hyprpwcenter.packages.${system}.default
     ];
 
-    home.pointerCursor = {
-      gtk.enable = true;
-      x11.enable = true;
-      name = "Catppuccin Mocha Dark";
-      size = 22;
-      package = pkgs.catppuccin-cursors.mochaDark;
-    };
-
     home.sessionVariables = {
       XCURSOR_THEME = "Catppuccin Mocha Dark";
       XCURSOR_SIZE = 22;
+    };
+
+    xdg.portal = {
+      enable = lib.mkForce true;
+      extraPortals = [ inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland pkgs.xdg-desktop-portal-wlr ];
     };
 
     wayland.windowManager.hyprland = {

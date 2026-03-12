@@ -6,6 +6,7 @@
   pkgs,
   inputs,
   config,
+  lib,
   ...
 }:
 {
@@ -16,6 +17,8 @@
     ../../modules/games
   ];
 
+  nixpkgs.overlays = [ inputs.niri.overlays.niri ];
+
   nvidia.enable = true;
   pipewire.enable = true;
   steam.enable = true;
@@ -25,7 +28,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.networkmanager.enable = true;
-  networking.hostName = "desktop"; # Define your hostname.
+  networking.hostName = "desktop";
   networking.interfaces.eno1.useDHCP = true;
 
   # Enable networking
@@ -65,8 +68,6 @@
   };
 
   services.usbmuxd.enable = true;
-
-  # Enable CUPS to print documents.
   services.printing.enable = true;
 
   services.avahi = {
@@ -133,7 +134,6 @@
     devenv
     nv-codec-headers
     virtiofsd
-    niri
     distrobox
     amnezia-vpn
   ];
@@ -201,7 +201,7 @@
   };
 
   programs.river-classic = {
-    enable = true;
+    enable = false;
     xwayland.enable = true;
   };
 
@@ -234,10 +234,6 @@
   ];
   virtualisation.spiceUSBRedirection.enable = true;
 
-  xdg.portal = {
-    enable = true;
-    extraPortals = [ inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland pkgs.xdg-desktop-portal-wlr ];
-  };
 
   nix.settings.experimental-features = [
     "nix-command"
@@ -250,11 +246,13 @@
       "https://hyprland.cachix.org"
       "https://devenv.cachix.org"
       "https://vicinae.cachix.org"
+      "https://niri.cachix.org"
     ];
     trusted-public-keys = [
       "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
       "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
       "vicinae.cachix.org-1:1kDrfienkGHPYbkpNj1mWTr7Fm1+zcenzgTizIcI3oc="
+      "niri.cachix.org-1:Wv0OmO7PsuocRKzfDoJ3mulSl7Z6oezYhGhR+3W2964="
     ];
     trusted-users = [ "root" "fn3x" ];
   };
