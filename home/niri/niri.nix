@@ -27,12 +27,18 @@ config,
       enable = true;
       package = pkgs.niri-unstable;
       settings = {
-        environment = {
-          ELECTRON_OZONE_PLATFORM_HINT = "wayland";
-        };
         prefer-no-csd = true;
         hotkey-overlay = {
           skip-at-startup = true;
+        };
+        animations = {
+          workspace-switch = {
+            spring = {
+              damping-ratio = 1.0;
+              stiffness = 5000;
+              epsilon = 0.0001;
+            };
+          };
         };
         input = {
           mod-key = "Alt";
