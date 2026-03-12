@@ -188,7 +188,7 @@
   system.stateVersion = "24.11"; # Did you read the comment?
 
   programs.hyprland = {
-    enable = true;
+    enable = false;
     withUWSM = true;
     # set the flake package
     package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;

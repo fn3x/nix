@@ -115,7 +115,7 @@ in
   ];
 
   neovim.enable = true;
-  hyprland.enable = true;
+  hyprland.enable = false;
   hyprpanel.enable = false;
   caelestia.enable = false;
   dankmaterial.enable = true;
