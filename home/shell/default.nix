@@ -27,7 +27,6 @@
     _JAVA_AWT_WM_NONREPARENTING = 1;
     GBM_BACKEND = "nvidia-drm";
     __GLX_VENDOR_LIBRARY_NAME = "nvidia";
-    GDK_BACKEND = "wayland,x11,*";
     __GL_VRR_ALLOWED = 0;
     CLUTTER_BACKEND = "wayland";
     WLR_NO_HARDWARE_CURSORS = 1;
