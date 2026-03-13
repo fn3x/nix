@@ -169,6 +169,13 @@ config,
           {
             open-maximized = true;
             border.enable = false;
+            geometry-corner-radius = {
+              top-left = 20.0;
+              top-right = 20.0;
+              bottom-left = 20.0;
+              bottom-right = 20.0;
+            };
+            clip-to-geometry = true;
           }
           {
             matches = [
@@ -251,6 +258,9 @@ config,
             block-out-from = "screencast";
           }
         ];
+        debug = {
+          honor-xdg-activation-with-invalid-serial = true;
+        };
       };
     };
   };

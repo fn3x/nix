@@ -84,6 +84,15 @@
       url = "github:sodiboo/niri-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    noctalia = {
+      url = "github:noctalia-dev/noctalia-shell";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.noctalia-qs.follows = "noctalia-qs";
+    };
+    noctalia-qs = {
+      url = "github:noctalia-dev/noctalia-qs";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -100,6 +109,7 @@
       dms,
       iDescriptor,
       niri,
+      noctalia,
       ...
     }@inputs:
     let
@@ -125,6 +135,7 @@
                 dms.homeModules.dank-material-shell
                 iDescriptor.homeManagerModules.default
                 niri.homeModules.niri
+                noctalia.homeModules.default
               ];
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;

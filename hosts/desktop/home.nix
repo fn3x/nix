@@ -33,6 +33,7 @@ in
     ../../home/idescriptor
     ../../home/games
     ../../home/niri
+    ../../home/noctalia
   ];
 
   home.username = username;
@@ -118,7 +119,7 @@ in
   hyprland.enable = false;
   hyprpanel.enable = false;
   caelestia.enable = false;
-  dankmaterial.enable = true;
+  dankmaterial.enable = false;
   vicinae.enable = true;
   ghostty.enable = true;
   nu.enable = false;
@@ -131,6 +132,7 @@ in
   prismlauncher.enable = true;
   lutris.enable = true;
   niri.enable = true;
+  noctalia.enable = true;
 
   home.file = {
     "${homeDirectory}/.config/chromium-flags.conf" = {
