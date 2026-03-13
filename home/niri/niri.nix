@@ -40,6 +40,18 @@ config,
             };
           };
         };
+        layout = {
+          empty-workspace-above-first = true;
+          focus-ring = {
+            active = {
+              gradient = {
+                relative-to = "workspace-view";
+                from = "blue";
+                to = "green";
+              };
+            };
+          };
+        };
         input = {
           mod-key = "Alt";
           focus-follows-mouse.enable = true;
@@ -122,12 +134,11 @@ config,
           "Mod+4".action = focus-workspace "work";
           "Mod+5".action = focus-workspace "music";
           "Mod+6".action = focus-workspace "games";
-          "Mod+7".action = focus-workspace "extra";
         };
         spawn-at-startup = [
+          { command = ["${pkgs.xwayland-satellite}/bin/xwayland-satellite"]; }
           { command = [terminal]; }
           { command = [browser]; }
-          { command = ["${pkgs.xwayland-satellite}/bin/xwayland-satellite"]; }
           { command = ["${pkgs.telegram-desktop}/bin/Telegram"]; }
           { command = ["${pkgs.mattermost-desktop}/bin/mattermost-desktop"]; }
           { command = ["${pkgs.spotify}/bin/spotify"]; }
@@ -135,29 +146,30 @@ config,
           { command = ["${pkgs.steam}/bin/steam"]; }
         ];
         workspaces = {
-          terminal = {
+          "01-terminal" = {
             name = "terminal";
           };
-          browser = {
+          "02-browser" = {
             name = "browser";
           };
-          messengers = {
+          "03-messengers" = {
             name = "messengers";
           };
-          work = {
+          "04-work" = {
             name = "work";
           };
-          music = {
+          "05-music" = {
             name = "music";
           };
-          games = {
+          "06-games" = {
             name = "games";
-          };
-          extra = {
-            name = "extra";
           };
         };
         window-rules = [
+          {
+            open-maximized = true;
+            border.enable = false;
+          }
           {
             matches = [
               {
@@ -175,6 +187,7 @@ config,
               }
             ];
             open-on-workspace = "browser";
+            open-focused = false;
           }
           {
             matches = [
@@ -184,6 +197,7 @@ config,
               }
             ];
             open-on-workspace = "messengers";
+            open-focused = false;
             block-out-from = "screencast";
           }
           {
@@ -194,6 +208,7 @@ config,
               }
             ];
             open-on-workspace = "messengers";
+            open-focused = false;
           }
           {
             matches = [
@@ -203,6 +218,7 @@ config,
               }
             ];
             open-on-workspace = "messengers";
+            open-focused = false;
           }
           {
             matches = [
@@ -212,6 +228,7 @@ config,
               }
             ];
             open-on-workspace = "music";
+            open-focused = false;
           }
           {
             matches = [
@@ -221,6 +238,7 @@ config,
               }
             ];
             open-on-workspace = "games";
+            open-focused = false;
           }
         ];
         layer-rules = [
