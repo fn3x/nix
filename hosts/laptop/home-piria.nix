@@ -49,7 +49,6 @@ in
     thorium-browser
     qbittorrent
     playerctl
-    wineWowPackages.stable
     winetricks
     whitesur-kde
   ];

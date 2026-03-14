@@ -16,6 +16,7 @@ inputs,
     ];
     programs.steam = {
       enable = true;
+      package = pkgs.millennium-steam;
       gamescopeSession.enable = true;
       extraCompatPackages = with pkgs; [
         proton-ge-bin

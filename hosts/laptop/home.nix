@@ -85,7 +85,7 @@ in
     grim
     slurp
     thorium
-    helvum
+    crosspipe
     poop
     gajim
     filezilla

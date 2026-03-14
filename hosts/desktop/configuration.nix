@@ -17,8 +17,6 @@
     ../../modules/games
   ];
 
-  nixpkgs.overlays = [ inputs.niri.overlays.niri ];
-
   nvidia.enable = true;
   pipewire.enable = true;
   steam.enable = true;

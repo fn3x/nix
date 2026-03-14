@@ -93,7 +93,7 @@ in
     satty
     grim
     slurp
-    helvum
+    crosspipe
     poop
     rustdesk-flutter
     gajim
@@ -128,7 +128,7 @@ in
   sneemok.enable = true;
   idescriptor.enable = true;
   shadps4.enable = true;
-  bblauncher.enable = true;
+  bblauncher.enable = false;
   prismlauncher.enable = true;
   lutris.enable = true;
   niri.enable = true;

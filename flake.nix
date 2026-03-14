@@ -93,6 +93,10 @@
       url = "github:noctalia-dev/noctalia-qs";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    millennium = {
+      url = "github:SteamClientHomebrew/Millennium?dir=packages/nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -125,6 +129,9 @@
             ./hosts/desktop/configuration.nix
             clipboard-sync.nixosModules.default
             home-manager.nixosModules.home-manager
+            {
+              nixpkgs.overlays = [ inputs.niri.overlays.niri inputs.millennium.overlays.default ];
+            }
             {
               home-manager.extraSpecialArgs = { inherit inputs outputs; };
               home-manager.sharedModules = [

@@ -15,7 +15,6 @@
   lutris.enable = lib.mkDefault false;
   bblauncher.enable = lib.mkDefault false;
   home.packages = with pkgs; [
-    wineWowPackages.stable
     winetricks
   ];
 }
