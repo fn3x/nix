@@ -28,6 +28,9 @@ config,
       package = pkgs.niri-unstable;
       settings = {
         prefer-no-csd = true;
+        gestures = {
+          hot-corners.enable = false;
+        };
         hotkey-overlay = {
           skip-at-startup = true;
         };
