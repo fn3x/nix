@@ -11,14 +11,17 @@ pkgs,
   };
 
   config = lib.mkIf config.noctalia.enable {
+    home.packages = with pkgs; [
+      networkmanagerapplet
+    ];
+
     programs.noctalia-shell = {
       enable = true;
-      systemd.enable = true;
       settings = {
-        settingsVersion = 57;
+        settingsVersion = 58;
 
         bar = {
-          barType = "simple";
+          barType = "floating";
           position = "top";
           monitors = [];
           density = "spacious";
@@ -43,6 +46,33 @@ pkgs,
           autoHideDelay = 500;
           autoShowDelay = 150;
           showOnWorkspaceSwitch = true;
+          plugins = {
+            sources = [
+              {
+                enabled = true;
+                name = "Official Noctalia Plugins";
+                url = "https://github.com/noctalia-dev/noctalia-plugins";
+              }
+            ];
+            states = {
+              privacy-indicator = {
+                enabled = true;
+                sourceUrl = "https://github.com/noctalia-dev/noctalia-plugins";
+              };
+              network-manager-vpn = {
+                enabled = true;
+                sourceUrl = "https://github.com/noctalia-dev/noctalia-plugins";
+              };
+              niri-auto-tile = {
+                enabled = true;
+                sourceUrl = "https://github.com/noctalia-dev/noctalia-plugins";
+              };
+            };
+            version = 2;
+          };
+
+          pluginSettings = {
+          };
 
           widgets = {
             left = [
@@ -62,6 +92,25 @@ pkgs,
                 useFixedWidth = false;
                 visualizerType = "wave";
               }
+              {
+                displayMode = "onhover";
+                iconColor = "none";
+                id = "Volume";
+                middleClickCommand = "pwvucontrol || pavucontrol";
+                textColor = "none";
+              }
+              {
+                defaultSettings = {
+                  activeColor = "primary";
+                  enableToast = true;
+                  hideInactive = false;
+                  iconSpacing = 4;
+                  inactiveColor = "none";
+                  micFilterRegex = "";
+                  removeMargins = false;
+                };
+                id = "plugin:privacy-indicator";
+              }
             ];
 
             center = [
@@ -77,6 +126,14 @@ pkgs,
             ];
 
             right = [
+              {
+                defaultSettings = {
+                  connectedColor = "primary";
+                  disconnectedColor = "none";
+                  displayMode = "onhover";
+                };
+                id = "plugin:network-manager-vpn";
+              }
               {
                 displayMode = "forceOpen";
                 iconColor = "none";
@@ -107,20 +164,13 @@ pkgs,
                 usePadding = false;
               }
               {
-                blacklist = [];
+                blacklist = [ "nm-applet" ];
                 chevronColor = "none";
                 colorizeIcons = false;
                 drawerEnabled = false;
                 hidePassive = true;
                 id = "Tray";
                 pinned = [];
-              }
-              {
-                displayMode = "onhover";
-                iconColor = "none";
-                id = "Volume";
-                middleClickCommand = "pwvucontrol || pavucontrol";
-                textColor = "none";
               }
               {
                 hideWhenZero = false;
@@ -283,7 +333,7 @@ pkgs,
           position = "center";
           pinnedApps = [];
           sortByMostUsed = true;
-          terminalCommand = "${inputs.ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default} -e";
+          terminalCommand = "${inputs.ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/ghostty -e";
           customLaunchPrefixEnabled = false;
           customLaunchPrefix = "";
           viewMode = "list";
@@ -582,13 +632,13 @@ pkgs,
                   hideMode = "visible";
                   id = "MediaPlayer";
                   roundedCorners = true;
-                  scale = 1.2733593793415183;
+                  scale = 1.1207563888899807;
                   showAlbumArt = true;
                   showBackground = true;
                   showButtons = true;
                   showVisualizer = true;
                   visualizerType = "linear";
-                  x = 352;
+                  x = 384;
                   y = 96;
                 }
               ];

@@ -33,13 +33,10 @@ config,
         window-save-state = "always";
         window-decoration = false;
         auto-update = "check";
-        shell-integration = "none";
+        shell-integration = "fish";
         shell-integration-features = "ssh-env, ssh-terminfo";
         mouse-hide-while-typing = true;
         keybind = [
-          "ctrl+b>u=scroll_page_fractional:-0.5"
-          "ctrl+b>d=scroll_page_fractional:0.5"
-
           "ctrl+b>ctrl+j=new_split:down"
           "ctrl+b>ctrl+k=new_split:up"
           "ctrl+b>ctrl+h=new_split:left"

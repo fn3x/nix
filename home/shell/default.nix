@@ -39,6 +39,7 @@
     ELECTRON_OZONE_PLATFORM_HINT = "wayland";
     LIBVIRT_DEFAULT_URI="qemu:///system";
     QT_QPA_PLATFORMTHEME = "qt6ct";
+    NO_AT_BRIDGE = 1;
   };
 
   home.shellAliases = {

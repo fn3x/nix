@@ -113,6 +113,7 @@ in
     normcap
     p7zip
     protontricks
+    satty
   ];
 
   neovim.enable = true;
