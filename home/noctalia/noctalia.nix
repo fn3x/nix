@@ -67,6 +67,10 @@ pkgs,
                 enabled = true;
                 sourceUrl = "https://github.com/noctalia-dev/noctalia-plugins";
               };
+              screenshot = {
+                enabled = true;
+                sourceUrl = "https://github.com/noctalia-dev/noctalia-plugins";
+              };
             };
             version = 2;
           };
@@ -76,22 +80,6 @@ pkgs,
 
           widgets = {
             left = [
-              {
-                compactMode = false;
-                hideMode = "visible";
-                hideWhenIdle = false;
-                id = "MediaMini";
-                maxWidth = 500;
-                panelShowAlbumArt = true;
-                scrollingMode = "hover";
-                showAlbumArt = true;
-                showArtistFirst = false;
-                showProgressRing = true;
-                showVisualizer = true;
-                textColor = "none";
-                useFixedWidth = false;
-                visualizerType = "wave";
-              }
               {
                 displayMode = "onhover";
                 iconColor = "none";
@@ -110,6 +98,25 @@ pkgs,
                   removeMargins = false;
                 };
                 id = "plugin:privacy-indicator";
+              }
+              {
+                id = "plugin:screenshot";
+              }
+              {
+                compactMode = false;
+                hideMode = "visible";
+                hideWhenIdle = false;
+                id = "MediaMini";
+                maxWidth = 500;
+                panelShowAlbumArt = true;
+                scrollingMode = "hover";
+                showAlbumArt = true;
+                showArtistFirst = false;
+                showProgressRing = true;
+                showVisualizer = true;
+                textColor = "none";
+                useFixedWidth = false;
+                visualizerType = "wave";
               }
             ];
 
