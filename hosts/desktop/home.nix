@@ -34,6 +34,7 @@ in
     ../../home/games
     ../../home/niri
     ../../home/noctalia
+    ../../home/television
   ];
 
   home.username = username;
@@ -134,6 +135,7 @@ in
   lutris.enable = true;
   niri.enable = true;
   noctalia.enable = true;
+  television.enable = true;
 
   home.file = {
     "${homeDirectory}/.config/chromium-flags.conf" = {
