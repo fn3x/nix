@@ -19,6 +19,11 @@ config,
       xwayland-satellite
     ];
 
+    services.wl-clip-persist = {
+      enable = true;
+      clipboardType = "regular";
+    };
+
     programs.niri = let
       terminal = "${inputs.ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/ghostty";
       browser = "${pkgs.brave}/bin/brave";
@@ -137,6 +142,7 @@ config,
         in 
           baseBinds // noctaliaBinds;
         spawn-at-startup = [
+          { command = ["dbus-update-activation-environment --systemd DBUS_SESSION_BUS_ADDRESS DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"]; }
           { command = ["${inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/noctalia-shell"]; }
           { command = ["${pkgs.xwayland-satellite}/bin/xwayland-satellite"]; }
           { command = [terminal]; }
@@ -252,7 +258,7 @@ config,
           {
             matches = [
               {
-                app-id = "r#\"^org\\.telegram\\.desktop$\"#";
+                app-id = "^org\\.telegram\\.desktop$";
                 title = "^Media viewer$";
               }
             ];
@@ -262,14 +268,14 @@ config,
             matches = [
               {
                 app-id = "steam";
-                title = "r#\"^notificationtoasts_\\d+_desktop$\"#";
+                title = "^notificationtoasts_\\d+_desktop$";
               }
             ];
           }
           {
             matches = [
               {
-                app-id = "r#\"^org\\.telegram\\.desktop$\"#";
+                app-id = "^org\\.telegram\\.desktop$";
               }
             ];
             block-out-from = "screencast";
