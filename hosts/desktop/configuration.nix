@@ -79,6 +79,8 @@
     };
   };
 
+  services.dbus.enable = true;
+
   users.users.fn3x = {
     isNormalUser = true;
     description = "Art";
