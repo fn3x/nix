@@ -169,6 +169,7 @@
 
   services.udev.extraRules = ''
     SUBSYSTEM=="input", ATTRS{idVendor}=="2dc8", ATTRS{idProduct}=="310b", MODE="0660", GROUP="input"
+    KERNEL=="ntsync", SUBSYSTEM=="misc", TAG+="uaccess"
   '';
 
   services.flatpak.enable = true;
@@ -221,7 +222,7 @@
     };
   };
   virtualisation.podman.enable = true;
-  boot.kernelModules = [ "kvm-amd" "v4l2loopback" "snd-aloop" ];
+  boot.kernelModules = [ "kvm-amd" "v4l2loopback" "snd-aloop" "ntsync" ];
   boot.extraModprobeConfig = ''
     options kvm_amd nested=1
     options v4l2loopback exclusive_caps=1 card_label="Virtual Camera"
