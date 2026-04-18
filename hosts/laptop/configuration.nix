@@ -35,15 +35,15 @@
   i18n.defaultLocale = "en_US.UTF-8";
 
   i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_GB.UTF-8";
-    LC_IDENTIFICATION = "en_GB.UTF-8";
-    LC_MEASUREMENT = "en_GB.UTF-8";
-    LC_MONETARY = "en_GB.UTF-8";
-    LC_NAME = "en_GB.UTF-8";
-    LC_NUMERIC = "en_GB.UTF-8";
-    LC_PAPER = "en_GB.UTF-8";
-    LC_TELEPHONE = "en_GB.UTF-8";
-    LC_TIME = "en_GB.UTF-8";
+    LC_ADDRESS = "en_US.UTF-8";
+    LC_IDENTIFICATION = "en_US.UTF-8";
+    LC_MEASUREMENT = "en_US.UTF-8";
+    LC_MONETARY = "en_US.UTF-8";
+    LC_NAME = "en_US.UTF-8";
+    LC_NUMERIC = "en_US.UTF-8";
+    LC_PAPER = "en_US.UTF-8";
+    LC_TELEPHONE = "en_US.UTF-8";
+    LC_TIME = "en_US.UTF-8";
   };
 
   services.xserver.enable = true;
@@ -57,8 +57,10 @@
     variant = "";
   };
 
-  # Enable CUPS to print documents.
+  services.usbmuxd.enable = true;
   services.printing.enable = true;
+  services.cpupower-gui.enable = true;
+
 
   services.fwupd.enable = true;
 
@@ -66,23 +68,7 @@
     startAgent = true;
   };
 
-  programs.steam.enable = true;
-  programs.steam.gamescopeSession.enable = true;
-  programs.gamemode.enable = true;
-
   users.users = {
-    whoispiria = {
-      isNormalUser = true;
-      description = "Mari";
-      extraGroups = [
-        "networkmanager"
-        "wheel"
-        "audio"
-        "video"
-      ];
-      shell = pkgs.nushell;
-      password = "1";
-    };
     fn3x = {
       isNormalUser = true;
       description = "Art";
@@ -93,7 +79,8 @@
         "audio"
         "video"
       ];
-      shell = pkgs.nushell;
+      shell = pkgs.fish;
+      ignoreShellProgramCheck = true;
     };
   };
 
@@ -179,17 +166,6 @@
     portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
   };
 
-  programs.river = {
-    enable = true;
-  };
-
-  environment.pathsToLink = [ "/share/zsh" ];
-
-  programs.virt-manager.enable = true;
-  users.groups.libvirtd.members = [ "fn3x" "whoispiria" ];
-  virtualisation.libvirtd.enable = true;
-  virtualisation.spiceUSBRedirection.enable = true;
-
   xdg.portal = {
     enable = true;
     wlr.enable = true;
@@ -202,11 +178,26 @@
   ];
 
   nix.settings = {
+    max-jobs = 8;
     auto-optimise-store = true;
-    substituters = ["https://hyprland.cachix.org"];
-    trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
+    substituters = [
+      "https://hyprland.cachix.org"
+      "https://devenv.cachix.org"
+      "https://vicinae.cachix.org"
+    ];
+    trusted-public-keys = [
+      "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+      "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
+      "vicinae.cachix.org-1:1kDrfienkGHPYbkpNj1mWTr7Fm1+zcenzgTizIcI3oc="
+    ];
+    trusted-users = [ "root" "fn3x" ];
   };
-  nix.optimise.automatic = true;
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 30d";
+  };
+
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   swapDevices = [
