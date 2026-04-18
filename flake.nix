@@ -72,10 +72,6 @@
       url = "github:AvengeMedia/DankMaterialShell/stable";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    iDescriptor = {
-      url = "github:fn3x/iDescriptor";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     me3 = {
       url = "github:fn3x/me3";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -111,7 +107,6 @@
       sneemok,
       caelestia-shell,
       dms,
-      iDescriptor,
       niri,
       noctalia,
       ...
@@ -140,7 +135,6 @@
                 sneemok.homeManagerModules.default
                 caelestia-shell.homeManagerModules.default
                 dms.homeModules.dank-material-shell
-                iDescriptor.homeManagerModules.default
                 niri.homeModules.niri
                 noctalia.homeModules.default
               ];

@@ -13,10 +13,7 @@ config,
   config = lib.mkIf config.niri.enable {
     xdg.portal = {
       enable = true;
-      extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-      config.niri = {
-        "org.freedesktop.impl.portal.FileChooser" = "kde";
-      };
+      extraPortals = [ pkgs.xdg-desktop-portal-gnome pkgs.xdg-desktop-portal-gtk ];
     };
 
     home.packages = with pkgs; [

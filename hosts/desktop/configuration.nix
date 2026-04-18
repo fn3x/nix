@@ -67,6 +67,7 @@
 
   services.usbmuxd.enable = true;
   services.printing.enable = true;
+  services.cpupower-gui.enable = true;
 
   services.avahi = {
     enable = true;
@@ -170,6 +171,11 @@
   services.udev.extraRules = ''
     SUBSYSTEM=="input", ATTRS{idVendor}=="2dc8", ATTRS{idProduct}=="310b", MODE="0660", GROUP="input"
     KERNEL=="ntsync", SUBSYSTEM=="misc", TAG+="uaccess"
+
+    # 2.4GHz/Dongle
+    KERNEL=="hidraw*", ATTRS{idVendor}=="2dc8", MODE="0660", TAG+="uaccess"
+    # Bluetooth
+    KERNEL=="hidraw*", KERNELS=="*2DC8:*", MODE="0660", TAG+="uaccess"
   '';
 
   services.flatpak.enable = true;

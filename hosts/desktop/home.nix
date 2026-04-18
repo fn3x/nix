@@ -30,7 +30,6 @@ in
     ../../home/sneemok
     ../../home/caelestia
     ../../home/dankmaterial
-    ../../home/idescriptor
     ../../home/games
     ../../home/niri
     ../../home/noctalia
@@ -115,6 +114,7 @@ in
     p7zip
     protontricks
     satty
+    cpupower-gui
   ];
 
   neovim.enable = true;
@@ -127,9 +127,8 @@ in
   nu.enable = false;
   fish.enable = true;
   brave.enable = true;
-  sneemok.enable = true;
-  idescriptor.enable = true;
-  shadps4.enable = true;
+  sneemok.enable = false;
+  shadps4.enable = false;
   bblauncher.enable = false;
   prismlauncher.enable = true;
   lutris.enable = true;

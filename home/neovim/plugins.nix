@@ -384,7 +384,7 @@ pkgs,
               command = lib.getExe pkgs.prettierd;
             };
             prettier = {
-              command = lib.getExe pkgs.nodePackages_latest.prettier;
+              command = lib.getExe pkgs.prettier;
             };
             gofumpt = {
               command = lib.getExe pkgs.gofumpt;
