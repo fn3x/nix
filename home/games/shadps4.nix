@@ -1,14 +1,9 @@
 {
-pkgs,
 lib,
 config,
+inputs,
 ...
 }:
-let
-  shadps4 = pkgs.kdePackages.callPackage ../../modules/games/shadps4/shadps4.nix {
-    withGUI = true;
-  };
-in
 {
   options = {
     shadps4.enable = lib.mkEnableOption "enables shadps4";
@@ -16,7 +11,8 @@ in
 
   config = lib.mkIf config.shadps4.enable {
     home.packages = [
-      shadps4
+      inputs.shadps4.packages.x86_64-linux.shadps4
+      inputs.shadps4.packages.x86_64-linux.shadps4-qt
     ];
   };
 }

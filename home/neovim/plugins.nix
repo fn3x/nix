@@ -55,7 +55,7 @@ pkgs,
       };
 
       sandwich = {
-        enable = true;
+        enable = false;
         settings = {
           lazyLoad = true;
         };

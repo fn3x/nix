@@ -93,6 +93,10 @@
       url = "github:SteamClientHomebrew/Millennium?dir=packages/nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    shadps4 = {
+      url = "git+https://codeberg.org/fn3x/shadps4.git";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -120,6 +124,9 @@
           specialArgs = { inherit inputs outputs; };
           system = "x86_64-linux";
           modules = [
+            ({ config, pkgs, ... }: {
+              nixpkgs.config.allowUnfree = true;
+            })
             stylix.nixosModules.stylix
             ./hosts/desktop/configuration.nix
             clipboard-sync.nixosModules.default

@@ -13,7 +13,7 @@ pkgs.stdenv.mkDerivation rec {
     rev = "refs/heads/master";
     fetchSubmodules = true;
     deepClone = true;
-    sha256 = "sha256-rDoj05CSaB2f4d9A76oKBpUlJxB+X8msRQ03CkULkzo=";
+    sha256 = "sha256-XZk9fbrbq+3dkhPtFyP0eGj7l5rlFeYgVQx3kpWE6/E=";
   };
 
   nativeBuildInputs = with pkgs; [

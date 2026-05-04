@@ -5,9 +5,6 @@
   lib,
   ...
 }:
-let
-  pkgs-unstable = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system};
-in
 {
   options = {
     nvidia.enable = lib.mkEnableOption "Enables nvidia open source drivers";
@@ -21,8 +18,8 @@ in
       graphics = {
         enable = true;
         enable32Bit = true;
-        package = pkgs-unstable.mesa;
-        package32 = pkgs-unstable.pkgsi686Linux.mesa;
+        package = pkgs.mesa;
+        package32 = pkgs.pkgsi686Linux.mesa;
         extraPackages = with pkgs; [
           nvidia-vaapi-driver
           libva-vdpau-driver

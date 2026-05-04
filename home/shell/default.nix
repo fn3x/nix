@@ -44,6 +44,7 @@
 
   home.shellAliases = {
     nix-s = "nh os switch -H desktop ~/nixos";
+    nix-b = "nh os boot -H desktop ~/nixos";
     nix-t = "nh os test  -H desktop ~/nixos";
     nix-c = "nh clean all";
     nix-u = "nh os switch -u -H desktop ~/nixos";

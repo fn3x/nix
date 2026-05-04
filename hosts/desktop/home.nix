@@ -128,10 +128,10 @@ in
   fish.enable = true;
   brave.enable = true;
   sneemok.enable = false;
-  shadps4.enable = false;
-  bblauncher.enable = false;
+  shadps4.enable = true;
+  bblauncher.enable = true;
   prismlauncher.enable = true;
-  lutris.enable = true;
+  lutris.enable = false;
   niri.enable = true;
   noctalia.enable = true;
   television.enable = true;
