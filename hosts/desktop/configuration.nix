@@ -121,6 +121,7 @@
     pavucontrol
     wireguard-tools 
     mangohud
+    mangojuice
     gcc
     clang
     cl

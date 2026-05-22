@@ -113,6 +113,7 @@ pkgs,
       treesitter = {
         enable = true;
         settings = {
+          disable = true;
           ensure_installed = [
             "javascript"
             "typescript"
@@ -126,7 +127,6 @@ pkgs,
           highlight = {
             additional_vim_regex_highlighting = false;
             custom_captures = { };
-            disable = [ ];
             enable = true;
           };
           ignore_install = [ ];

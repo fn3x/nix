@@ -3,6 +3,19 @@
     keymaps = [
       {
         mode = "n";
+        key = "K";
+        action.__raw = ''
+          function()
+            vim.lsp.buf.hover({ silent = true })
+          end
+        '';
+        options = {
+          silent = true;
+          desc = "Hover";
+        };
+      }
+      {
+        mode = "n";
         key = "<leader>u";
         action = "<cmd>UndotreeToggle<CR>";
         options = {
