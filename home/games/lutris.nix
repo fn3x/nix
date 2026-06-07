@@ -11,7 +11,7 @@ config,
 
   config = lib.mkIf config.lutris.enable {
     home.packages = with pkgs; [
-      lutris
+      lutris-free
     ];
   };
 }

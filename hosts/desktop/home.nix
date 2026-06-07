@@ -115,6 +115,7 @@ in
     protontricks
     satty
     cpupower-gui
+    jujutsu
   ];
 
   neovim.enable = true;
@@ -129,9 +130,9 @@ in
   brave.enable = true;
   sneemok.enable = false;
   shadps4.enable = true;
-  bblauncher.enable = true;
+  bblauncher.enable = false;
   prismlauncher.enable = true;
-  lutris.enable = false;
+  lutris.enable = true;
   niri.enable = true;
   noctalia.enable = true;
   television.enable = true;

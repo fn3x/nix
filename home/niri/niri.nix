@@ -51,6 +51,7 @@ config,
         };
         layout = {
           empty-workspace-above-first = true;
+          border.enable = false;
           focus-ring = {
             width = 2;
             active = {
@@ -61,6 +62,11 @@ config,
               };
             };
           };
+          preset-column-widths = [
+            { proportion = 1. / 3.; }
+            { proportion = 1. / 2.; }
+            { proportion = 2. / 3.; }
+          ];
         };
         input = {
           mod-key = "Alt";
@@ -136,6 +142,21 @@ config,
             "Mod+4".action = focus-workspace "work";
             "Mod+5".action = focus-workspace "music";
             "Mod+6".action = focus-workspace "games";
+
+            # Finer width adjustments.
+            # This command can also:
+            # * set width in pixels: "1000"
+            # * adjust width in pixels: "-5" or "+5"
+            # * set width as a percentage of screen width: "25%"
+            # * adjust width as a percentage of screen width: "-10%" or "+10%"
+            # Pixel sizes use logical, or scaled, pixels. I.e. on an output with scale 2.0,
+            # set-column-width "100" will make the column occupy 200 physical screen pixels.
+            "Mod+Minus".action = set-column-width "-10%";
+            "Mod+Equal".action = set-column-width "+10%";
+
+            # Finer height adjustments when in column with other windows.
+            "Mod+Shift+Minus".action = set-window-width "-10%";
+            "Mod+Shift+Equal".action = set-window-width "+10%";
           };
           noctaliaBinds = lib.optionalAttrs config.noctalia.enable {
             # "Mod+S".action = spawn ["qs" "-c" "noctalia-shell" "ipc" "call" "plugin:notes-scratchpad" "togglePanel"];
@@ -176,13 +197,13 @@ config,
         };
         window-rules = [
           {
-            open-maximized = true;
+            open-maximized = false;
             border.enable = false;
             geometry-corner-radius = {
-              top-left = 20.0;
-              top-right = 20.0;
-              bottom-left = 20.0;
-              bottom-right = 20.0;
+              top-left = 10.0;
+              top-right = 10.0;
+              bottom-left = 10.0;
+              bottom-right = 10.0;
             };
             clip-to-geometry = true;
           }
