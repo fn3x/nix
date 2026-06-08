@@ -97,6 +97,14 @@
       url = "git+https://codeberg.org/fn3x/shadps4.git";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    odysseus = {
+      url = "github:pewdiepie-archdaemon/odysseus/pull/2568/head";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    helium = {
+      url = "github:schembriaiden/helium-browser-nix-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =

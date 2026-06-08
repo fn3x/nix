@@ -15,6 +15,7 @@
     ../../modules/graphics
     ../../modules/audio
     ../../modules/games
+    inputs.odysseus.nixosModules.default
   ];
 
   nvidia.enable = true;
@@ -180,6 +181,30 @@
   '';
 
   services.flatpak.enable = true;
+
+  services.odysseus = {
+    enable = true;
+    extraEnvironmentVariables = {
+      ODYSSEUS_ADMIN_PASSWORD = "admin";
+      NVIDIA_VISIBLE_DEVICES = "all";
+      NVIDIA_DRIVER_CAPABILITIES = "compute,utility";
+    };
+    extraPythonPackages = ps: with ps; [
+      hf-transfer
+      rembg
+      diffusers
+    ];
+    llamaCpp.enable = true;
+    searxng = {
+      enable = true;
+      secretKey = "very_secret_key";
+    };
+  };
+
+  services.ollama = {
+    enable = true;
+    host = "0.0.0.0";
+  };
 
   programs.gnupg.agent = {                                                      
     enable = true;

@@ -128,6 +128,7 @@ in
   nu.enable = false;
   fish.enable = true;
   brave.enable = true;
+  helium.enable = true;
   sneemok.enable = false;
   shadps4.enable = true;
   bblauncher.enable = false;
