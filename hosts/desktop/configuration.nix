@@ -34,6 +34,10 @@
   networking.nameservers = ["1.1.1.1" "8.8.8.8"];
   networking.enableIPv6 = true;
 
+  networking.firewall = {
+    allowedTCPPorts = [ 7000 ];
+  };
+
   # Set your time zone.
   time.timeZone = "Asia/Yerevan";
 
@@ -188,6 +192,7 @@
       ODYSSEUS_ADMIN_PASSWORD = "admin";
       NVIDIA_VISIBLE_DEVICES = "all";
       NVIDIA_DRIVER_CAPABILITIES = "compute,utility";
+      HF_HUB_DISABLE_XET = "1";
     };
     extraPythonPackages = ps: with ps; [
       hf-transfer
@@ -201,9 +206,14 @@
     };
   };
 
+  services.searx.settings.engines = [
+    { name = "radio browser"; disabled = true; }
+  ];
+
   services.ollama = {
     enable = true;
     host = "0.0.0.0";
+    package = pkgs.ollama-cuda;
   };
 
   programs.gnupg.agent = {                                                      
