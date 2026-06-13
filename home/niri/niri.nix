@@ -27,7 +27,7 @@ config,
 
     programs.niri = let
       terminal = "${inputs.ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/ghostty";
-      browser = "${pkgs.brave}/bin/brave";
+      browser =  "${inputs.helium.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/helium";
       fileManager = "${pkgs.kdePackages.dolphin}/bin/dolphin";
     in {
       enable = true;
