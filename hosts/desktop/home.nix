@@ -116,6 +116,7 @@ in
     satty
     cpupower-gui
     jujutsu
+    stremio-linux-shell
   ];
 
   neovim.enable = true;
