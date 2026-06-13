@@ -222,6 +222,10 @@ config,
                 app-id = "brave-browser";
                 at-startup = true;
               }
+              {
+                app-id = "helium";
+                at-startup = true;
+              }
             ];
             open-on-workspace = "browser";
             open-focused = false;
@@ -260,7 +264,7 @@ config,
           {
             matches = [
               {
-                app-id = "spotify";
+                app-id = "Spotify";
                 at-startup = true;
               }
             ];
