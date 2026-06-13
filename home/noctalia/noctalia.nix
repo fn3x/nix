@@ -63,10 +63,6 @@ pkgs,
                 enabled = true;
                 sourceUrl = "https://github.com/noctalia-dev/noctalia-plugins";
               };
-              niri-auto-tile = {
-                enabled = true;
-                sourceUrl = "https://github.com/noctalia-dev/noctalia-plugins";
-              };
               screenshot = {
                 enabled = true;
                 sourceUrl = "https://github.com/noctalia-dev/noctalia-plugins";

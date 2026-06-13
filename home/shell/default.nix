@@ -21,7 +21,6 @@
     NVM_DIR = "~/.nvm";
     STEAM_EXTRA_COMPAT_TOOLS_PATHS = "\\\${HOME}/.steam/root/compatibilitytools.d";
     GTK_THEME = "Breeze";
-    SDL_VIDEODRIVER = "wayland";
     QT_QPA_PLATFORM = "wayland;xcb";
     QT_WAYLAND_DISABLE_WINDOWDECORATION = 1;
     _JAVA_AWT_WM_NONREPARENTING = 1;

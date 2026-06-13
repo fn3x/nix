@@ -18,6 +18,7 @@ in
   };
 
   imports = [
+    ../../home/shell
     ../../home/neovim
     ../../home/ghostty
     ../../home/hypr
@@ -25,7 +26,6 @@ in
     ../../home/tmux
     ../../home/wofi
     ../../home/vicinae
-    ../../home/shell
     ../../home/browsers
     ../../home/sneemok
     ../../home/caelestia
@@ -119,15 +119,15 @@ in
     stremio-linux-shell
   ];
 
+  fish.enable = true;
   neovim.enable = true;
-  hyprland.enable = false;
+  hyprland.enable = true;
   hyprpanel.enable = false;
   caelestia.enable = false;
   dankmaterial.enable = false;
   vicinae.enable = true;
   ghostty.enable = true;
   nu.enable = false;
-  fish.enable = true;
   brave.enable = true;
   helium.enable = true;
   sneemok.enable = false;
@@ -154,6 +154,14 @@ in
     };
     "${homeDirectory}/.cache/nvim/lazygit-theme" = {
       text = ''
+      '';
+      executable = false;
+    };
+    "${homeDirectory}/.config/spotify-flags.conf" = {
+      text = ''
+        --enable-features=UseOzonePlatform
+        --ozone-platform=wayland
+        --enable-wayland-ime
       '';
       executable = false;
     };
