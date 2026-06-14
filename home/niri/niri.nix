@@ -22,6 +22,23 @@ config,
       xwayland-satellite
     ];
 
+    programs.swappy = {
+      enable = true;
+      settings = {
+        Default = {
+          custom_color = "rgba(255,255,0,1)";
+          early_exit = true;
+          line_size = 2;
+          paint_mode = "rectangle";
+          show_panel = false;
+          text_font = "sans-serif";
+          text_size = 20;
+          transparency = 50;
+          transparent = false;
+        };
+      };
+    };
+
     programs.niri = let
       terminal = "${inputs.ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/ghostty";
       browser =  "${inputs.helium.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/helium";
@@ -113,7 +130,9 @@ config,
             "Mod+B".action = spawn browser;
             "Mod+E".action = spawn fileManager;
             "Mod+Space".action = appLauncher;
-            "Mod+Shift+S".action = spawn ["${pkgs.grim}/bin/grim" "-g" "\"$(${pkgs.slurp}/bin/slurp -d)\"" "-" "|" "${pkgs.satty}/bin/satty" "--filename" "-" "--output-filename" "\"./screenshot-%+.png\""];
+            "Mod+Shift+S".action = spawn ["sh" "-c" ''
+              ${pkgs.grim}/bin/grim -g "$(${pkgs.slurp}/bin/slurp -d)" - | ${pkgs.swappy}/bin/swappy -f -
+            ''];
 
             "Mod+Shift+Q".action = close-window;
             "Mod+V".action = toggle-window-floating;
