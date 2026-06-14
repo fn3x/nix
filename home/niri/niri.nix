@@ -13,17 +13,14 @@ config,
   config = lib.mkIf config.niri.enable {
     xdg.portal = {
       enable = true;
+      xdgOpenUsePortal = true;
+      config.common.default = "*";
       extraPortals = [ pkgs.xdg-desktop-portal-gnome pkgs.xdg-desktop-portal-gtk ];
     };
 
     home.packages = with pkgs; [
       xwayland-satellite
     ];
-
-    services.wl-clip-persist = {
-      enable = true;
-      clipboardType = "regular";
-    };
 
     programs.niri = let
       terminal = "${inputs.ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/ghostty";
@@ -151,12 +148,12 @@ config,
             # * adjust width as a percentage of screen width: "-10%" or "+10%"
             # Pixel sizes use logical, or scaled, pixels. I.e. on an output with scale 2.0,
             # set-column-width "100" will make the column occupy 200 physical screen pixels.
-            "Mod+Minus".action = set-column-width "-10%";
-            "Mod+Equal".action = set-column-width "+10%";
+            "Mod+Minus".action = set-column-width "-5%";
+            "Mod+Equal".action = set-column-width "+5%";
 
             # Finer height adjustments when in column with other windows.
-            "Mod+Shift+Minus".action = set-window-width "-10%";
-            "Mod+Shift+Equal".action = set-window-width "+10%";
+            "Mod+Shift+Minus".action = set-window-width "-5%";
+            "Mod+Shift+Equal".action = set-window-width "+5%";
           };
           noctaliaBinds = lib.optionalAttrs config.noctalia.enable {
             # "Mod+S".action = spawn ["qs" "-c" "noctalia-shell" "ipc" "call" "plugin:notes-scratchpad" "togglePanel"];
@@ -174,6 +171,9 @@ config,
           { command = ["${pkgs.spotify}/bin/spotify"]; }
           { command = ["${pkgs.teamspeak6-client}/bin/TeamSpeak"]; }
           { command = ["${pkgs.steam}/bin/steam"]; }
+          { command = ["wl-clip-persist" "--clipboard" "both"]; }
+          { command = ["sh" "-c" "wl-paste --type text --watch cliphist store"]; }
+          { command = ["sh" "-c" "wl-paste --type image --watch cliphist store"]; }
         ];
         workspaces = {
           "01-terminal" = {

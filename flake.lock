@@ -1192,23 +1192,6 @@
         "type": "github"
       }
     },
-    "luajit-src": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1763177035,
-        "narHash": "sha256-oYD86MqmlJpiCuEs4LwVtxvarPtz1RPWm8nJqNE0sBs=",
-        "owner": "SteamClientHomebrew",
-        "repo": "LuaJIT",
-        "rev": "89550023569c3e195e75e12951c067fe5591e0d2",
-        "type": "github"
-      },
-      "original": {
-        "owner": "SteamClientHomebrew",
-        "ref": "v2.1",
-        "repo": "LuaJIT",
-        "type": "github"
-      }
-    },
     "me3": {
       "inputs": {
         "flake-utils": "flake-utils_2",
@@ -1227,47 +1210,6 @@
       "original": {
         "owner": "fn3x",
         "repo": "me3",
-        "type": "github"
-      }
-    },
-    "millennium": {
-      "inputs": {
-        "luajit-src": "luajit-src",
-        "millennium-src": "millennium-src",
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "dir": "packages/nix",
-        "lastModified": 1780619651,
-        "narHash": "sha256-iw3PGmENVu+TFruPNgBZuV/OcQhsoTzljxE7WpvVU1I=",
-        "owner": "SteamClientHomebrew",
-        "repo": "Millennium",
-        "rev": "c5cf31523169c4145decf4393c88ecdc80759f80",
-        "type": "github"
-      },
-      "original": {
-        "dir": "packages/nix",
-        "owner": "SteamClientHomebrew",
-        "repo": "Millennium",
-        "type": "github"
-      }
-    },
-    "millennium-src": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1780619503,
-        "narHash": "sha256-H6h3p4C3XtAhS64MnmRhHvDF8P1gEDGQ5Oo93KI5MvY=",
-        "owner": "SteamClientHomebrew",
-        "repo": "Millennium",
-        "rev": "f8ec21d14e0f2536f099cd06dd099e39fd04cda7",
-        "type": "github"
-      },
-      "original": {
-        "owner": "SteamClientHomebrew",
-        "repo": "Millennium",
-        "rev": "f8ec21d14e0f2536f099cd06dd099e39fd04cda7",
         "type": "github"
       }
     },
@@ -1659,7 +1601,6 @@
         "hyprpanel": "hyprpanel",
         "hyprpwcenter": "hyprpwcenter",
         "me3": "me3",
-        "millennium": "millennium",
         "neovim-nightly-overlay": "neovim-nightly-overlay",
         "niri": "niri",
         "nixpkgs": "nixpkgs_2",
