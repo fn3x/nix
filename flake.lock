@@ -1393,6 +1393,38 @@
         "type": "github"
       }
     },
+    "nixpkgs_3": {
+      "locked": {
+        "lastModified": 1781577229,
+        "narHash": "sha256-lrp67w8AulE9Ks53n27I45ADSzbOCn4H+CNW1Ck8B+8=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "567a49d1913ce81ac6e9582e3553dd90a955875f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_4": {
+      "locked": {
+        "lastModified": 1781074563,
+        "narHash": "sha256-md8WlXOlfnIeHeOScMTTHFyf2d6iaTwPl2apR5EQ3P4=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "9ae611a455b90cf061d8f332b977e387bda8e1ca",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixvim": {
       "inputs": {
         "flake-parts": "flake-parts_2",
@@ -1506,11 +1538,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1780868909,
-        "narHash": "sha256-a9M8+yJdl9dDfbazIdMY4oCIGO+RtpNuaRCKYByEWnY=",
+        "lastModified": 1781968520,
+        "narHash": "sha256-iy5h8VNkEo0KsDb2DVxG4w6MMO0g4hDXq3OLY0uDzoI=",
         "owner": "pewdiepie-archdaemon",
         "repo": "odysseus",
-        "rev": "83d2f37b28d34ca578338a20e5cd4046177645d5",
+        "rev": "b2a99f5b199c33c1ac3aab21dcadcbb0f949a360",
         "type": "github"
       },
       "original": {
@@ -1612,7 +1644,9 @@
         "sneemok": "sneemok",
         "stylix": "stylix",
         "vicinae": "vicinae",
-        "winapps": "winapps"
+        "winapps": "winapps",
+        "xwaylandvideobridge": "xwaylandvideobridge",
+        "zennotes": "zennotes"
       }
     },
     "sf-arabic": {
@@ -2173,6 +2207,43 @@
         "owner": "Supreeeme",
         "repo": "xwayland-satellite",
         "type": "github"
+      }
+    },
+    "xwaylandvideobridge": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_3"
+      },
+      "locked": {
+        "lastModified": 1781698394,
+        "narHash": "sha256-9wUjMIWUnJHnOhUXeM1twB2fIIy0mVLXjFvdqrU37nY=",
+        "ref": "refs/heads/master",
+        "rev": "fdb69b8eea938d8e33b82824c31b1f324397fb7d",
+        "revCount": 260,
+        "type": "git",
+        "url": "https://invent.kde.org/system/xwaylandvideobridge.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://invent.kde.org/system/xwaylandvideobridge.git"
+      }
+    },
+    "zennotes": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_4"
+      },
+      "locked": {
+        "lastModified": 1781734309,
+        "narHash": "sha256-4uuCrRnGkAY2260RhRwnJj5BYkgQk81T27YEIfT1UMU=",
+        "ref": "release/v2.4.0",
+        "rev": "a38ce62d09ee649f5cb485c039c62785936a700a",
+        "revCount": 276,
+        "type": "git",
+        "url": "https://github.com/ZenNotes/zennotes"
+      },
+      "original": {
+        "ref": "release/v2.4.0",
+        "type": "git",
+        "url": "https://github.com/ZenNotes/zennotes"
       }
     },
     "zig": {

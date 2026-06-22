@@ -137,6 +137,8 @@
     firefox
     inputs.winapps.packages.${pkgs.stdenv.hostPlatform.system}.winapps
     inputs.winapps.packages.${pkgs.stdenv.hostPlatform.system}.winapps-launcher
+    inputs.zennotes.packages.${pkgs.stdenv.hostPlatform.system}.zennotes-desktop
+    inputs.zennotes.packages.${pkgs.stdenv.hostPlatform.system}.zennotes-server
     OVMF
     devenv
     nv-codec-headers

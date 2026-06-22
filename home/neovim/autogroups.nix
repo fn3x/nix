@@ -12,7 +12,14 @@
         group = "HighlightYank";
         pattern = "*";
         callback = {
-          __raw = ''function()vim.highlight.on_yank({higroup = "IncSearch",timeout = 40,}) end'';
+          __raw = ''
+            function()
+              vim.hl.hl_op({
+                higroup = "IncSearch",
+                timeout = 40,
+              })
+            end
+          '';
         };
       }
       {

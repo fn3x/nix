@@ -5,11 +5,11 @@
 
 pkgs.stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "teamspeak6-client";
-  version = "6.0.0-beta4";
+  version = "6.0.0-beta4.1";
 
   src = pkgs.fetchurl {
     url = "https://files.teamspeak-services.com/pre_releases/client/${finalAttrs.version}/teamspeak-client.tar.gz";
-    hash = "sha256-tDMECBWmh4QJzyVdvlkQW7Mqu8Mn6JjFiXMJJS45Efg=";
+    hash = "sha256-7f0VQQLa4Gg7qgXMVfoPYPazPRA9uYeX251j3mHaSLo=";
   };
 
   sourceRoot = ".";
