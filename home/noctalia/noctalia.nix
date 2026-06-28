@@ -20,15 +20,17 @@ pkgs,
         bar = {
           default = {
             capsule = true;
-            end = [ "tray" "notifications" ];
+            end = [ "keyboard_layout" "tray" "notifications" ];
             margin_ends = 10;
             scale = 1.25;
             start = [ "volume" "media" ];
-            thickness = 30;
+            thickness = 40;
           };
         };
 
         control_center = {
+          sidebar_section = "none";
+
           shortcuts = [
             { type = "bluetooth"; }
             { type = "audio"; }
@@ -36,6 +38,10 @@ pkgs,
             { type = "weather"; }
             { type = "nightlight"; }
           ];
+        };
+
+        location = {
+          address = "Yerevan";
         };
 
         lockscreen_widgets = {
@@ -75,11 +81,17 @@ pkgs,
         };
 
         osd = {
-          position = "center_left";
+          orientation = "vertical";
+          position = "top_center";
           position_vertical = "center_left";
+
+          kinds = {
+            media = false;
+          };
         };
 
         shell = {
+          app_icon_color = "hover";
           clipboard_enabled = false;
           corner_radius_scale = 0.75;
           screen_time_enabled = true;
@@ -91,7 +103,10 @@ pkgs,
 
           panel = {
             floating_offset = 9;
+            open_near_click_clipboard = true;
+            open_near_click_control_center = true;
             open_near_click_launcher = true;
+            open_near_click_wallpaper = true;
             transparency_mode = "glass";
           };
         };
@@ -103,6 +118,11 @@ pkgs,
         widget = {
           clock = {
             format = "{:%H:%M:%S}";
+          };
+
+          tray = {
+            hidden = [ "Xwayland Video Bridge" "nm-applet" ];
+            scale = 1.2;
           };
         };
       };
