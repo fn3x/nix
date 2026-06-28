@@ -64,6 +64,7 @@ config,
           };
         };
         layout = {
+          gaps = 8;
           empty-workspace-above-first = true;
           border.enable = false;
           focus-ring = {
