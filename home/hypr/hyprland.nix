@@ -154,7 +154,7 @@ config,
           {
             _args = [
               (lib.generators.mkLuaInline "mod .. \" + T\"")
-              (lib.generators.mkLuaInline "hl.dsp.exec_cmd(\"${pkgs.uwsm}/bin/uwsm app -- ${inputs.ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/ghostty\")")
+              (lib.generators.mkLuaInline "hl.dsp.exec_cmd(\"${pkgs.uwsm}/bin/uwsm app -- ${pkgs.ghostty}/bin/ghostty\")")
             ];
           }
           {
@@ -343,7 +343,7 @@ config,
   hl.exec_cmd(\"dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP\")
   hl.exec_cmd(\"hyprctl setcursor 'Catppuccin Mocha Dark' 22\")
   hl.exec_cmd(\"${inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/noctalia-shell\")
-  hl.exec_cmd(\"${pkgs.uwsm}/bin/uwsm app -- ${inputs.ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/ghostty\", { workspace = \"1\" })
+  hl.exec_cmd(\"${pkgs.uwsm}/bin/uwsm app -- ${pkgs.ghostty}/bin/ghostty\", { workspace = \"1\" })
   hl.exec_cmd(\"${pkgs.uwsm}/bin/uwsm app -- ${inputs.helium.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/helium\", { workspace = \"2\" })
   hl.exec_cmd(\"${pkgs.uwsm}/bin/uwsm app -- ${pkgs.telegram-desktop}/bin/Telegram\", { workspace = \"3\" })
   hl.exec_cmd(\"${pkgs.uwsm}/bin/uwsm app -- ${pkgs.mattermost-desktop}/bin/mattermost-desktop\", { workspace = \"3\" })

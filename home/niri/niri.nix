@@ -11,10 +11,9 @@ config,
   };
 
   config = lib.mkIf config.niri.enable {
+    nixpkgs.overlays = [ inputs.niri.overlays.niri ];
     xdg.portal = {
       enable = true;
-      xdgOpenUsePortal = true;
-      config.common.default = "*";
       extraPortals = [ pkgs.xdg-desktop-portal-gnome pkgs.xdg-desktop-portal-gtk ];
     };
 
@@ -41,7 +40,7 @@ config,
     };
 
     programs.niri = let
-      terminal = "${inputs.ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/ghostty";
+      terminal = "${pkgs.ghostty}/bin/ghostty";
       browser =  "${inputs.helium.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/helium";
       fileManager = "${pkgs.kdePackages.dolphin}/bin/dolphin";
     in {
@@ -182,8 +181,7 @@ config,
           baseBinds // noctaliaBinds;
         spawn-at-startup = [
           { command = ["dbus-update-activation-environment --systemd DBUS_SESSION_BUS_ADDRESS DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"]; }
-          { command = ["${inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/noctalia-shell"]; }
-          { command = ["${pkgs.xwayland-satellite}/bin/xwayland-satellite"]; }
+          { command = ["${inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/noctalia"]; }
           { command = [terminal]; }
           { command = [browser]; }
           { command = ["${pkgs.mattermost-desktop}/bin/mattermost-desktop"]; }
@@ -192,7 +190,6 @@ config,
           { command = ["${pkgs.teamspeak6-client}/bin/TeamSpeak"]; }
           { command = ["${pkgs.steam}/bin/steam"]; }
           { command = ["${inputs.zennotes.packages.${pkgs.stdenv.hostPlatform.system}.zennotes-server}/bin/zennotes-server"]; }
-          { command = ["${inputs.xwaylandvideobridge.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/xwaylandvideobridge"]; }
           { command = ["wl-clip-persist" "--clipboard" "both"]; }
           { command = ["sh" "-c" "wl-paste --type text --watch cliphist store"]; }
           { command = ["sh" "-c" "wl-paste --type image --watch cliphist store"]; }
@@ -228,6 +225,20 @@ config,
               bottom-right = 10.0;
             };
             clip-to-geometry = true;
+          }
+          {
+            matches = [
+              {
+                app-id = "dev.noctalia.Noctalia.Settings";
+              }
+            ];
+            open-floating = true;
+            default-column-width = {
+              fixed = 1080;
+            };
+            default-window-height = {
+              fixed = 920;
+            };
           }
           {
             matches = [

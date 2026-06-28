@@ -9,7 +9,7 @@ let
   username = "fn3x";
   homeDirectory = "/home/${username}";
   system = pkgs.stdenv.hostPlatform.system;
-  teamspeak = import ../../modules/programs/teamspeak/teamspeak-client.nix { inherit pkgs; };
+  # teamspeak = import ../../modules/programs/teamspeak/teamspeak-client.nix { inherit pkgs; };
 in
 
 {
@@ -56,7 +56,6 @@ in
     oh-my-posh
     telegram-desktop
     mattermost-desktop
-    cantarell-fonts
     noto-fonts
     noto-fonts-color-emoji
     fd
@@ -80,10 +79,9 @@ in
     inkscape
     libreoffice-still
     logmein-hamachi
-    teamspeak
+    teamspeak6-client
     qbittorrent
     playerctl
-    anydesk
     vesktop
     r2modman
     whitesur-kde
@@ -116,6 +114,7 @@ in
     cpupower-gui
     jujutsu
     stremio-linux-shell
+    tigervnc
   ];
 
   fish.enable = true;
@@ -130,7 +129,7 @@ in
   brave.enable = true;
   helium.enable = true;
   sneemok.enable = false;
-  shadps4.enable = true;
+  shadps4.enable = false;
   bblauncher.enable = false;
   prismlauncher.enable = true;
   lutris.enable = true;

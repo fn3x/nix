@@ -47,13 +47,8 @@
       url = "github:jackgrahn/cachy-proton-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    ghostty = {
-      url = "github:ghostty-org/ghostty";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     vicinae = {
       url = "github:vicinaehq/vicinae";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
     sneemok = {
       url = "git+https://codeberg.org/fn3x/sneemok.git";
@@ -80,9 +75,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     noctalia = {
-      url = "github:noctalia-dev/noctalia-shell";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.noctalia-qs.follows = "noctalia-qs";
+      url = "github:noctalia-dev/noctalia/cachix";
     };
     noctalia-qs = {
       url = "github:noctalia-dev/noctalia-qs";
@@ -101,7 +94,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     zennotes = {
-      url = "git+https://github.com/ZenNotes/zennotes?ref=release/v2.4.0";
+      url = "github:ZenNotes/zennotes";
     };
     xwaylandvideobridge = {
       url = "git+https://invent.kde.org/system/xwaylandvideobridge.git";
