@@ -20,6 +20,20 @@
       alsa.support32Bit = true;
       pulse.enable = true;
       jack.enable = true;
+      extraConfig.pipewire."99-virtualmic" = {
+        "context.objects" = [
+          {
+            factory = "adapter";
+            args = {
+              "factory.name" = "support.null-audio-sink";
+              "node.name" = "VirtualMic";
+              "node.description" = "VirtualMic";
+              "media.class" = "Audio/Sink";
+              "audio.position" = "FL,FR";
+            };
+          }
+        ];
+      };
     };
   };
 }
