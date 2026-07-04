@@ -298,7 +298,7 @@ config,
           {
             matches = [
               {
-                app-id = "Spotify";
+                app-id = "spotify";
                 at-startup = true;
               }
             ];
@@ -336,6 +336,16 @@ config,
             matches = [
               {
                 app-id = "^org\\.telegram\\.desktop$";
+              }
+            ];
+            block-out-from = "screencast";
+          }
+        ];
+        layer-rules = [
+          {
+            matches = [
+              {
+                namespace = "^noctalia-notification$";
               }
             ];
             block-out-from = "screencast";
