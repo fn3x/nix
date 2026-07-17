@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 {
@@ -9,6 +10,10 @@
   };
 
   config = lib.mkIf config.pipewire.enable {
+    environment.systemPackages = with pkgs; [
+      qpwgraph
+    ];
+
     # Enable sound with pipewire.
     services.pulseaudio.enable = false;
 
