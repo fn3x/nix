@@ -17,6 +17,7 @@ inputs,
     programs.steam = {
       enable = true;
       gamescopeSession.enable = true;
+      extest.enable = true;
       extraCompatPackages = with pkgs; [
         proton-ge-bin
         inputs.cachy-proton.packages.x86_64-linux.proton-cachyos-v3
