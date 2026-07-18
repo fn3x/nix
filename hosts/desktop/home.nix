@@ -115,6 +115,7 @@ in
     jujutsu
     stremio-linux-shell
     tigervnc
+    audacity
   ];
 
   fish.enable = true;
