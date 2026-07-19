@@ -190,7 +190,6 @@ config,
           { command = ["${pkgs.spotify}/bin/spotify"]; }
           { command = ["${pkgs.teamspeak6-client}/bin/TeamSpeak"]; }
           { command = ["${pkgs.steam}/bin/steam"]; }
-          { command = ["${inputs.zennotes.packages.${pkgs.stdenv.hostPlatform.system}.zennotes-server}/bin/zennotes-server"]; }
           { command = ["wl-clip-persist" "--clipboard" "both"]; }
           { command = ["sh" "-c" "wl-paste --type text --watch cliphist store"]; }
           { command = ["sh" "-c" "wl-paste --type image --watch cliphist store"]; }

@@ -93,9 +93,6 @@
       url = "github:schembriaiden/helium-browser-nix-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    zennotes = {
-      url = "github:ZenNotes/zennotes";
-    };
     xwaylandvideobridge = {
       url = "git+https://invent.kde.org/system/xwaylandvideobridge.git";
     };

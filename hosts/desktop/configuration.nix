@@ -72,7 +72,7 @@
 
   services.usbmuxd.enable = true;
   services.printing.enable = true;
-  services.cpupower-gui.enable = true;
+  services.cpupower-gui.enable = false;
 
   services.avahi = {
     enable = true;
@@ -135,8 +135,6 @@
     firefox
     inputs.winapps.packages.${pkgs.stdenv.hostPlatform.system}.winapps
     inputs.winapps.packages.${pkgs.stdenv.hostPlatform.system}.winapps-launcher
-    inputs.zennotes.packages.${pkgs.stdenv.hostPlatform.system}.zennotes-desktop
-    inputs.zennotes.packages.${pkgs.stdenv.hostPlatform.system}.zennotes-server
     OVMF
     devenv
     nv-codec-headers
