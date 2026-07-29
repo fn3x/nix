@@ -10,6 +10,7 @@ let
   homeDirectory = "/home/${username}";
   system = pkgs.stdenv.hostPlatform.system;
   # teamspeak = import ../../modules/programs/teamspeak/teamspeak-client.nix { inherit pkgs; };
+  usbtree = import ../../modules/programs/usbtree/usbtree.nix { inherit pkgs; };
 in
 
 {
@@ -116,6 +117,9 @@ in
     stremio-linux-shell
     tigervnc
     audacity
+    claude-code
+    freenet
+    usbtree
   ];
 
   fish.enable = true;
