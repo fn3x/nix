@@ -35,6 +35,7 @@ in
     ../../home/niri
     ../../home/noctalia
     ../../home/television
+    ../../home/audio
   ];
 
   home.username = username;
