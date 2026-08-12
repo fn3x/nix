@@ -12,6 +12,7 @@
   config = lib.mkIf config.pipewire.enable {
     environment.systemPackages = with pkgs; [
       qpwgraph
+      pipewire.jack
     ];
 
     # Enable sound with pipewire.
@@ -25,19 +26,33 @@
       alsa.support32Bit = true;
       pulse.enable = true;
       jack.enable = true;
-      extraConfig.pipewire."99-virtualmic" = {
-        "context.objects" = [
-          {
-            factory = "adapter";
-            args = {
-              "factory.name" = "support.null-audio-sink";
-              "node.name" = "VirtualMic";
-              "node.description" = "VirtualMic";
-              "media.class" = "Audio/Sink";
-              "audio.position" = "FL,FR";
+
+      # Global low-latency defaults
+      extraConfig.pipewire."92-low-latency" = {
+        "context.properties" = {
+          "default.clock.rate" = 48000;       # Fixed rate avoids resampling latency
+          "default.clock.quantum" = 128;      # ~5ms latency at 48kHz
+          "default.clock.min-quantum" = 32;   # Allows top-tier interfaces to achieve ~1.5ms
+          "default.clock.max-quantum" = 512;
+        };
+      };
+
+      wireplumber.extraConfig."99-disable-suspend" = {
+        "monitor.alsa.rules" = [{
+          matches = [
+            { "node.name" = "~alsa_input.*"; }
+            { "node.name" = "~alsa_output.*"; }
+          ];
+          actions = {
+            update-props = {
+              "session.suspend-timeout-seconds" = 0;
+              # Optional: Tweak by trial-and-error if crackling occurs on specific USB interfaces.
+              # Do not apply globally without testing, as it may break built-in audio.
+              # "api.alsa.period-size" = 2;
+              # "api.alsa.headroom" = 8192;
             };
-          }
-        ];
+          };
+        }];
       };
     };
   };
