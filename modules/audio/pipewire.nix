@@ -13,6 +13,8 @@
     environment.systemPackages = with pkgs; [
       qpwgraph
       pipewire.jack
+      neural-amp-modeler-lv2
+      lsp-plugins
     ];
 
     # Enable sound with pipewire.

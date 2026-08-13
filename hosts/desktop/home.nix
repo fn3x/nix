@@ -54,7 +54,7 @@ in
 
   home.packages = with pkgs; [
     # inputs.apple-fonts.packages.${system}.sf-pro-nerd
-    inputs.me3.packages.${system}.me3
+    # inputs.me3.packages.${system}.me3
     oh-my-posh
     telegram-desktop
     mattermost-desktop
@@ -107,7 +107,6 @@ in
     kdePackages.breeze-icons
     kdePackages.breeze
     kdePackages.qt6ct
-    mullvad-browser
     nwg-displays
     normcap
     p7zip
@@ -121,6 +120,7 @@ in
     claude-code
     freenet
     usbtree
+    reaper
   ];
 
   fish.enable = true;

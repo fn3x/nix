@@ -39,6 +39,7 @@
     LIBVIRT_DEFAULT_URI="qemu:///system";
     QT_QPA_PLATFORMTHEME = "qt6ct";
     NO_AT_BRIDGE = 1;
+    LV2_PATH = "/run/current-system/sw/lib/lv2:$HOME/.lv2:$HOME/.nix-profile/lib/lv2";
   };
 
   home.shellAliases = {

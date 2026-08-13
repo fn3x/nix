@@ -45,7 +45,7 @@ config,
       fileManager = "${pkgs.kdePackages.dolphin}/bin/dolphin";
     in {
       enable = true;
-      package = pkgs.niri-unstable;
+      package = inputs.nixpkgs.legacyPackages.${pkgs.system}.niri;
       settings = {
         prefer-no-csd = true;
         gestures = {

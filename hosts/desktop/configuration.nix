@@ -60,7 +60,7 @@
   services.xserver.enable = true;
 
   services.displayManager.sddm.enable = true;
-  services.desktopManager.plasma6.enable = true;
+  services.desktopManager.plasma6.enable = false;
 
   services.logmein-hamachi.enable = true;
 
@@ -161,7 +161,7 @@
   # services.openssh.enable = true;
 
   services.mullvad-vpn = {
-    enable = true;
+    enable = false;
     package = pkgs.mullvad-vpn;
   };
 
