@@ -39,6 +39,14 @@
         };
       };
 
+      extraConfig.jack."99-bitwig" = {
+        "jack.properties" = {
+          "jack.fix-buffer-size" = true;
+          "node.latency" = "128/48000";
+          "node.lock-quantum" = true;
+        };
+      };
+
       wireplumber.extraConfig."99-disable-suspend" = {
         "monitor.alsa.rules" = [{
           matches = [

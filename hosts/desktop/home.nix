@@ -121,6 +121,7 @@ in
     freenet
     usbtree
     reaper
+    kdePackages.elisa
   ];
 
   fish.enable = true;
