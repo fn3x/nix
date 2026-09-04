@@ -11,6 +11,7 @@ let
   system = pkgs.stdenv.hostPlatform.system;
   # teamspeak = import ../../modules/programs/teamspeak/teamspeak-client.nix { inherit pkgs; };
   usbtree = import ../../modules/programs/usbtree/usbtree.nix { inherit pkgs; };
+  audacity4 = import ../../modules/programs/audacity/audacity.nix { inherit pkgs; };
 in
 
 {
@@ -125,7 +126,7 @@ in
     jujutsu
     stremio-linux-shell
     tigervnc
-    audacity
+    audacity4
     claude-code
     freenet
     usbtree
