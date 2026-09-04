@@ -55,9 +55,18 @@ in
   home.packages = with pkgs; [
     # inputs.apple-fonts.packages.${system}.sf-pro-nerd
     # inputs.me3.packages.${system}.me3
+    inputs.fastpotify.packages.${pkgs.system}.default
     oh-my-posh
     telegram-desktop
-    mattermost-desktop
+    (pkgs.symlinkJoin {
+      name = "mattermost-desktop-wrapped";
+      paths = [ pkgs.mattermost-desktop ];
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      postBuild = ''
+      wrapProgram $out/bin/mattermost-desktop \
+      --prefix LD_LIBRARY_PATH : ${pkgs.lib.makeLibraryPath [ pkgs.stdenv.cc.cc.lib ]}
+      '';
+    })
     noto-fonts
     noto-fonts-color-emoji
     fd
