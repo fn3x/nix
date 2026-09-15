@@ -144,6 +144,8 @@
     wl-clipboard
     cliphist
     wl-clip-persist
+    noto-fonts
+    noto-fonts-cjk-sans
   ];
 
   environment.plasma6.excludePackages = with pkgs.kdePackages; [
