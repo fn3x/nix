@@ -187,7 +187,7 @@ config,
           { command = [browser]; }
           { command = ["${pkgs.mattermost-desktop}/bin/mattermost-desktop"]; }
           { command = ["${pkgs.telegram-desktop}/bin/Telegram"]; }
-          { command = ["${pkgs.spotify}/bin/spotify"]; }
+          { command = ["${inputs.spotifast.packages.${pkgs.system}.default}/bin/spotifast"]; }
           { command = ["${pkgs.teamspeak6-client}/bin/TeamSpeak"]; }
           { command = ["${pkgs.steam}/bin/steam"]; }
           { command = ["wl-clip-persist" "--clipboard" "both"]; }
@@ -297,12 +297,13 @@ config,
           {
             matches = [
               {
-                app-id = "spotify";
+                app-id = "spotifast";
                 at-startup = true;
               }
             ];
             open-on-workspace = "music";
             open-focused = false;
+            open-fullscreen = true;
           }
           {
             matches = [

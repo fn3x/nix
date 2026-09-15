@@ -96,8 +96,8 @@
     xwaylandvideobridge = {
       url = "git+https://invent.kde.org/system/xwaylandvideobridge.git";
     };
-    fastpotify = {
-      url = "github:crmne/fastpotify";
+    spotifast = {
+      url = "github:crmne/spotifast";
     };
   };
 

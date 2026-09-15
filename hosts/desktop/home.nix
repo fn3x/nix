@@ -56,7 +56,7 @@ in
   home.packages = with pkgs; [
     # inputs.apple-fonts.packages.${system}.sf-pro-nerd
     # inputs.me3.packages.${system}.me3
-    inputs.fastpotify.packages.${pkgs.system}.default
+    inputs.spotifast.packages.${pkgs.system}.default
     oh-my-posh
     telegram-desktop
     (pkgs.symlinkJoin {
