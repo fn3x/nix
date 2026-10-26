@@ -11,7 +11,13 @@ config,
 
   config = lib.mkIf config.lutris.enable {
     home.packages = with pkgs; [
-      lutris-free
+    (lutris.override {
+      extraPkgs = pkgs: with pkgs; [
+        winetricks
+        wineWowPackages.staging
+        cabextract
+      ];
+    })
     ];
   };
 }
