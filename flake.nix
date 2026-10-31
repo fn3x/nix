@@ -10,7 +10,6 @@
     };
     nixvim = {
       url = "github:nix-community/nixvim";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
     hyprland = {
       url = "github:hyprwm/Hyprland";
@@ -19,20 +18,8 @@
       url = "github:nix-community/neovim-nightly-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    stylix = {
-      url = "github:danth/stylix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    apple-fonts = {
-      url = "github:fn3x/apple-fonts.nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     clipboard-sync = {
       url = "github:fn3x/clipboard-sync";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    hyprpanel = {
-      url = "github:Jas-SinghFSU/HyprPanel";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     hyprpwcenter = {
@@ -58,16 +45,8 @@
       url = "github:caelestia-dots/shell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    dgop = {
-      url = "github:AvengeMedia/dgop";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     dms = {
       url = "github:AvengeMedia/DankMaterialShell/stable";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    me3 = {
-      url = "github:fn3x/me3";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     niri = {
@@ -106,88 +85,74 @@
       self,
       nixpkgs,
       home-manager,
-      nixvim,
-      clipboard-sync,
-      stylix,
-      vicinae,
-      sneemok,
-      caelestia-shell,
-      dms,
-      niri,
-      noctalia,
       ...
     }@inputs:
     let
       inherit (self) outputs;
+      system = "x86_64-linux";
+      pkgs = nixpkgs.legacyPackages.${system};
+
+      mkHost =
+        {
+          hostname,
+          users,
+          extraModules ? [ ],
+          hmModules ? [ ],
+        }:
+        nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          modules = [
+            ./hosts/${hostname}/configuration.nix
+            home-manager.nixosModules.home-manager
+            {
+              nixpkgs.overlays = [ self.overlays.default ];
+              home-manager = {
+                extraSpecialArgs = { inherit inputs outputs; };
+                sharedModules = [ inputs.nixvim.homeModules.nixvim ] ++ hmModules;
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                backupFileExtension = "bak";
+                inherit users;
+              };
+            }
+          ]
+          ++ extraModules;
+        };
     in
     {
-      nixosConfigurations = {
-        desktop = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          system = "x86_64-linux";
-          modules = [
-            ({ config, pkgs, ... }: {
-              nixpkgs.config.allowUnfree = true;
-            })
-            stylix.nixosModules.stylix
-            ./hosts/desktop/configuration.nix
-            home-manager.nixosModules.home-manager
-            {
-              nixpkgs.overlays = [
-                inputs.niri.overlays.niri
-              ];
-            }
-            {
-              home-manager.extraSpecialArgs = { inherit inputs outputs; };
-              home-manager.sharedModules = [
-                nixvim.homeModules.nixvim
-                vicinae.homeManagerModules.default
-                sneemok.homeManagerModules.default
-                caelestia-shell.homeManagerModules.default
-                dms.homeModules.dank-material-shell
-                niri.homeModules.niri
-                noctalia.homeModules.default
-              ];
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.backupFileExtension = "bak";
-              home-manager.users.fn3x = import ./hosts/desktop/home.nix;
-            }
-          ];
-        };
-        laptop = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          system = "x86_64-linux";
-          modules = [
-            ./hosts/laptop/configuration.nix
-            clipboard-sync.nixosModules.default
-            home-manager.nixosModules.home-manager
-            {
-              home-manager.extraSpecialArgs = { inherit inputs outputs; };
-              home-manager.sharedModules = [ nixvim.homeModules.nixvim ];
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.backupFileExtension = "bak";
-              home-manager.users.fn3x = import ./hosts/laptop/home.nix;
-              home-manager.users.whoispiria = import ./hosts/laptop/home-piria.nix;
-            }
-            inputs.stylix.nixosModules.stylix
-          ];
-        };
-      };
+      overlays.default = final: _prev: import ./pkgs { pkgs = final; };
 
-      homeConfigurations = {
-        "fn3x@desktop" = home-manager.lib.homeManagerConfiguration {
-          extraSpecialArgs = { inherit inputs outputs; };
-          modules = [ ./hosts/desktop/home.nix ];
+      packages.${system} = import ./pkgs { inherit pkgs; };
+
+      formatter.${system} = pkgs.nixfmt-tree;
+
+      nixosConfigurations = {
+        desktop = mkHost {
+          hostname = "desktop";
+          users.fn3x = import ./hosts/desktop/home.nix;
+          extraModules = [
+            { nixpkgs.overlays = [ inputs.niri.overlays.niri ]; }
+          ];
+          hmModules = [
+            inputs.vicinae.homeManagerModules.default
+            inputs.sneemok.homeManagerModules.default
+            inputs.caelestia-shell.homeManagerModules.default
+            inputs.dms.homeModules.dank-material-shell
+            inputs.niri.homeModules.niri
+            inputs.noctalia.homeModules.default
+          ];
         };
-        "fn3x@laptop" = home-manager.lib.homeManagerConfiguration {
-          extraSpecialArgs = { inherit inputs outputs; };
-          modules = [ ./hosts/laptop/home.nix ];
-        };
-        "whoispiria@laptop" = home-manager.lib.homeManagerConfiguration {
-          extraSpecialArgs = { inherit inputs outputs; };
-          modules = [ ./hosts/laptop/home-piria.nix ];
+
+        laptop = mkHost {
+          hostname = "laptop";
+          users.fn3x = import ./hosts/laptop/home.nix;
+          extraModules = [ inputs.clipboard-sync.nixosModules.default ];
+          hmModules = [
+            inputs.vicinae.homeManagerModules.default
+            inputs.sneemok.homeManagerModules.default
+            inputs.caelestia-shell.homeManagerModules.default
+            inputs.noctalia.homeModules.default
+          ];
         };
       };
     };

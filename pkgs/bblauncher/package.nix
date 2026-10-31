@@ -4,16 +4,16 @@
   ...
 }:
 
-pkgs.stdenv.mkDerivation rec {
+pkgs.stdenv.mkDerivation {
   pname = "BB_Launcher";
-  version = "unstable";
+  version = "0-unstable-2026-10-27";
 
   src = pkgs.fetchgit {
     url = "https://github.com/rainmakerv3/BB_Launcher.git";
-    rev = "refs/heads/master";
+    rev = "0fdce9f094d760d65cb1871b8ac27d4fcace0e81";
     fetchSubmodules = true;
     deepClone = true;
-    sha256 = "sha256-XZk9fbrbq+3dkhPtFyP0eGj7l5rlFeYgVQx3kpWE6/E=";
+    hash = "sha256-BTLmttB+P3q6TL3pvd3GRdEjgsFho8OYOiadwfywwmE=";
   };
 
   nativeBuildInputs = with pkgs; [

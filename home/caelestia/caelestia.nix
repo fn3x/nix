@@ -43,7 +43,7 @@ inputs,
         general = {
           apps = {
             terminal = [
-              "${inputs.ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/ghostty"
+              "${pkgs.ghostty}/bin/ghostty"
             ];
             audio = [
               "${pkgs.pavucontrol}/bin/pavucontrol"

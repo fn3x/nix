@@ -11,9 +11,8 @@ config,
   };
 
   config = lib.mkIf config.niri.enable {
-    nixpkgs.overlays = [ inputs.niri.overlays.niri ];
     xdg.portal = {
-      enable = true;
+      enable = lib.mkForce true; # HM hyprland module sets it false
       extraPortals = [ pkgs.xdg-desktop-portal-gnome pkgs.xdg-desktop-portal-gtk ];
     };
 
@@ -45,7 +44,7 @@ config,
       fileManager = "${pkgs.kdePackages.dolphin}/bin/dolphin";
     in {
       enable = true;
-      package = inputs.nixpkgs.legacyPackages.${pkgs.system}.niri;
+      package = pkgs.niri;
       settings = {
         prefer-no-csd = true;
         gestures = {
@@ -55,7 +54,7 @@ config,
           skip-at-startup = true;
         };
         animations = {
-          workspace-switch = {
+          workspace-switch.kind = {
             spring = {
               damping-ratio = 1.0;
               stiffness = 5000;
@@ -187,7 +186,7 @@ config,
           { command = [browser]; }
           { command = ["${pkgs.mattermost-desktop}/bin/mattermost-desktop"]; }
           { command = ["${pkgs.telegram-desktop}/bin/Telegram"]; }
-          { command = ["${inputs.spotifast.packages.${pkgs.system}.default}/bin/spotifast"]; }
+          { command = ["${inputs.spotifast.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/spotifast"]; }
           { command = ["${pkgs.teamspeak6-client}/bin/TeamSpeak"]; }
           { command = ["${pkgs.steam}/bin/steam"]; }
           { command = ["wl-clip-persist" "--clipboard" "both"]; }

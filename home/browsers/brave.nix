@@ -13,12 +13,12 @@ config,
       enable = true;
       commandLineArgs = [
         "--password-store=basic"
-        "--enable-features=UseOzonePlatform"
         "--ozone-platform=wayland"
       ];
     };
 
-    xdg.mimeApps.defaultApplications = {
+    # mkDefault: another browser module (helium) may take over
+    xdg.mimeApps.defaultApplications = lib.mapAttrs (_: lib.mkDefault) {
       "text/html" = [ "brave.desktop" ];
       "text/xml" = [ "brave.desktop" ];
       "x-scheme-handler/http" = [ "brave.desktop" ];

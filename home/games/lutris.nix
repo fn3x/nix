@@ -14,7 +14,7 @@ config,
     (lutris.override {
       extraPkgs = pkgs: with pkgs; [
         winetricks
-        wineWowPackages.staging
+        wineWow64Packages.staging
         cabextract
       ];
     })

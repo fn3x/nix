@@ -1,17 +1,16 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
 {
   pkgs,
   inputs,
   config,
-  lib,
   ...
 }:
+let
+  system = pkgs.stdenv.hostPlatform.system;
+in
 {
   imports = [
     ./hardware-configuration.nix
+    ../../modules/common.nix
     ../../modules/graphics
     ../../modules/audio
     ../../modules/games
@@ -22,27 +21,17 @@
   pipewire.enable = true;
   steam.enable = true;
 
-  # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
-  networking.networkmanager.enable = true;
   networking.hostName = "desktop";
-  networking.interfaces.eno1.useDHCP = true;
-
-  # Enable networking
-  networking.nameservers = ["1.1.1.1" "8.8.8.8"];
   networking.enableIPv6 = true;
+
+  services.resolved.settings.Resolve.FallbackDNS = [
+    "1.1.1.1"
+    "8.8.8.8"
+  ];
 
   networking.firewall = {
     allowedTCPPorts = [ 7000 ];
   };
-
-  # Set your time zone.
-  time.timeZone = "Asia/Yerevan";
-
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.UTF-8";
 
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "ru_RU.UTF-8";
@@ -56,22 +45,12 @@
     LC_TIME = "ru_RU.UTF-8";
   };
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
-  services.displayManager.sddm.enable = true;
-  services.desktopManager.plasma6.enable = false;
-
-  services.logmein-hamachi.enable = true;
-
-  # Configure keymap in X11
   services.xserver.xkb = {
     layout = "us,ru";
     variant = "";
   };
 
-  services.usbmuxd.enable = true;
-  services.printing.enable = true;
+  services.logmein-hamachi.enable = true;
   services.cpupower-gui.enable = false;
 
   services.avahi = {
@@ -85,82 +64,39 @@
     };
   };
 
-  services.dbus.enable = true;
-
-  users.users.fn3x = {
-    isNormalUser = true;
-    description = "Art";
-    extraGroups = [
-      "qemu-libvirtd"
-      "kvm"
-      "libvirtd"
-      "docker"
-      "networkmanager"
-      "wheel"
-      "audio"
-      "video"
-      "disk"
-    ];
-    shell = pkgs.fish;
-    ignoreShellProgramCheck = true;
-  };
-
-  hardware.bluetooth.enable = true;
-  hardware.bluetooth.powerOnBoot = true;
-  services.blueman.enable = true;
+  users.users.fn3x.extraGroups = [
+    "qemu-libvirtd"
+    "kvm"
+    "libvirtd"
+    "docker"
+  ];
 
   environment.systemPackages = with pkgs; [
-    kitty
-    vim
-    wget
-    gtk3
-    gtk4
-    bluez
-    libnotify
-    git
-    font-awesome
-    nwg-look
-    nh
-    pavucontrol
-    wireguard-tools 
-    mangohud
     mangojuice
-    gcc
-    clang
     cl
     kdePackages.kirigami
     kdePackages.kirigami-addons
-    fastfetch
     kdePackages.partitionmanager
-    firefox
-    inputs.winapps.packages.${pkgs.stdenv.hostPlatform.system}.winapps
-    inputs.winapps.packages.${pkgs.stdenv.hostPlatform.system}.winapps-launcher
-    OVMF
+    kdePackages.qtsvg
+    inputs.winapps.packages.${system}.winapps
+    inputs.winapps.packages.${system}.winapps-launcher
     devenv
-    nv-codec-headers
     virtiofsd
     distrobox
-    amnezia-vpn
-    wl-clipboard
     cliphist
     wl-clip-persist
-    noto-fonts
-    noto-fonts-cjk-sans
+
+    # Dolphin as the file manager outside Plasma
+    kdePackages.dolphin
+    kdePackages.dolphin-plugins
+    kdePackages.ark # "Compress"/"Extract" context menu
+    kdePackages.kio-extras
+    kdePackages.kdegraphics-thumbnailers
+    kdePackages.ffmpegthumbs
   ];
 
-  environment.plasma6.excludePackages = with pkgs.kdePackages; [
-    plasma-browser-integration
-    konsole
-    oxygen
-  ];
-
+  programs.firefox.enable = true;
   programs.amnezia-vpn.enable = true;
-
-  services.resolved.enable = true;
-
-  # Security
-  services.fail2ban.enable = true;
-  # services.openssh.enable = true;
 
   services.mullvad-vpn = {
     enable = false;
@@ -187,28 +123,36 @@
 
   services.flatpak.enable = true;
 
+  # Secrets are read from files outside the repo/store; see
+  # /etc/odysseus/env (chmod 600) with ODYSSEUS_ADMIN_PASSWORD=... and SEARX_SECRET_KEY=...
   services.odysseus = {
     enable = false;
+    environmentFile = "/etc/odysseus/env";
     extraEnvironmentVariables = {
-      ODYSSEUS_ADMIN_PASSWORD = "admin";
       NVIDIA_VISIBLE_DEVICES = "all";
       NVIDIA_DRIVER_CAPABILITIES = "compute,utility";
       HF_HUB_DISABLE_XET = "1";
     };
-    extraPythonPackages = ps: with ps; [
-      hf-transfer
-      rembg
-      diffusers
-    ];
+    extraPythonPackages =
+      ps: with ps; [
+        hf-transfer
+        rembg
+        diffusers
+      ];
     llamaCpp.enable = true;
     searxng = {
       enable = true;
-      secretKey = "very_secret_key";
+      # substituted by searx from services.searx.environmentFile
+      secretKey = "$SEARX_SECRET_KEY";
     };
   };
 
+  services.searx.environmentFile = "/etc/odysseus/env";
   services.searx.settings.engines = [
-    { name = "radio browser"; disabled = true; }
+    {
+      name = "radio browser";
+      disabled = true;
+    }
   ];
 
   services.ollama = {
@@ -217,29 +161,26 @@
     package = pkgs.ollama-cuda;
   };
 
-  programs.gnupg.agent = {                                                      
-    enable = true;
-  };
-
   networking.wireguard.enable = true;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
   # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "26.05"; # Did you read the comment?
 
   programs.hyprland = {
     enable = true;
-    withUWSM = true;
-
-    package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
-    portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+    package = inputs.hyprland.packages.${system}.hyprland;
+    portalPackage = inputs.hyprland.packages.${system}.xdg-desktop-portal-hyprland;
   };
 
-  programs.niri.enable = true;
+  programs.niri = {
+    enable = true;
+    # Nautilus would claim org.freedesktop.FileManager1 ("Show in folder")
+    useNautilus = false;
+  };
+  services.dbus.packages = [ pkgs.kdePackages.dolphin ];
 
   programs.river-classic = {
     enable = false;
@@ -262,47 +203,24 @@
     };
   };
   virtualisation.podman.enable = true;
-  boot.kernelModules = [ "kvm-amd" "v4l2loopback" "snd-aloop" "ntsync" ];
+  virtualisation.spiceUSBRedirection.enable = true;
+
+  boot.kernelModules = [
+    "kvm-amd"
+    "v4l2loopback"
+    "snd-aloop"
+    "ntsync"
+  ];
   boot.extraModprobeConfig = ''
     options kvm_amd nested=1
     options v4l2loopback exclusive_caps=1 card_label="Virtual Camera"
   '';
-  boot.extraModulePackages = with config.boot.kernelPackages;
-    [ v4l2loopback.out ];
+  boot.extraModulePackages = [ config.boot.kernelPackages.v4l2loopback.out ];
   systemd.tmpfiles.rules = [
     "d /var/log/libvirt 0755 root root -"
     "f /dev/shm/looking-glass 0660 fn3x qemu-libvirtd -"
   ];
-  virtualisation.spiceUSBRedirection.enable = true;
 
-
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
-
-  nix.settings = {
-    auto-optimise-store = true;
-    substituters = [
-      "https://cache.nixos.org"
-      "https://hyprland.cachix.org"
-      "https://devenv.cachix.org"
-      "https://vicinae.cachix.org"
-      "https://niri.cachix.org"
-      "https://noctalia.cachix.org"
-    ];
-    trusted-public-keys = [
-      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-      "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
-      "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
-      "vicinae.cachix.org-1:1kDrfienkGHPYbkpNj1mWTr7Fm1+zcenzgTizIcI3oc="
-      "niri.cachix.org-1:Wv0OmO7PsuocRKzfDoJ3mulSl7Z6oezYhGhR+3W2964="
-      "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
-    ];
-    trusted-users = [ "root" "fn3x" ];
-  };
-
-  boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.kernelParams = [
     "threadirqs"
     "preempt=full"
@@ -312,27 +230,23 @@
   services.power-profiles-daemon.enable = false;
   powerManagement.cpuFreqGovernor = "performance";
 
-  environment.variables = let
-    makePluginPath = format:
-      (pkgs.lib.makeSearchPath format [
-        "$HOME/.nix-profile/lib"
-        "/run/current-system/sw/lib"
-        "/etc/profiles/per-user/$USER/lib"
-      ]) + ":$HOME/.${format}";
-  in {
-    LV2_PATH = makePluginPath "lv2";
-    VST3_PATH = makePluginPath "vst3";
-    CLAP_PATH = makePluginPath "clap";
-  };
-
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 30d";
-  };
-  nix.settings = {
-    max-jobs = 8;
-  };
+  environment.etc."xdg/menus/applications.menu".source = "${pkgs.kdePackages.plasma-workspace}/etc/xdg/menus/plasma-applications.menu";
+  environment.variables =
+    let
+      makePluginPath =
+        format:
+        (pkgs.lib.makeSearchPath format [
+          "$HOME/.nix-profile/lib"
+          "/run/current-system/sw/lib"
+          "/etc/profiles/per-user/$USER/lib"
+        ])
+        + ":$HOME/.${format}";
+    in
+    {
+      LV2_PATH = makePluginPath "lv2";
+      VST3_PATH = makePluginPath "vst3";
+      CLAP_PATH = makePluginPath "clap";
+    };
 
   # lutris workaround
   nixpkgs.overlays = [

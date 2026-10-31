@@ -2,6 +2,7 @@
 config,
 lib,
 inputs,
+pkgs,
 ...
 }:
 {
@@ -21,7 +22,7 @@ inputs,
   config = lib.mkIf config.neovim.enable {
     programs.nixvim = {
       enable = true;
-      package = inputs.neovim-nightly-overlay.packages.x86_64-linux.neovim;
+      package = inputs.neovim-nightly-overlay.packages.${pkgs.stdenv.hostPlatform.system}.neovim;
 
       clipboard.providers.wl-copy.enable = true;
 

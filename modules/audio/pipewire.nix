@@ -12,7 +12,6 @@
   config = lib.mkIf config.pipewire.enable {
     environment.systemPackages = with pkgs; [
       qpwgraph
-      pipewire.jack
       neural-amp-modeler-lv2
       lsp-plugins
     ];

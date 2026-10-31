@@ -15,7 +15,7 @@ config,
 
     home.packages = with pkgs; [
       catppuccin-cursors.mochaDark
-      inputs.hyprpwcenter.packages.${system}.default
+      inputs.hyprpwcenter.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
 
     xdg.configFile."uwsm/env".source = "${config.home.sessionVariablesPackage}/etc/profile.d/hm-session-vars.sh";
@@ -23,11 +23,6 @@ config,
     home.sessionVariables = {
       XCURSOR_THEME = "Catppuccin Mocha Dark";
       XCURSOR_SIZE = 22;
-    };
-
-    xdg.portal = {
-      enable = lib.mkForce true;
-      extraPortals = [ pkgs.xdg-desktop-portal-wlr ];
     };
 
     wayland.windowManager.hyprland = {

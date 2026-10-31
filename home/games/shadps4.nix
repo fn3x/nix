@@ -1,6 +1,7 @@
 {
 lib,
 config,
+pkgs,
 inputs,
 ...
 }:
@@ -11,8 +12,8 @@ inputs,
 
   config = lib.mkIf config.shadps4.enable {
     home.packages = [
-      inputs.shadps4.packages.x86_64-linux.shadps4
-      inputs.shadps4.packages.x86_64-linux.shadps4-qt
+      inputs.shadps4.packages.${pkgs.stdenv.hostPlatform.system}.shadps4
+      inputs.shadps4.packages.${pkgs.stdenv.hostPlatform.system}.shadps4-qt
     ];
   };
 }

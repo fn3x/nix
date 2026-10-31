@@ -372,7 +372,7 @@ pkgs,
               "prettierd"
               "prettier"
             ];
-            nix = [ "nixfmt-rfc-style" ];
+            nix = [ "nixfmt" ];
             cpp = [ "clang-format" ];
             c = [ "clang-format" ];
           };
@@ -389,8 +389,8 @@ pkgs,
             gofumpt = {
               command = lib.getExe pkgs.gofumpt;
             };
-            nixfmt-rfc-style = {
-              command = lib.getExe pkgs.nixfmt-rfc-style;
+            nixfmt = {
+              command = lib.getExe pkgs.nixfmt;
             };
           };
         };
