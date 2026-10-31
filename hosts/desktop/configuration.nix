@@ -227,6 +227,13 @@ in
     "amd_pstate=active"
     "usbcore.autosuspend=-1"
   ];
+
+  swapDevices = [
+    {
+      device = "/var/lib/swapfile";
+      size = 16 * 1024;
+    }
+  ];
   services.power-profiles-daemon.enable = false;
   powerManagement.cpuFreqGovernor = "performance";
 
