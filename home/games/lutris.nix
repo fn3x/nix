@@ -19,5 +19,11 @@ config,
       ];
     })
     ];
+
+    # lutris installers ignore system_winetricks and use the bundled (outdated) runtime copy
+    home.file.".local/share/lutris/runtime/winetricks/winetricks" = {
+      source = lib.getExe pkgs.winetricks;
+      force = true;
+    };
   };
 }
