@@ -72,9 +72,6 @@
       url = "github:schembriaiden/helium-browser-nix-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    xwaylandvideobridge = {
-      url = "git+https://invent.kde.org/system/xwaylandvideobridge.git";
-    };
     spotifast = {
       url = "github:crmne/spotifast";
     };

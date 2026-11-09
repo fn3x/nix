@@ -81,7 +81,6 @@ config,
           };
           systray = {
             ignore = [
-              "Xwayland Video Bridge_pipewireToXProxy"
               "blueman"
             ];
           };

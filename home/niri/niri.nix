@@ -18,7 +18,6 @@ config,
 
     home.packages = with pkgs; [
       xwayland-satellite
-      inputs.xwaylandvideobridge.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
 
     programs.swappy = {

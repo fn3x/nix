@@ -1219,22 +1219,6 @@
         "type": "github"
       }
     },
-    "nixpkgs_7": {
-      "locked": {
-        "lastModified": 1791456040,
-        "narHash": "sha256-H83yz/do+hjOO0uujHyH8RgtIQP2v7Mw+cLwcZK/xKc=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "e7439b6b14ad3cc35d05608ebca9bce01a25f5f8",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixvim": {
       "inputs": {
         "flake-parts": "flake-parts_2",
@@ -1406,8 +1390,7 @@
         "sneemok": "sneemok",
         "spotifast": "spotifast",
         "vicinae": "vicinae",
-        "winapps": "winapps",
-        "xwaylandvideobridge": "xwaylandvideobridge"
+        "winapps": "winapps"
       }
     },
     "rust-overlay": {
@@ -1798,24 +1781,6 @@
         "owner": "Supreeeme",
         "repo": "xwayland-satellite",
         "type": "github"
-      }
-    },
-    "xwaylandvideobridge": {
-      "inputs": {
-        "nixpkgs": "nixpkgs_7"
-      },
-      "locked": {
-        "lastModified": 1789556284,
-        "narHash": "sha256-gIpOV3WHkOQ7/Kash6vRxh7xmu7AzdeZxSoPvcByNzc=",
-        "ref": "refs/heads/master",
-        "rev": "1a972a2b2bd89105ed39bc7065f7fa7889607c96",
-        "revCount": 284,
-        "type": "git",
-        "url": "https://invent.kde.org/system/xwaylandvideobridge.git"
-      },
-      "original": {
-        "type": "git",
-        "url": "https://invent.kde.org/system/xwaylandvideobridge.git"
       }
     }
   },

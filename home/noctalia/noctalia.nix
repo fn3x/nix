@@ -233,7 +233,7 @@ pkgs,
           };
 
           tray = {
-            hidden = [ "Xwayland Video Bridge" "nm-applet" ];
+            hidden = [ "nm-applet" ];
             scale = 1.2;
           };
         };

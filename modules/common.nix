@@ -6,6 +6,18 @@
 {
   nixpkgs.config.allowUnfree = true;
 
+  # upstream replaced the 8.1.0 tarball in place on 2026-11-03; drop once nixpkgs updates its hash
+  nixpkgs.overlays = [
+    (_: prev: {
+      anydesk = prev.anydesk.overrideAttrs (old: {
+        src = prev.fetchurl {
+          url = "https://download.anydesk.com/linux/anydesk-${old.version}-amd64.tar.gz";
+          hash = "sha256-zS5P2eyTHZY7cBW8mQ2Q6M0lXcx9VZZTtpG3Bb6u7IQ=";
+        };
+      });
+    })
+  ];
+
   nix = {
     channel.enable = false;
     optimise.automatic = true;
