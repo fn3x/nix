@@ -67,6 +67,7 @@
     usbtree
     reaper
     kdePackages.elisa
+    firebot
   ];
 
   fish.enable = true;
