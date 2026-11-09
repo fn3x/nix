@@ -51,7 +51,7 @@
     r2modman
     whitesur-kde
     poop
-    rustdesk-flutter
+    # rustdesk-flutter
     gajim
     filezilla
     signal-desktop
@@ -61,7 +61,7 @@
     jujutsu
     stremio-linux-shell
     tigervnc
-    audacity4
+    # audacity4
     claude-code
     hyphanet
     usbtree
@@ -78,7 +78,6 @@
   vicinae.enable = true;
   ghostty.enable = true;
   nu.enable = false;
-  brave.enable = true;
   helium.enable = true;
   sneemok.enable = false;
   shadps4.enable = false;

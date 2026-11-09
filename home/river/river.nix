@@ -62,7 +62,7 @@ inputs,
         };
         set-repeat = "50 300";
         spawn = [
-          "${pkgs.brave}/bin/brave"
+          "${pkgs.helium}/bin/helium"
           "${pkgs.ghostty}/bin/ghostty"
         ];
       };

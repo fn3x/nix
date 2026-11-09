@@ -42,6 +42,6 @@
   vicinae.enable = true;
   ghostty.enable = true;
   fish.enable = true;
-  brave.enable = true;
+  helium.enable = true;
   noctalia.enable = true;
 }

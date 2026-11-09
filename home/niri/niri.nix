@@ -250,10 +250,6 @@ config,
           {
             matches = [
               {
-                app-id = "brave-browser";
-                at-startup = true;
-              }
-              {
                 app-id = "helium";
                 at-startup = true;
               }

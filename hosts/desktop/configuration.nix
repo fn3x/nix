@@ -72,6 +72,7 @@ in
   ];
 
   environment.systemPackages = with pkgs; [
+    soloist
     mangojuice
     cl
     kdePackages.kirigami
