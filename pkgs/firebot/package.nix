@@ -19,7 +19,22 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
     autoPatchelfHook
     makeWrapper
     copyDesktopItems
+    asar
   ];
+
+  # Local patch: let commands trigger when the chat message is a Twitch reply.
+  # Twitch prefixes replies with "@<parent user> ", which made the trigger miss the start of the message.
+  # Only applies to real replies (isReply), so plain mentions are unaffected; args are parsed from the stripped text.
+  # Declined upstream as default behavior: https://github.com/crowbartools/Firebot/issues/3592
+  postPatch = ''
+    asar extract resources/app.asar app-src
+    substituteInPlace app-src/build/backend/chat/commands/chat-command-handler.js \
+      --replace-fail 'const rawMessage = firebotChatMessage.rawText;' \
+        'const rawMessage = firebotChatMessage.isReply ? firebotChatMessage.rawText.replace(/^@\S+\s+/, "") : firebotChatMessage.rawText;'
+    rm resources/app.asar
+    asar pack app-src resources/app.asar
+    rm -r app-src
+  '';
 
   buildInputs = with pkgs; [
     alsa-lib
