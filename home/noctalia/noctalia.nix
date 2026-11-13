@@ -232,6 +232,10 @@ pkgs,
             format = "{:%H:%M:%S}";
           };
 
+          date = {
+            format = "{:%a %d/%m/%Y}";
+          };
+
           tray = {
             hidden = [ "nm-applet" ];
             scale = 1.2;
