@@ -5,11 +5,11 @@
 
 pkgs.stdenv.mkDerivation (finalAttrs: {
   pname = "firebot";
-  version = "5.66.7";
+  version = "5.67.0";
 
   src = pkgs.fetchurl {
     url = "https://github.com/crowbartools/Firebot/releases/download/v${finalAttrs.version}/firebot-v${finalAttrs.version}-linux-x64.tar.gz";
-    hash = "sha256-g/Zk9KOGc93StE0UJP0d1xTcHAlPY/oa6IjkymYdKj8=";
+    hash = "sha256-Hw9egK/WeGROSWyBmigP1Ncs1K74FQDZa3Gy2GIswMM=";
   };
 
   # Tarball has no top-level directory
