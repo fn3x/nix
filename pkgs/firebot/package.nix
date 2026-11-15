@@ -31,6 +31,15 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
     substituteInPlace app-src/build/backend/chat/commands/chat-command-handler.js \
       --replace-fail 'const rawMessage = firebotChatMessage.rawText;' \
         'const rawMessage = firebotChatMessage.isReply ? firebotChatMessage.rawText.replace(/^@\S+\s+/, "") : firebotChatMessage.rawText;'
+
+    # Local patch: "Wait for sound to finish" waits the exact sound length instead of rounding it to whole seconds
+    # (a 0.78 s clip waited 1 s, leaving a gap before the next effect; a 1.4 s clip waited 1 s and overlapped it).
+    for f in app-src/build/backend/common/handlers/sound-handler.js \
+             app-src/build/backend/integrations/builtin/aws/text-to-speech-polly-effect.js; do
+      substituteInPlace "$f" \
+        --replace-fail 'const durationInMils = (Math.round(duration) || 0) * 1000;' \
+          'const durationInMils = Math.round((Number(duration) || 0) * 1000);'
+    done
     rm resources/app.asar
     asar pack app-src resources/app.asar
     rm -r app-src
