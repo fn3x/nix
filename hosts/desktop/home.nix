@@ -68,6 +68,7 @@
     reaper
     kdePackages.elisa
     firebot
+    audacity_3
   ];
 
   fish.enable = true;
