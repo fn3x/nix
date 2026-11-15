@@ -30,7 +30,8 @@ in
   ];
 
   networking.firewall = {
-    allowedTCPPorts = [ 7000 ];
+    # 7472 - firebot control deck
+    allowedTCPPorts = [ 7000 7472 ];
   };
 
   i18n.extraLocaleSettings = {
