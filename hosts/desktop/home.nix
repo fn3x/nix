@@ -69,6 +69,8 @@
     kdePackages.elisa
     firebot
     audacity_3
+    lsp-plugins
+    easyeffects
   ];
 
   fish.enable = true;
@@ -134,6 +136,9 @@
     };
   };
 
+  # OBS (obs-vst) scans ~/.vst recursively for Linux VST2 .so files
+  home.file.".vst/zam-plugins".source = "${pkgs.zam-plugins}/lib/vst";
+
   programs.obs-studio = {
     enable = true;
     package = pkgs.obs-studio.override { cudaSupport = true; };
@@ -142,6 +147,7 @@
       obs-backgroundremoval
       obs-pipewire-audio-capture
       obs-move-transition
+      pkgs.obs-image-reaction
     ];
   };
 

@@ -62,6 +62,23 @@ in
       enable = true;
       addresses = true;
       workstation = true;
+      userServices = true; # lets firebot-mdns (avahi-publish) announce firebot.local
+    };
+  };
+
+  # Firebot Control Deck at http://firebot.local:7472 from other devices on the LAN.
+  # Firebot's own Bonjour advertises the service but doesn't answer for the "firebot.local" name next to avahi,
+  # so avahi announces it (static LAN IP of eno1). Not via /etc/avahi/hosts: that also publishes the reverse
+  # record, which collides with desktop.local ("Local name collision"); -R skips it.
+  systemd.services.firebot-mdns = {
+    description = "Announce firebot.local via avahi";
+    after = [ "avahi-daemon.service" ];
+    bindsTo = [ "avahi-daemon.service" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      ExecStart = "${pkgs.avahi}/bin/avahi-publish -a -R firebot.local 192.168.0.63";
+      Restart = "always";
+      RestartSec = 5;
     };
   };
 
