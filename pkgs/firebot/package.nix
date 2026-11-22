@@ -40,6 +40,15 @@ pkgs.stdenv.mkDerivation (finalAttrs: {
         --replace-fail 'const durationInMils = (Math.round(duration) || 0) * 1000;' \
           'const durationInMils = Math.round((Number(duration) || 0) * 1000);'
     done
+    # Local patch: overlay chat widgets (Chat and Chat (Advanced)) skip command messages: text starting with "!",
+    # also as a Twitch reply ("@someone !cmd"). Firebot only has a per-user hide list.
+    for f in app-src/build/backend/overlay-widgets/builtin-types/chat/chat.js \
+             app-src/build/backend/overlay-widgets/builtin-types/chat/chat-advanced.js; do
+      substituteInPlace "$f" \
+        --replace-fail '// Check the ignore list' \
+          'if (/^(@\S+\s+)?!/.test((chatMessage.rawText ?? "").trim())) { return; } // skip chat commands
+                // Check the ignore list'
+    done
     rm resources/app.asar
     asar pack app-src resources/app.asar
     rm -r app-src
