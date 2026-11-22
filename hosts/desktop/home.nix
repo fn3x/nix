@@ -71,6 +71,7 @@
     audacity_3
     lsp-plugins
     easyeffects
+    yt-dlp
   ];
 
   fish.enable = true;
