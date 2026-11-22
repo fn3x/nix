@@ -82,6 +82,53 @@ in
     };
   };
 
+  # Separate "Desktop" and "Firebot" sinks, both played on the Scarlett. OBS records each on its own fader
+  # (Desktop Audio = Desktop sink, a "Firebot" capture = Firebot sink), so Firebot isn't recorded twice.
+  # Your own Firebot volume = the "Firebot → Scarlett" stream; keep the "Firebot" sink at 100% (that's what OBS records).
+  services.pipewire.extraConfig.pipewire."93-virtual-sinks" =
+    let
+      scarlett = "alsa_output.usb-Focusrite_Scarlett_2i2_USB_Y8NEN7M1907603-00.HiFi__Line__sink";
+      virtualSink = name: description: {
+        name = "libpipewire-module-loopback";
+        args = {
+          "node.description" = description;
+          "capture.props" = {
+            "node.name" = name;
+            "node.description" = description;
+            "media.class" = "Audio/Sink";
+            "audio.position" = [ "FL" "FR" ];
+          };
+          "playback.props" = {
+            "node.name" = "${name}.output";
+            "node.description" = "${description} → Scarlett";
+            "audio.position" = [ "FL" "FR" ];
+            "node.passive" = true;
+            "target.object" = scarlett;
+            "node.dont-fallback" = true; # never fall back to the default (Desktop) sink: feedback loop
+          };
+        };
+      };
+    in
+    {
+      "context.modules" = [
+        (virtualSink "desktop_sink" "Desktop")
+        (virtualSink "firebot_sink" "Firebot")
+      ];
+    };
+
+  # Desktop sink as the default output, set on every login (overrides the choice WirePlumber saved).
+  systemd.user.services.default-sink-desktop = {
+    description = "Make the Desktop virtual sink the default output";
+    after = [ "wireplumber.service" ];
+    requires = [ "wireplumber.service" ];
+    wantedBy = [ "pipewire.service" ];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStartPre = "${pkgs.coreutils}/bin/sleep 2"; # let WirePlumber load the sinks
+      ExecStart = ''${pkgs.pipewire}/bin/pw-metadata 0 default.configured.audio.sink '{"name":"desktop_sink"}' Spa:String:JSON'';
+    };
+  };
+
   users.users.fn3x.extraGroups = [
     "qemu-libvirtd"
     "kvm"
